@@ -3,10 +3,10 @@ html {
 }
 body {
     background-color: #2f3035;
-    background-image: url(images/background-adare-restaurant.jpg), url(images/background-adare-restaurant-2.jpg);
-    background-size: cover, cover;
-    background-repeat: no-repeat, repeat;
-    background-position: center, center;
+    background-image: url(images/background-adare-restaurant.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 .container {
