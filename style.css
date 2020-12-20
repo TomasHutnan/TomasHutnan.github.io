@@ -6,7 +6,7 @@ body {
     background-image: url(images/background-adare-restaurant.jpg), url(images/background-adare-restaurant-2.jpg);
     background-size: cover, cover;
     background-repeat: no-repeat, repeat;
-    background-position: center;
+    background-position: center, center;
 }
 
 .container {
