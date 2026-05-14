@@ -1,5 +1,7 @@
 :root {
-    --font-sans: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    --font-body: 'Inter', sans-serif;
+    --font-heading: 'Space Grotesk', sans-serif;
+    /*--font-sans: "Segoe UI", "Helvetica Neue", Arial, sans-serif;*/
 
     /* backgrounds */
     --bg-main: #0B1120;
@@ -32,10 +34,16 @@ html,
 body {
     margin: 0;
     min-height: 100%;
-    background: radial-gradient(1200px 700px at 20% -20%, var(--bg-elevated) 0%, var(--bg-main) 60%);
+    background: var(--bg-main);
+    font-family: var(--font-body);
     color: var(--text-main);
-    font-family: var(--font-sans);
 }
+
+h1, h2, h3, h4 {
+  font-family: var(--font-heading);
+  letter-spacing: -0.02em;
+}
+
 
 * {
     box-sizing: border-box;
