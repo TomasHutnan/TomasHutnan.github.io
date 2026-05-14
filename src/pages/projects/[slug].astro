@@ -2,6 +2,9 @@
 import { getCollection, getEntries, render, type CollectionEntry } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import { slugify } from '../../utils/slug';
+import demoIcon from '../../assets/icons/demo.svg';
+import paperIcon from '../../assets/icons/paper.svg';
+import repoIcon from '../../assets/icons/repository.svg';
 
 export async function getStaticPaths() {
     const projects = await getCollection('projects');
@@ -37,21 +40,42 @@ const { Content } = await render(project);
             <header class="project-header">
                 <h1>{project.data.title}</h1>
                 <p>{project.data.description}</p>
+
                 <div class="project-meta">
-                    <span class="pill">{project.data.type}</span>
-                    <span>
-                        {project.data.startedAt ? project.data.startedAt.toLocaleDateString() : 'Planned'}
-                        {' - '}
-                        {project.data.completedAt ? project.data.completedAt.toLocaleDateString() : 'In progress'}
-                    </span>
-                </div>
-                {(project.data.repo || project.data.demo || project.data.paper) && (
-                    <div class="project-links">
-                        {project.data.repo && <a href={project.data.repo} target="_blank" rel="noopener noreferrer">Repository</a>}
-                        {project.data.demo && <a href={project.data.demo} target="_blank" rel="noopener noreferrer">Demo</a>}
-                        {project.data.paper && <a href={project.data.paper} target="_blank" rel="noopener noreferrer">Paper</a>}
+                    <div class="meta-left">
+                        <span class="pill">{project.data.type}</span>
+                        <span>
+                            {project.data.startedAt ? project.data.startedAt.toLocaleDateString() : 'Planned'}
+                            {' - '}
+                            {project.data.completedAt ? project.data.completedAt.toLocaleDateString() : 'In progress'}
+                        </span>
                     </div>
-                )}
+
+                    {(project.data.repo || project.data.demo || project.data.paper) && (
+                        <div class="project-links">
+                            {project.data.demo && (
+                                <a href={project.data.demo} target="_blank" rel="noopener noreferrer" class="link-item">
+                                    <img src={demoIcon.src} alt="Demo" class="link-icon" />
+                                    <span>Demo</span>
+                                </a>
+                            )}
+                            {project.data.paper && (
+                                <a href={project.data.paper} target="_blank" rel="noopener noreferrer" class="link-item">
+                                    <img src={paperIcon.src} alt="Paper" class="link-icon" />
+                                    <span>Paper</span>
+                                </a>
+                            )}
+                            {project.data.repo && (
+                                <a href={project.data.repo} target="_blank" rel="noopener noreferrer" class="link-item">
+                                    <img src={repoIcon.src} alt="Repository" class="link-icon" />
+                                    <span>Repository</span>
+                                </a>
+                            )}
+                        </div>
+                    )}
+
+                </div>
+
                 {(project.data.role || project.data.collaborators) && (
                     <div class="project-info">
                         {project.data.role && <div><strong>Role:</strong> {project.data.role}</div>}
@@ -164,7 +188,7 @@ const { Content } = await render(project);
         display: flex;
         gap: 0.9rem;
         align-items: center;
-        flex-wrap: wrap;
+        justify-content: space-between;
         color: var(--text-secondary);
         font-size: 0.95rem;
     }
@@ -220,26 +244,48 @@ const { Content } = await render(project);
         color: var(--text-secondary);
     }
 
-    .project-links {
-        margin-top: 1rem;
+    .meta-left {
         display: flex;
-        gap: 1rem;
-        flex-wrap: wrap;
+        gap: 0.75rem;
+        align-items: center;
+        flex: 0 1 auto;
     }
 
-    .project-links a {
-        padding: 0.5rem 1rem;
-        background: var(--primary-muted);
-        color: var(--bg-main);
-        border-radius: var(--radius-sm);
+    .project-links {
+        display: flex;
+        gap: 0.9rem;
+        align-items: center;
+        margin-left: auto;
+        flex: 0 0 auto;
+    }
+
+    .project-links .link-item {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: inherit;
         text-decoration: none;
         font-weight: 500;
         font-size: 0.9rem;
-        transition: background 0.2s;
+        padding: 0;
     }
 
-    .project-links a:hover {
-        background: var(--primary);
+    .project-links .link-item:hover {
+        opacity: 0.85;
+    }
+
+    .link-icon {
+        width: 18px;
+        height: 18px;
+        display: inline-block;
+        align-self: center;
+        vertical-align: middle;
+        filter: invert(1) sepia(1) saturate(1000%) hue-rotate(180deg) brightness(1.2);
+    }
+
+    .project-links .link-item span {
+        display: inline-block;
+        line-height: 1;
     }
 
     .project-info {
