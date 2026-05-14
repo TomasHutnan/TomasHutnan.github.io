@@ -32,37 +32,96 @@ const { Content } = await render(project);
 ---
 
 <Layout title={project.data.title}>
-    <main>
-        <article>
-            <h1>{project.data.title}</h1>
-            <p>{project.data.description}</p>
+    <main class="project-page">
+        <article class="project-card">
+            <header class="project-header">
+                <h1>{project.data.title}</h1>
+                <p>{project.data.description}</p>
+                <div class="project-meta">
+                    <span class="pill">{project.data.type}</span>
+                    <span>
+                        {project.data.startedAt ? project.data.startedAt.toLocaleDateString() : 'Planned'}
+                        {' - '}
+                        {project.data.completedAt ? project.data.completedAt.toLocaleDateString() : 'In progress'}
+                    </span>
+                </div>
+                {(project.data.repo || project.data.demo || project.data.paper) && (
+                    <div class="project-links">
+                        {project.data.repo && <a href={project.data.repo} target="_blank" rel="noopener noreferrer">Repository</a>}
+                        {project.data.demo && <a href={project.data.demo} target="_blank" rel="noopener noreferrer">Demo</a>}
+                        {project.data.paper && <a href={project.data.paper} target="_blank" rel="noopener noreferrer">Paper</a>}
+                    </div>
+                )}
+                {(project.data.role || project.data.collaborators) && (
+                    <div class="project-info">
+                        {project.data.role && <div><strong>Role:</strong> {project.data.role}</div>}
+                        {project.data.collaborators && project.data.collaborators.length > 0 && (
+                            <div><strong>Collaborators:</strong> {project.data.collaborators.join(', ')}</div>
+                        )}
+                    </div>
+                )}
+            </header>
 
-            <img src={project.data.cover.src} alt={project.data.title} width={project.data.cover.width} height={project.data.cover.height} />
+            <figure class="project-cover">
+                <img src={project.data.cover.src} alt={project.data.title} width={project.data.cover.width} height={project.data.cover.height} loading="eager" />
+            </figure>
 
-            <p>Type: {project.data.type}</p>
-            <p>
-                Timeline:
-                {project.data.startedAt ? project.data.startedAt.toLocaleDateString() : 'Planned'}
-                {' - '}
-                {project.data.completedAt ? project.data.completedAt.toLocaleDateString() : 'In progress'}
-            </p>
-
-            <ul>
+            <ul class="tag-list">
                 {project.data.tags.map((tag) => <li>{tag}</li>)}
             </ul>
 
-            <Content />
+            <div class="content-body">
+                <Content />
+            </div>
+
+            {project.data.gallery && project.data.gallery.length > 0 && (
+                <section class="gallery-section">
+                    <h2>Gallery</h2>
+                    <ul class="gallery-grid">
+                        {project.data.gallery.map((image) => (
+                            <li>
+                                <img 
+                                    src={image.src} 
+                                    alt={project.data.title} 
+                                    width={image.width} 
+                                    height={image.height}
+                                    loading="lazy"
+                                />
+                            </li>
+                        ))}
+                    </ul>
+                </section>
+            )}
+
+            {project.data.contribution && (
+                <section class="contribution-section">
+                    <h2>Contribution</h2>
+                    <p>{project.data.contribution}</p>
+                </section>
+            )}
         </article>
 
         {awards.length > 0 && (
-            <section>
+            <section class="awards-section">
                 <h2>Awards</h2>
-                <ul>
+                <ul class="award-grid">
                     {awards.map((award) => (
-                        <li>
-                            <strong>{award.data.title}</strong>
-                            <div>{award.data.issuer}</div>
-                            <div>{award.data.date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</div>
+                        <li class="award-card">
+                            {award.data.cover && (
+                                <img
+                                    class="award-cover"
+                                    src={award.data.cover.src}
+                                    alt={award.data.title}
+                                    width={award.data.cover.width}
+                                    height={award.data.cover.height}
+                                    loading="lazy"
+                                />
+                            )}
+                            <div class="award-copy">
+                                <strong>{award.data.title}</strong>
+                                <span>{award.data.issuer}</span>
+                                <span>{award.data.date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</span>
+                            </div>
                         </li>
                     ))}
                 </ul>
@@ -70,3 +129,245 @@ const { Content } = await render(project);
         )}
     </main>
 </Layout>
+
+<style>
+    .project-page {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 2.5rem 1rem 3rem;
+        color: var(--text-main);
+    }
+
+    .project-card {
+        background: linear-gradient(180deg, var(--bg-surface) 0%, var(--bg-elevated) 100%);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        padding: 1.5rem;
+        box-shadow: var(--shadow-card);
+    }
+
+    .project-header h1 {
+        margin: 0;
+        font-size: clamp(1.9rem, 3.2vw, 2.8rem);
+        line-height: 1.1;
+    }
+
+    .project-header p {
+        margin: 0.9rem 0 0;
+        font-size: 1.05rem;
+        max-width: 70ch;
+        color: var(--text-secondary);
+    }
+
+    .project-meta {
+        margin-top: 1rem;
+        display: flex;
+        gap: 0.9rem;
+        align-items: center;
+        flex-wrap: wrap;
+        color: var(--text-secondary);
+        font-size: 0.95rem;
+    }
+
+    .pill {
+        display: inline-block;
+        background: var(--accent);
+        color: var(--bg-main);
+        border-radius: 999px;
+        padding: 0.2rem 0.7rem;
+        font-size: 0.8rem;
+        letter-spacing: 0.02em;
+        text-transform: capitalize;
+    }
+
+    .project-cover {
+        margin: 1.3rem 0 1rem;
+        display: grid;
+        place-items: center;
+        border-radius: var(--radius-md);
+        background: var(--bg-elevated);
+        padding: 0.75rem;
+    }
+
+    .project-cover img {
+        display: block;
+        width: 100%;
+        height: auto;
+        max-height: min(70vh, 640px);
+        object-fit: contain;
+        border-radius: var(--radius-sm);
+    }
+
+    .tag-list {
+        list-style: none;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        padding: 0;
+        margin: 0.6rem 0 1.3rem;
+    }
+
+    .tag-list li {
+        background: rgba(34, 211, 238, 0.12);
+        color: var(--primary-soft);
+        border-radius: 999px;
+        padding: 0.3rem 0.7rem;
+        font-size: 0.82rem;
+    }
+
+    .content-body {
+        line-height: 1.7;
+        color: var(--text-secondary);
+    }
+
+    .project-links {
+        margin-top: 1rem;
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .project-links a {
+        padding: 0.5rem 1rem;
+        background: var(--primary-muted);
+        color: var(--bg-main);
+        border-radius: var(--radius-sm);
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 0.9rem;
+        transition: background 0.2s;
+    }
+
+    .project-links a:hover {
+        background: var(--primary);
+    }
+
+    .project-info {
+        margin-top: 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        font-size: 0.95rem;
+        color: var(--text-secondary);
+    }
+
+    .project-info strong {
+        color: var(--text-main);
+    }
+
+    .gallery-section {
+        margin-top: 2rem;
+    }
+
+    .gallery-section h2 {
+        margin: 0 0 0.8rem;
+        font-size: 1.35rem;
+    }
+
+    .gallery-grid {
+        list-style: none;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1rem;
+        padding: 0;
+        margin: 0;
+    }
+
+    .gallery-grid li {
+        border-radius: var(--radius-md);
+        background: var(--bg-elevated);
+        overflow: hidden;
+    }
+
+    .gallery-grid img {
+        display: block;
+        width: 100%;
+        height: auto;
+        max-height: 400px;
+        object-fit: contain;
+        background: var(--bg-surface);
+    }
+
+    .contribution-section {
+        margin-top: 2rem;
+    }
+
+    .contribution-section h2 {
+        margin: 0 0 0.8rem;
+        font-size: 1.35rem;
+    }
+
+    .contribution-section p {
+        line-height: 1.7;
+        color: var(--text-secondary);
+    }
+
+    .awards-section {
+        margin-top: 1.5rem;
+    }
+
+    .awards-section h2 {
+        margin: 0 0 0.8rem;
+        font-size: 1.35rem;
+    }
+
+    .award-grid {
+        list-style: none;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.9rem;
+        padding: 0;
+        margin: 0;
+    }
+
+    .award-card {
+        display: flex;
+        flex-direction: column;
+        gap: 0.8rem;
+        background: var(--bg-surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+        padding: 1.2rem;
+    }
+
+    .award-cover {
+        display: block;
+        width: 100%;
+        height: auto;
+        object-fit: contain;
+        border-radius: var(--radius-sm);
+        background: var(--bg-elevated);
+    }
+
+    .award-copy {
+        display: grid;
+        gap: 0.35rem;
+        padding: 0 0.15rem 0.2rem;
+        color: var(--text-secondary);
+        font-size: 0.92rem;
+    }
+
+    .award-copy strong {
+        color: var(--text-main);
+        line-height: 1.35;
+    }
+
+    @media (max-width: 720px) {
+        .project-page {
+            padding-top: 1.5rem;
+        }
+
+        .project-card {
+            padding: 1rem;
+            border-radius: 14px;
+        }
+
+        .award-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .award-cover {
+            height: 320px;
+        }
+    }
+</style>
