@@ -16,7 +16,7 @@ completedAt: 2026-04-19
 awards:
   - upjs-hackkosice-2026-honorable
 
-featured: false
+featured: true
 
 repo: https://github.com/TomasHutnan/ae-tearz/
 

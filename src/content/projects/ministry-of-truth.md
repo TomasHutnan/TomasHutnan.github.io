@@ -12,7 +12,7 @@ tags:
 type: solo
 startedAt: 2026-04-17
 completedAt: 2026-05-10
-featured: false
+featured: true
 
 repo: https://github.com/TomasHutnan/ministry-of-truth
 

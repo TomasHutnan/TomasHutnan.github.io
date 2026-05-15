@@ -13,7 +13,7 @@ type: team
 startedAt: 2021-10-24
 completedAt: 2022-03-31
 awards:
-  - spongia-2022-2nd-place
+  - spongia-2021-2nd-place
   - ihra-2022-2nd-place
 featured: false
 

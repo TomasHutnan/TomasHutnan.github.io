@@ -12,9 +12,13 @@ import '../styles/global.css';
 
 interface Props {
 	title?: string;
+	description?: string;
 }
 
-const { title = 'Portfolio' } = Astro.props;
+const {
+	title = 'Portfolio',
+	description = 'Tomáš Hutňan portfolio: machine learning, computer vision, and full-stack software projects.'
+} = Astro.props;
 ---
 
 <!doctype html>
@@ -25,6 +29,7 @@ const { title = 'Portfolio' } = Astro.props;
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="icon" href="/favicon.ico" />
 		<meta name="generator" content={Astro.generator} />
+		<meta name="description" content={description} />
 		<title>{title}</title>
 	</head>
 	<body>

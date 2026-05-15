@@ -1,0 +1,52 @@
+---
+import Section from './Section.astro';
+import type { QuickInfoItem } from '../../data/home';
+
+interface Props {
+	items: QuickInfoItem[];
+}
+
+const { items } = Astro.props;
+---
+
+<Section id="quick-info" eyebrow="Quick info" title="At a glance">
+	<div class="info-grid">
+		{items.map((item) => (
+			<article class="info-card">
+				<p>{item.label}</p>
+				<strong>{item.value}</strong>
+			</article>
+		))}
+	</div>
+</Section>
+
+<style>
+	.info-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+		gap: 1rem;
+	}
+
+	.info-card {
+		padding: 1.15rem 1.2rem;
+		border: 1px solid var(--border);
+		border-radius: var(--radius-md);
+		background: linear-gradient(180deg, rgba(17, 24, 39, 0.92), rgba(15, 23, 42, 0.84));
+		box-shadow: var(--shadow-card);
+	}
+
+	.info-card p {
+		margin: 0 0 0.55rem;
+		font-size: 0.8rem;
+		text-transform: uppercase;
+		letter-spacing: 0.08em;
+		color: var(--text-secondary);
+	}
+
+	.info-card strong {
+		display: block;
+		font-size: 1rem;
+		line-height: 1.55;
+		color: var(--text-main);
+	}
+</style>

@@ -2,7 +2,7 @@
 title: Winner of the Tatra Banka Challenge
 event: Hack Košice 2024
 issuer: Tatra Banka
-date: 2026-04-07
+date: 2024-04-07
 featured: false
 cover: ../../assets/awards/covers/tatrabanka-hackkosice-2024.webp
 ---

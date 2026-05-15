@@ -1,0 +1,72 @@
+---
+import Section from './Section.astro';
+import type { ContactLink } from '../../data/home';
+
+interface Props {
+	links: ContactLink[];
+}
+
+const { links } = Astro.props;
+---
+
+<Section id="contact" eyebrow="Contact" title="Let’s build something interesting">
+	<div class="contact-panel">
+		<p class="contact-copy">
+			I’m open to projects, collaborations, and conversations around machine learning,
+			computer vision, and product-focused software.
+		</p>
+
+		<div class="contact-links">
+			{links.map((link) => (
+				<a href={link.href} target={link.href.startsWith('mailto:') ? undefined : '_blank'} rel={link.href.startsWith('mailto:') ? undefined : 'noopener noreferrer'}>
+					<strong>{link.label}</strong>
+					<span>{link.value}</span>
+				</a>
+			))}
+		</div>
+	</div>
+</Section>
+
+<style>
+	.contact-panel {
+		display: grid;
+		gap: 1rem;
+		padding: 1.2rem;
+		border: 1px solid var(--border);
+		border-radius: var(--radius-lg);
+		background: linear-gradient(135deg, rgba(34, 211, 238, 0.08), rgba(15, 23, 42, 0.94));
+		box-shadow: var(--shadow-card);
+	}
+
+	.contact-copy {
+		margin: 0;
+		max-width: 70ch;
+		line-height: 1.75;
+		color: var(--text-secondary);
+	}
+
+	.contact-links {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+		gap: 0.85rem;
+	}
+
+	.contact-links a {
+		display: grid;
+		gap: 0.25rem;
+		padding: 0.95rem 1rem;
+		border-radius: var(--radius-md);
+		border: 1px solid var(--border);
+		text-decoration: none;
+		background: rgba(17, 24, 39, 0.72);
+	}
+
+	.contact-links strong {
+		font-size: 0.95rem;
+	}
+
+	.contact-links span {
+		color: var(--text-secondary);
+		line-height: 1.55;
+	}
+</style>

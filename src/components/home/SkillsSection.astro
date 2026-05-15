@@ -1,0 +1,52 @@
+---
+import Section from './Section.astro';
+import type { SkillGroup } from '../../data/home';
+
+interface Props {
+	groups: SkillGroup[];
+}
+
+const { groups } = Astro.props;
+---
+
+<Section id="skills" eyebrow="Skills" title="Tools and domains I work in">
+	<div class="skills-grid">
+		{groups.map((group) => (
+			<article class="skill-card">
+				<h3>{group.title}</h3>
+				<ul>
+					{group.items.map((item) => <li>{item}</li>)}
+				</ul>
+			</article>
+		))}
+	</div>
+</Section>
+
+<style>
+	.skills-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+		gap: 1rem;
+	}
+
+	.skill-card {
+		padding: 1.2rem;
+		border: 1px solid var(--border);
+		border-radius: var(--radius-md);
+		background: var(--bg-surface);
+		box-shadow: var(--shadow-card);
+	}
+
+	.skill-card h3 {
+		margin: 0 0 0.85rem;
+		font-size: 1.05rem;
+	}
+
+	.skill-card ul {
+		margin: 0;
+		padding-left: 1.05rem;
+		display: grid;
+		gap: 0.45rem;
+		color: var(--text-secondary);
+	}
+</style>

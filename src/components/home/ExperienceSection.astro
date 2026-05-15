@@ -1,0 +1,74 @@
+---
+import Section from './Section.astro';
+import type { ExperienceEntry } from '../../data/home';
+
+interface Props {
+	entries: ExperienceEntry[];
+}
+
+const { entries } = Astro.props;
+---
+
+<Section id="experience" eyebrow="Experience" title="Professional and teaching experience">
+	<div class="experience-grid">
+		{entries.map((entry) => (
+			<article class="experience-card">
+				<div class="experience-topline">
+					<h3>{entry.title}</h3>
+					<span>{entry.period}</span>
+				</div>
+				<p class="organization">{entry.organization}</p>
+				<ul>
+					{entry.bullets.map((bullet) => <li>{bullet}</li>)}
+				</ul>
+			</article>
+		))}
+	</div>
+</Section>
+
+<style>
+	.experience-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+		gap: 1rem;
+	}
+
+	.experience-card {
+		padding: 1.2rem;
+		border: 1px solid var(--border);
+		border-radius: var(--radius-md);
+		background: var(--bg-surface);
+		box-shadow: var(--shadow-card);
+	}
+
+	.experience-topline {
+		display: flex;
+		justify-content: space-between;
+		gap: 1rem;
+		align-items: baseline;
+	}
+
+	.experience-topline h3 {
+		margin: 0;
+		font-size: 1.05rem;
+	}
+
+	.experience-topline span,
+	.organization,
+	.experience-card li {
+		color: var(--text-secondary);
+	}
+
+	.organization {
+		margin: 0.45rem 0 0.85rem;
+		font-weight: 600;
+	}
+
+	.experience-card ul {
+		margin: 0;
+		padding-left: 1.05rem;
+		display: grid;
+		gap: 0.45rem;
+		line-height: 1.6;
+	}
+</style>
