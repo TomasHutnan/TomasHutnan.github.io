@@ -1,0 +1,26 @@
+---
+const links = [
+  { href: '/projects', label: 'Projects' },
+  { href: '/#contact', label: 'Contact' },
+];
+---
+
+<nav class="nav">
+  <div class="nav-container">
+
+    <!-- Logo -->
+    <a href="/" class="nav-logo">
+      Tomáš Hutňan
+    </a>
+
+    <!-- Links -->
+    <div class="nav-links">
+      {links.map(link => (
+        <a href={link.href} class="nav-link">
+          {link.label}
+        </a>
+      ))}
+    </div>
+
+  </div>
+</nav>

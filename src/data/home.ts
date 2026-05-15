@@ -30,8 +30,8 @@ export const hero = {
 
 export const quickInfo: QuickInfoItem[] = [
 	{ label: 'Location', value: 'Brno, Czechia / Slovakia' },
-	{ label: 'Education', value: 'Masaryk University — Informatics' },
-	{ label: 'Current role', value: 'Teaching Assistant (Programming, Algorithms & Data Structures)' },
+	{ label: 'Education', value: 'Masaryk University — Informatics (BC, in progress)' },
+	{ label: 'Current role', value: 'Teaching Assistant' },
 ];
 
 export const aboutParagraphs = [
@@ -51,7 +51,7 @@ export const experienceEntries: ExperienceEntry[] = [
 	{
 		title: 'SQA Intern',
 		organization: 'ChyronHego',
-		period: '2024 Nov - 2025 Dec',
+		period: '2024 Nov — 2025 Dec',
 		bullets: ['Develop automation systems in Python.', 'Work with SQL, APIs, and Docker-based infrastructure.']
 	},
 	{
