@@ -27,7 +27,7 @@ const awards = project.data.awards ? await getEntries(project.data.awards) : [];
 const { Content } = await render(project);
 ---
 
-<Layout title={project.data.title}>
+<Layout pageTitle={project.data.title}>
     <main class="project-page">
         <article class="project-card">
             <header class="project-header">

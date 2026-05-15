@@ -13,12 +13,14 @@ import '../styles/global.css';
 interface Props {
 	title?: string;
 	description?: string;
+	pageTitle?: string;
 }
 
-const {
-	title = 'Portfolio',
-	description = 'Tomáš Hutňan portfolio: machine learning, computer vision, and full-stack software projects.'
-} = Astro.props;
+const { title, description = 'Tomáš Hutňan portfolio: machine learning, computer vision, and full-stack software projects.', pageTitle } = Astro.props;
+
+const siteOwner = 'Tomáš Hutňan';
+const computedTitle = pageTitle ? `${pageTitle} - ${siteOwner}` : (title ?? siteOwner);
+
 ---
 
 <!doctype html>
@@ -30,7 +32,7 @@ const {
 		<link rel="icon" href="/favicon.ico" />
 		<meta name="generator" content={Astro.generator} />
 		<meta name="description" content={description} />
-		<title>{title}</title>
+		<title>{computedTitle}</title>
 	</head>
 	<body>
 		<slot />
