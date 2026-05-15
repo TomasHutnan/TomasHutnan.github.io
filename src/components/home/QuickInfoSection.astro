@@ -22,17 +22,14 @@ const { items } = Astro.props;
 
 <style>
 	.info-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+		display: flex;
 		gap: 1rem;
 	}
 
 	.info-card {
-		padding: 1.15rem 1.2rem;
-		border: 1px solid var(--border);
-		border-radius: var(--radius-md);
-		background: linear-gradient(180deg, rgba(17, 24, 39, 0.92), rgba(15, 23, 42, 0.84));
-		box-shadow: var(--shadow-card);
+		padding-top: 1.2rem;
+		padding-bottom: 1.2rem;
+		padding-right: 2rem;
 	}
 
 	.info-card p {
