@@ -1,6 +1,6 @@
 ---
-title: CUDA Image Processing Pipeline (TESCAN Collaboration)
-description: GPU-accelerated image processing pipeline implementing a multi-stage grayscale enhancement workflow with CUDA, focusing on performance, validation, and architectural clarity.
+title: CUDA Image Enhancement (TESCAN Collaboration)
+description: GPU-accelerated image enhancemnt via CUDA, focusing on performance, validation, and architectural clarity.
 tags:
   - cuda
   - cplusplus
