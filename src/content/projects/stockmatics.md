@@ -19,6 +19,7 @@ completedAt: 2025-03-01
 awards:
   - newsmatics-hackathon-2025-winner
 featured: true
+featuredOrder: 3
 
 repo: https://github.com/newsmatics-hackathon-2025/team-ae2025-02-28
 demo: https://www.youtube.com/watch?v=mfA4vSHSiD0

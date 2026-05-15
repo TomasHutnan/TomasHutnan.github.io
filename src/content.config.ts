@@ -18,6 +18,7 @@ const projects = defineCollection({
 
             awards: z.array(reference('awards')).optional(),
             featured: z.boolean().default(false),
+            featuredOrder: z.number().optional(),
 
             repo: z.url().optional(),
             demo: z.url().optional(),

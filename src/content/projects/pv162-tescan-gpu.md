@@ -13,6 +13,7 @@ type: university
 startedAt: 2026-03-01
 completedAt: 2026-05-19
 featured: true
+featuredOrder: 2
 
 repo: https://gitlab.fi.muni.cz/xhutnan/pv162-tescan-gpu
 

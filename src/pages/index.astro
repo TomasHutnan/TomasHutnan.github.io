@@ -22,11 +22,8 @@ const projects = await getCollection('projects');
 const awards = await getCollection('awards');
 const featuredProjects = projects
 	.filter((project) => project.data.featured)
-	.sort((left, right) => {
-		const leftDate = left.data.completedAt ?? left.data.startedAt ?? new Date(0);
-		const rightDate = right.data.completedAt ?? right.data.startedAt ?? new Date(0);
-		return rightDate.getTime() - leftDate.getTime();
-	});
+	.sort((a, b) => (a.data.featuredOrder ?? 0) - (b.data.featuredOrder ?? 0));
+
 ---
 
 <Layout

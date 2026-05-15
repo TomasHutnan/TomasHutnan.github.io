@@ -20,6 +20,7 @@ awards:
   - mlh-auth0-hackkosice-2024
   - tatrabanka-hackkosice-2024
 featured: true
+featuredOrder: 4
 
 repo: https://github.com/dejvokep/hk2024-app
 
