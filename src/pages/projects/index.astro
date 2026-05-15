@@ -1,7 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
-import { buildTagCloud } from '../../utils/tags';
+import { collectTagStats, getTagCloudFontSize } from '../../utils/tags';
 import Section from '../../components/home/Section.astro';
 import ProjectCard from '../../components/home/ProjectCard.astro';
 
@@ -11,6 +11,12 @@ const sortedProjects = projects.sort((left, right) => {
 	const rightDate = right.data.completedAt ?? right.data.startedAt ?? new Date(0);
 	return rightDate.getTime() - leftDate.getTime();
 });
+
+const minTagFontSize = 13;
+const maxTagFontSize = 18;
+
+const initialTagStats = collectTagStats(sortedProjects);
+const initialMaxCount = initialTagStats[0]?.count ?? 1;
 ---
 
 <Layout
@@ -20,25 +26,38 @@ const sortedProjects = projects.sort((left, right) => {
 	<main class="projects-page">
 		<Section
 			eyebrow="Projects"
-			title="All projects"
-			description="A complete list of selected work across AI, systems, and interactive software."
+			title="Explore by Technology"
+			description="Explore projects by technologies and domains I work with most frequently."
 		>
 			<div class="cloud-shell">
-				<div id="interactive-cloud" class="tag-cloud">
-					{buildTagCloud(sortedProjects).items.map((item) => (
-						<a
-							class:list={['tag-box', item.count > 2 && 'tag-box--strong']}
-							href={`/projects?tags=${item.slug}`}
-							data-slug={item.slug}
-							aria-label={`${item.tag} (${item.count} projects)`}
-							style={`left: ${item.x}px; top: ${item.y}px; width: ${item.width}px; height: ${item.height}px; font-size: ${item.fontSize}px;`}
-						>
-							<span>{item.tag}</span>
-						</a>
-					))}
+				<div
+					id="interactive-cloud"
+					class="tag-cloud"
+					style="display:flex;flex-wrap:wrap;gap:0.2rem 0.4rem;align-items:center;width:100%;min-height:0;overflow:visible;margin:0;padding:0.1rem 0 0.35rem;"
+				>
+					{initialTagStats.map((item) => {
+						const fontSize = getTagCloudFontSize(item.count, initialMaxCount, {
+							minFontSize: minTagFontSize,
+							maxFontSize: maxTagFontSize
+						});
+
+						return (
+							<a
+								class:list={['tag-box', item.count > 2 && 'tag-box--strong']}
+								href={`/projects?tags=${item.slug}`}
+								data-slug={item.slug}
+								aria-label={`${item.tag} (${item.count} projects)`}
+								style={`font-size: ${fontSize}px;`}
+							>
+								<span>{item.tag}</span>
+							</a>
+						);
+					})}
 				</div>
-				<div id="filter-summary" class="filter-summary" aria-live="polite"></div>
-				<div class="cloud-controls"><button id="clear-filter" hidden>Clear filter</button></div>
+                <div style="columns: 2;">
+                    <div id="filter-summary" class="filter-summary" aria-live="polite"></div>
+                    <div class="cloud-controls"><button id="clear-filter" hidden>Clear filter</button></div>
+                </div>
 			</div>
 
 			<div class="projects-grid">
@@ -51,33 +70,12 @@ const sortedProjects = projects.sort((left, right) => {
 				const clearBtn = document.getElementById('clear-filter');
 				const cards = Array.from(document.querySelectorAll('.projects-grid .project-card'));
 				const tagLinks = Array.from(document.querySelectorAll('[data-tag-slug]'));
-				const slugToLabel = new Map();
-				const cloudPadding = 2.5;
+				const minFontSize = 13;
+				const maxFontSize = 18;
 
-				function estimateTagBox(tag, fontSize) {
-					return {
-						width: Math.max(72, tag.length * fontSize * 0.62 + 28),
-						height: Math.max(36, fontSize * 1.55 + 18)
-					};
-				}
-
-				function overlaps(left, right, gap = 0.8) {
-					return !(
-						left.x + left.width / 2 + gap <= right.x - right.width / 2 ||
-						left.x - left.width / 2 - gap >= right.x + right.width / 2 ||
-						left.y + left.height / 2 + gap <= right.y - right.height / 2 ||
-						left.y - left.height / 2 - gap >= right.y + right.height / 2
-					);
-				}
-
-				function spiralPoint(step) {
-					const angle = step * 0.52;
-					const radius = 18 * Math.sqrt(step);
-
-					return {
-						x: radius * Math.cos(angle),
-						y: radius * Math.sin(angle)
-					};
+				function getTagCloudFontSize(count, maxCount) {
+					const ratio = maxCount <= 1 ? 0 : (count - 1) / (maxCount - 1);
+					return minFontSize + ratio * (maxFontSize - minFontSize);
 				}
 
 				function getVisibleTagStats() {
@@ -103,82 +101,23 @@ const sortedProjects = projects.sort((left, right) => {
 					return [...counts.values()].sort((left, right) => right.count - left.count || left.tag.localeCompare(right.tag));
 				}
 
-				function buildCloudItems(stats) {
-					if (stats.length === 0) {
-						return { width: 0, height: 0, items: [] };
-					}
-
-					const maxCount = stats[0]?.count ?? 1;
-					const placed = [];
-					const rawItems = stats.map((stat) => {
-						const fontSize = 15 + (stat.count / maxCount) * 18;
-						const { width, height } = estimateTagBox(stat.tag, fontSize);
-
-						return {
-							...stat,
-							fontSize,
-							width,
-							height
-						};
-					});
-
-					const sortedItems = [...rawItems].sort((left, right) => right.count - left.count || left.tag.localeCompare(right.tag));
-					const positioned = sortedItems.map((item, index) => {
-						let candidate = { x: 0, y: 0 };
-						let found = false;
-
-						for (let step = 0; step < 2500; step += 1) {
-							const point = step === 0 ? { x: 0, y: 0 } : spiralPoint(step + index * 7);
-							candidate = { x: point.x, y: point.y };
-							const testBox = { ...candidate, width: item.width, height: item.height };
-
-							if (placed.every((existing) => !overlaps(testBox, existing))) {
-								placed.push(testBox);
-								found = true;
-								break;
-							}
-						}
-
-						if (!found) {
-							placed.push({ x: candidate.x, y: candidate.y, width: item.width, height: item.height });
-						}
-
-						return {
-							...item,
-							x: candidate.x,
-							y: candidate.y
-						};
-					});
-
-					const minX = Math.min(...placed.map((item) => item.x - item.width / 2));
-					const maxX = Math.max(...placed.map((item) => item.x + item.width / 2));
-					const minY = Math.min(...placed.map((item) => item.y - item.height / 2));
-					const maxY = Math.max(...placed.map((item) => item.y + item.height / 2));
-					const width = Math.max(80, maxX - minX + cloudPadding * 2);
-					const height = Math.max(48, maxY - minY + cloudPadding * 2);
-					const offsetX = -minX + cloudPadding;
-					const offsetY = -minY + cloudPadding;
-
-					return {
-						width,
-						height,
-						items: positioned.map((item) => ({
-							...item,
-							x: item.x + offsetX,
-							y: item.y + offsetY
-						}))
-					};
-				}
-
 				function renderCloud(selected) {
 					const stats = getVisibleTagStats();
-					const layout = buildCloudItems(stats);
+					const maxCount = stats[0]?.count ?? 1;
 
 					cloud.replaceChildren();
-					cloud.style.width = layout.width ? `${layout.width}px` : '100%';
-					cloud.style.height = layout.height ? `${layout.height}px` : '0px';
+					cloud.style.display = 'flex';
+					cloud.style.flexWrap = 'wrap';
+					cloud.style.gap = '0.2rem 0.4rem';
+					cloud.style.alignItems = 'center';
+					cloud.style.width = '100%';
+					cloud.style.height = 'auto';
+					cloud.style.minHeight = '0';
+					cloud.style.overflow = 'visible';
+					cloud.style.margin = '0';
+					cloud.style.padding = '0.1rem 0 0.35rem';
 
-					for (const item of layout.items) {
+					for (const item of stats) {
 						const link = document.createElement('a');
 						link.className = 'tag-box';
 						if (item.count > 2) {
@@ -191,11 +130,7 @@ const sortedProjects = projects.sort((left, right) => {
 						link.href = nextSelected.length === 0 ? '/projects' : `/projects?tags=${nextSelected.join(',')}`;
 						link.dataset.slug = item.slug;
 						link.setAttribute('aria-label', `${item.tag} (${item.count} projects)`);
-						link.style.left = `${item.x}px`;
-						link.style.top = `${item.y}px`;
-						link.style.width = `${item.width}px`;
-						link.style.height = `${item.height}px`;
-						link.style.fontSize = `${item.fontSize}px`;
+						link.style.fontSize = `${getTagCloudFontSize(item.count, maxCount)}px`;
 
 						const label = document.createElement('span');
 						label.textContent = item.tag;
@@ -206,20 +141,6 @@ const sortedProjects = projects.sort((left, right) => {
 
 				if (!(cloud instanceof HTMLElement) || !(filterSummary instanceof HTMLElement) || !(clearBtn instanceof HTMLButtonElement)) {
 					throw new Error('Projects filter UI failed to initialize.');
-				}
-
-				for (const link of cloud.querySelectorAll('a[data-slug]')) {
-					const slug = link.getAttribute('data-slug');
-					if (slug) {
-						slugToLabel.set(slug, link.textContent.trim());
-					}
-				}
-
-				for (const link of tagLinks) {
-					const slug = link.getAttribute('data-tag-slug');
-					if (slug && !slugToLabel.has(slug)) {
-						slugToLabel.set(slug, link.textContent.trim());
-					}
 				}
 
 				function getSelectedFromURL() {
@@ -256,29 +177,7 @@ const sortedProjects = projects.sort((left, right) => {
 					const text = document.createElement('div');
 					text.className = 'filter-summary__text';
 					text.textContent = `Showing ${visibleCount} of ${totalCount} projects`;
-
-					const chips = document.createElement('div');
-					chips.className = 'filter-summary__chips';
-
-					for (const slug of selected) {
-						const label = slugToLabel.get(slug) ?? slug;
-						const button = document.createElement('button');
-						button.type = 'button';
-						button.className = 'filter-chip';
-						button.dataset.removeTag = slug;
-						button.textContent = `${label} ×`;
-
-						button.addEventListener('click', () => {
-							const nextSelected = getSelectedFromURL();
-							nextSelected.delete(slug);
-							setSelectedToURL(nextSelected);
-							sync();
-						});
-
-						chips.appendChild(button);
-					}
-
-					filterSummary.append(text, chips);
+					filterSummary.append(text);
 				}
 
 				function updateActiveState(selected) {
@@ -291,6 +190,18 @@ const sortedProjects = projects.sort((left, right) => {
 				function sync() {
 					const selected = getSelectedFromURL();
 					applyFilters(selected);
+					const visibleCount = cards.filter((card) => !card.hidden).length;
+
+					if (selected.size > 0 && visibleCount === 0) {
+						history.replaceState({}, '', window.location.pathname);
+						applyFilters(new Set());
+						renderCloud(new Set());
+						renderSummary(new Set());
+						updateActiveState(new Set());
+						clearBtn.hidden = true;
+						return;
+					}
+
 					renderCloud(selected);
 					renderSummary(selected);
 					updateActiveState(selected);
@@ -366,7 +277,7 @@ const sortedProjects = projects.sort((left, right) => {
 		flex-wrap: wrap;
 		align-items: center;
 		gap: 0.7rem;
-		margin-top: 0.5rem;
+		margin-top: 1.5rem;
 		color: var(--text-secondary);
 	}
 
@@ -376,52 +287,38 @@ const sortedProjects = projects.sort((left, right) => {
 	}
 
 	:global(.filter-summary__chips) {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.5rem;
-	}
-
-	:global(.filter-chip) {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.35rem;
-		padding: 0.35rem 0.65rem;
-		border-radius: 999px;
-		border: 1px solid rgba(34, 211, 238, 0.22);
-		background: rgba(34, 211, 238, 0.1);
-		color: var(--text-main);
-		font: inherit;
-		cursor: pointer;
-	}
-
-	:global(.filter-chip:hover) {
-		background: rgba(34, 211, 238, 0.16);
+		display: none;
 	}
 
 	:global(.tag-cloud) {
 		position: relative;
-        margin: 4rem;
 		width: 100%;
-		height: 220px;
-		min-height: 140px;
-		display: block;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.2rem 0.4rem;
+		align-items: center;
+		min-height: 0;
 		overflow: visible;
+		margin: 0;
+		padding: 0.1rem 0 0.35rem;
 	}
 
 	:global(.tag-box) {
-		position: absolute;
+		position: static;
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
-		padding: 0.35rem 0.7rem;
-		border-radius: 10px;
-		background: rgba(255,255,255,0.04);
-		border: 1px solid rgba(255,255,255,0.04);
-		backdrop-filter: blur(2px);
-		color: var(--text);
+		padding: 0.05rem 0.2rem;
+		border-radius: 0.2rem;
+		background: transparent !important;
+		border: 0 !important;
+		backdrop-filter: none;
+		color: var(--text-secondary);
 		text-decoration: none;
-		box-shadow: var(--shadow-card);
-		transition: transform 180ms ease, background 180ms ease;
+		box-shadow: none;
+		transition: color 160ms ease, opacity 160ms ease, transform 160ms ease;
+		line-height: 1.1;
+		white-space: nowrap;
 	}
 
 	:global(.tag-box span) {
@@ -429,30 +326,32 @@ const sortedProjects = projects.sort((left, right) => {
 	}
 
 	:global(.tag-box:hover) {
-		transform: translateY(-4px) scale(1.02);
-		background: rgba(255,255,255,0.06);
-	}
-
-	:global(.tag-box.active) {
-		background: linear-gradient(90deg, rgba(34,211,238,0.16), rgba(167,139,250,0.14));
-		border-color: rgba(34,211,238,0.35);
+		transform: translateY(-1px);
 		color: var(--text-main);
 	}
 
-	:global(.tag-box--strong) {
-		background: linear-gradient(90deg, rgba(34,211,238,0.08), rgba(167,139,250,0.06));
-		border-color: rgba(34,211,238,0.12);
+	:global(.tag-box.active) {
+		color: var(--text-main);
+		font-weight: 700;
+		text-decoration: underline;
+		text-decoration-thickness: 2px;
+		text-underline-offset: 0.16em;
 	}
 
-	.cloud-controls {
-		margin-top: 0.5rem;
+	:global(.tag-box--strong) {
+		background: transparent !important;
+		color: var(--text-main);
+		font-weight: 700;
 	}
 
 	.cloud-controls button {
 		background: transparent;
-		border: 1px solid var(--border);
+		border: 0px solid var(--border);
 		color: var(--text-secondary);
-		padding: 0.35rem 0.6rem;
-		border-radius: 8px;
+		margin-top: 1.5rem;
+	}
+
+	.cloud-controls button:hover {
+		color: var(--text-main);
 	}
 </style>
