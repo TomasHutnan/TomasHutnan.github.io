@@ -37,6 +37,7 @@ const awards = defineCollection({
     schema: ({ image }) =>
         z.object({
             title: z.string(),
+            event: z.string(),
             issuer: z.string(),
             date: z.coerce.date(),
             featured: z.boolean().default(false),

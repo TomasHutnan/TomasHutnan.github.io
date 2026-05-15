@@ -8,18 +8,10 @@ import repoIcon from '../../assets/icons/repository.svg';
 
 export async function getStaticPaths() {
     const projects = await getCollection('projects');
-    const slugCounts = new Map<string, number>();
 
     return projects.map((project) => {
-        const baseSlug = slugify(project.data.title);
-        const currentCount = slugCounts.get(baseSlug) ?? 0;
-        const nextCount = currentCount + 1;
-        slugCounts.set(baseSlug, nextCount);
-
-        const slug = currentCount === 0 ? baseSlug : `${baseSlug}-${nextCount}`;
-
         return {
-            params: { slug },
+            params: { slug: slugify(project.id) },
             props: { project }
         };
     });
@@ -45,9 +37,9 @@ const { Content } = await render(project);
                     <div class="meta-left">
                         <span class="pill">{project.data.type}</span>
                         <span>
-                            {project.data.startedAt ? project.data.startedAt.toLocaleDateString() : 'Planned'}
+                            {project.data.startedAt ? `${project.data.startedAt.getFullYear()} ${['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][project.data.startedAt.getMonth()]} ${String(project.data.startedAt.getDate()).padStart(2, '0')}` : 'Planned'}
                             {' - '}
-                            {project.data.completedAt ? project.data.completedAt.toLocaleDateString() : 'In progress'}
+                            {project.data.completedAt ? `${project.data.completedAt.getFullYear()} ${['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][project.data.completedAt.getMonth()]} ${String(project.data.completedAt.getDate()).padStart(2, '0')}` : 'In progress'}
                         </span>
                     </div>
 
@@ -143,7 +135,7 @@ const { Content } = await render(project);
                             )}
                             <div class="award-copy">
                                 <strong>{award.data.title}</strong>
-                                <span>{award.data.issuer}</span>
+                                <span>{award.data.event} - {award.data.issuer}</span>
                                 <span>{award.data.date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</span>
                             </div>
                         </li>

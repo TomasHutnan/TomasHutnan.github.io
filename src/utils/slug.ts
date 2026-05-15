@@ -1,5 +1,8 @@
 export function slugify(input: string): string {
-    return input
+    const filename = input.split(/[\\/]/).pop() ?? input;
+    const baseName = filename.replace(/\.[^.]+$/, '');
+
+    return baseName
         .toLowerCase()
         .normalize('NFKD')
         .replace(/[\u0300-\u036f]/g, '')
