@@ -15,7 +15,7 @@ completedAt: 2026-04-19
 awards:
   - tatra-banka-hackkosice-2026
   - mlh-mongodb-hackkosice-2026
-featured: true
+featured: false
 repo: https://github.com/dejvokep/hk2026-app
 cover: ../../assets/projects/tatrashare/cover.webp
 
