@@ -20,7 +20,7 @@ interface Props {
 const { title, description = 'Tomáš Hutňan portfolio: machine learning, computer vision, and full-stack software projects.', pageTitle } = Astro.props;
 
 const siteOwner = 'Tomáš Hutňan';
-const computedTitle = pageTitle ? `${pageTitle} - ${siteOwner}` : (title ?? siteOwner);
+const computedTitle = pageTitle ? `${pageTitle} • ${siteOwner}` : (title ?? siteOwner);
 
 ---
 

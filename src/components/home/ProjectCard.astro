@@ -36,25 +36,19 @@ const keepNaturalCover = coverRatio >= 0.5 && coverRatio <= 2;
 	</a>
 
 	<div class="project-copy">
-		<div class="project-topline">
-			<span class="project-type">{project.data.type}</span>
-			{
-				project.data.role && (
-					<span class="project-role">{project.data.role}</span>
-				)
-			}
-		</div>
-
 		<h3>
 			<a href={projectHref}>{project.data.title}</a>
 		</h3>
+
+		<p class="project-role">{project.data.role} • {project.data.type}</p>
+
 		<p>{project.data.description}</p>
 
 		<ul class="tag-list">
 			{
 				project.data.tags.slice(0, 4).map((tag) => (
 					<li>
-						<TagLink tag={tag} size={0.75} />
+						<TagLink tag={tag} size={0.70} />
 					</li>
 				))
 			}
@@ -110,35 +104,18 @@ const keepNaturalCover = coverRatio >= 0.5 && coverRatio <= 2;
 		gap: 0.8rem;
 	}
 
-	.project-topline {
+	.project-role {
+		color: var(--text-secondary);
+		font-size: 0.85rem;
 		display: flex;
 		flex-wrap: wrap;
-		gap: 0.5rem;
 		align-items: center;
-	}
-
-	.project-type,
-	.project-role {
-		display: inline-flex;
-		align-items: center;
-		padding: 0.28rem 0.65rem;
-		border-radius: 999px;
-		font-size: 0.75rem;
-		font-weight: 600;
-	}
-
-	.project-type {
-		background: rgba(34, 211, 238, 0.12);
-		color: var(--primary-soft);
-	}
-
-	.project-role {
-		background: rgba(167, 139, 250, 0.12);
-		color: #c4b5fd;
 	}
 
 	h3 {
 		margin: 0;
+		font-family: var(--font-heading);
+		font-weight: 600;
 		font-size: 1.15rem;
 	}
 
@@ -148,8 +125,9 @@ const keepNaturalCover = coverRatio >= 0.5 && coverRatio <= 2;
 
 	p {
 		margin: 0;
-		line-height: 1.7;
-		color: var(--text-secondary);
+		font-size: 0.95rem;
+		line-height: 1.5;
+		color: var(--text-main);
 	}
 
 	.tag-list {
