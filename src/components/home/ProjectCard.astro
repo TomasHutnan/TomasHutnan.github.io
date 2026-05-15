@@ -1,6 +1,7 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import { slugify } from '../../utils/slug';
+import TagLink from '../TagLink.astro';
 
 interface Props {
 	project: CollectionEntry<'projects'>;
@@ -12,12 +13,12 @@ const coverRatio = project.data.cover.width / project.data.cover.height;
 const keepNaturalCover = coverRatio >= 0.5 && coverRatio <= 2;
 ---
 
-<article class="project-card">
-	<a
-		class:list={['project-cover-link', keepNaturalCover ? 'project-cover-link--natural' : 'project-cover-link--framed']}
-		href={projectHref}
-		aria-label={`Open ${project.data.title}`}
-	>
+<article class="project-card" data-tags={project.data.tags.join(' ')} data-tag-slugs={project.data.tags.map((t) => slugify(t)).join(' ')}>
+		<a
+			class:list={['project-cover-link', keepNaturalCover ? 'project-cover-link--natural' : 'project-cover-link--framed']}
+			href={projectHref}
+			aria-label={`Open ${project.data.title}`}
+		>
 		<img
 			src={project.data.cover.src}
 			alt={project.data.title}
@@ -39,7 +40,11 @@ const keepNaturalCover = coverRatio >= 0.5 && coverRatio <= 2;
 		<p>{project.data.description}</p>
 
 		<ul class="tag-list">
-			{project.data.tags.slice(0, 4).map((tag) => <li>{tag}</li>)}
+			{project.data.tags.slice(0, 4).map((tag) => (
+				<li>
+					<TagLink tag={tag} size={0.75}/>
+				</li>
+			))}
 		</ul>
 	</div>
 </article>
@@ -137,10 +142,6 @@ const keepNaturalCover = coverRatio >= 0.5 && coverRatio <= 2;
 	}
 
 	.tag-list li {
-		padding: 0.28rem 0.6rem;
-		border-radius: 999px;
-		font-size: 0.76rem;
-		background: rgba(34, 211, 238, 0.1);
-		color: var(--primary-soft);
+		display: flex;
 	}
 </style>

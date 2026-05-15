@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
+import { collectTagStats, getTagCloudFontSize } from '../../utils/tags';
 import Section from '../../components/home/Section.astro';
 import ProjectCard from '../../components/home/ProjectCard.astro';
 
@@ -10,21 +11,239 @@ const sortedProjects = projects.sort((left, right) => {
 	const rightDate = right.data.completedAt ?? right.data.startedAt ?? new Date(0);
 	return rightDate.getTime() - leftDate.getTime();
 });
+
+const minTagFontSize = 13;
+const maxTagFontSize = 18;
+
+const initialTagStats = collectTagStats(sortedProjects);
+const initialMaxCount = initialTagStats[0]?.count ?? 1;
 ---
 
 <Layout
-	title="Projects | Tomáš Hutňan"
+	pageTitle="Projects"
 	description="All projects from Tomáš Hutňan's portfolio, covering machine learning, games, and full-stack systems."
 >
 	<main class="projects-page">
 		<Section
 			eyebrow="Projects"
-			title="All projects"
-			description="A complete list of selected work across AI, systems, and interactive software."
+			title="Explore by Technology"
+			description="Explore projects by technologies and domains I work with most frequently."
 		>
+			<div class="cloud-shell">
+				<div
+					id="interactive-cloud"
+					class="tag-cloud"
+					style="display:flex;flex-wrap:wrap;gap:0.2rem 0.4rem;align-items:center;width:100%;min-height:0;overflow:visible;margin:0;padding:0.1rem 0 0.35rem;"
+				>
+					{initialTagStats.map((item) => {
+						const fontSize = getTagCloudFontSize(item.count, initialMaxCount, {
+							minFontSize: minTagFontSize,
+							maxFontSize: maxTagFontSize
+						});
+
+						return (
+							<a
+								class:list={['tag-box', item.count > 2 && 'tag-box--strong']}
+								href={`/projects?tags=${item.slug}`}
+								data-slug={item.slug}
+								aria-label={`${item.tag} (${item.count} projects)`}
+								style={`font-size: ${fontSize}px;`}
+							>
+								<span>{item.tag}</span>
+							</a>
+						);
+					})}
+				</div>
+                <div style="columns: 2;">
+                    <div id="filter-summary" class="filter-summary" aria-live="polite"></div>
+                    <div class="cloud-controls"><button id="clear-filter" hidden>Clear filter</button></div>
+                </div>
+			</div>
+
 			<div class="projects-grid">
 				{sortedProjects.map((project) => <ProjectCard project={project} />)}
 			</div>
+
+			<script type="module">
+				const cloud = document.getElementById('interactive-cloud');
+				const filterSummary = document.getElementById('filter-summary');
+				const clearBtn = document.getElementById('clear-filter');
+				const cards = Array.from(document.querySelectorAll('.projects-grid .project-card'));
+				const tagLinks = Array.from(document.querySelectorAll('[data-tag-slug]'));
+				const minFontSize = 13;
+				const maxFontSize = 18;
+
+				function getTagCloudFontSize(count, maxCount) {
+					const ratio = maxCount <= 1 ? 0 : (count - 1) / (maxCount - 1);
+					return minFontSize + ratio * (maxFontSize - minFontSize);
+				}
+
+				function getVisibleTagStats() {
+					const counts = new Map();
+
+					for (const card of cards) {
+						if (card.hidden) continue;
+
+						for (const tagLink of card.querySelectorAll('.tag-link[data-tag-slug]')) {
+							const slug = tagLink.getAttribute('data-tag-slug');
+							if (!slug) continue;
+							const tag = tagLink.textContent?.trim() || slug;
+							const existing = counts.get(slug);
+
+							if (existing) {
+								existing.count += 1;
+							} else {
+								counts.set(slug, { slug, tag, count: 1 });
+							}
+						}
+					}
+
+					return [...counts.values()].sort((left, right) => right.count - left.count || left.tag.localeCompare(right.tag));
+				}
+
+				function renderCloud(selected) {
+					const stats = getVisibleTagStats();
+					const maxCount = stats[0]?.count ?? 1;
+
+					cloud.replaceChildren();
+					cloud.style.display = 'flex';
+					cloud.style.flexWrap = 'wrap';
+					cloud.style.gap = '0.2rem 0.4rem';
+					cloud.style.alignItems = 'center';
+					cloud.style.width = '100%';
+					cloud.style.height = 'auto';
+					cloud.style.minHeight = '0';
+					cloud.style.overflow = 'visible';
+					cloud.style.margin = '0';
+					cloud.style.padding = '0.1rem 0 0.35rem';
+
+					for (const item of stats) {
+						const link = document.createElement('a');
+						link.className = 'tag-box';
+						if (item.count > 2) {
+							link.classList.add('tag-box--strong');
+						}
+						if (selected.has(item.slug)) {
+							link.classList.add('active');
+						}
+						const nextSelected = selected.has(item.slug) ? [...selected].filter((slug) => slug !== item.slug) : [...selected, item.slug];
+						link.href = nextSelected.length === 0 ? '/projects' : `/projects?tags=${nextSelected.join(',')}`;
+						link.dataset.slug = item.slug;
+						link.setAttribute('aria-label', `${item.tag} (${item.count} projects)`);
+						link.style.fontSize = `${getTagCloudFontSize(item.count, maxCount)}px`;
+
+						const label = document.createElement('span');
+						label.textContent = item.tag;
+						link.append(label);
+						cloud.append(link);
+					}
+				}
+
+				if (!(cloud instanceof HTMLElement) || !(filterSummary instanceof HTMLElement) || !(clearBtn instanceof HTMLButtonElement)) {
+					throw new Error('Projects filter UI failed to initialize.');
+				}
+
+				function getSelectedFromURL() {
+					const params = new URLSearchParams(window.location.search);
+					return new Set((params.get('tags') || '').split(',').map((value) => value.trim()).filter(Boolean));
+				}
+
+				function setSelectedToURL(selected) {
+					const nextUrl = selected.size === 0
+						? window.location.pathname
+						: `${window.location.pathname}?tags=${[...selected].join(',')}`;
+					history.replaceState({}, '', nextUrl);
+				}
+
+				function applyFilters(selected) {
+					if (selected.size === 0) {
+						cards.forEach((card) => {
+							card.hidden = false;
+						});
+						return;
+					}
+
+					cards.forEach((card) => {
+						const tags = (card.getAttribute('data-tag-slugs') || '').split(/\s+/).filter(Boolean);
+						card.hidden = ![...selected].every((tag) => tags.includes(tag));
+					});
+				}
+
+				function renderSummary(selected) {
+					const visibleCount = cards.filter((card) => !card.hidden).length;
+					const totalCount = cards.length;
+					filterSummary.replaceChildren();
+
+					const text = document.createElement('div');
+					text.className = 'filter-summary__text';
+					text.textContent = `Showing ${visibleCount} of ${totalCount} projects`;
+					filterSummary.append(text);
+				}
+
+				function updateActiveState(selected) {
+					for (const link of [...cloud.querySelectorAll('a[data-slug]'), ...tagLinks]) {
+						const slug = link.getAttribute('data-slug') || link.getAttribute('data-tag-slug');
+						link.classList.toggle('active', Boolean(slug && selected.has(slug)));
+					}
+				}
+
+				function sync() {
+					const selected = getSelectedFromURL();
+					applyFilters(selected);
+					const visibleCount = cards.filter((card) => !card.hidden).length;
+
+					if (selected.size > 0 && visibleCount === 0) {
+						history.replaceState({}, '', window.location.pathname);
+						applyFilters(new Set());
+						renderCloud(new Set());
+						renderSummary(new Set());
+						updateActiveState(new Set());
+						clearBtn.hidden = true;
+						return;
+					}
+
+					renderCloud(selected);
+					renderSummary(selected);
+					updateActiveState(selected);
+					clearBtn.hidden = selected.size === 0;
+				}
+
+				cloud.addEventListener('click', (event) => {
+					const target = event.target;
+					if (!(target instanceof Element)) return;
+					const link = target.closest('a[data-slug]');
+					if (!link) return;
+					event.preventDefault();
+					const slug = link.getAttribute('data-slug');
+					if (!slug) return;
+					const selected = getSelectedFromURL();
+					selected.has(slug) ? selected.delete(slug) : selected.add(slug);
+					setSelectedToURL(selected);
+					sync();
+				});
+
+				document.addEventListener('click', (event) => {
+					const target = event.target;
+					if (!(target instanceof Element)) return;
+					const link = target.closest('[data-tag-slug]');
+					if (!link || !tagLinks.includes(link)) return;
+					event.preventDefault();
+					const slug = link.getAttribute('data-tag-slug');
+					if (!slug) return;
+					const selected = getSelectedFromURL();
+					selected.has(slug) ? selected.delete(slug) : selected.add(slug);
+					setSelectedToURL(selected);
+					sync();
+				});
+
+				clearBtn.addEventListener('click', () => {
+					history.replaceState({}, '', window.location.pathname);
+					sync();
+				});
+
+				window.addEventListener('popstate', sync);
+				sync();
+			</script>
 		</Section>
 	</main>
 </Layout>
@@ -40,5 +259,99 @@ const sortedProjects = projects.sort((left, right) => {
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 		gap: 1rem;
+	}
+
+	:global(.projects-grid .project-card[hidden]) {
+		display: none !important;
+	}
+
+	.cloud-shell {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		margin-bottom: 1.25rem;
+	}
+
+	:global(.filter-summary) {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.7rem;
+		margin-top: 1.5rem;
+		color: var(--text-secondary);
+	}
+
+	:global(.filter-summary__text) {
+		font-size: 0.92rem;
+		font-weight: 600;
+	}
+
+	:global(.filter-summary__chips) {
+		display: none;
+	}
+
+	:global(.tag-cloud) {
+		position: relative;
+		width: 100%;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.2rem 0.4rem;
+		align-items: center;
+		min-height: 0;
+		overflow: visible;
+		margin: 0;
+		padding: 0.1rem 0 0.35rem;
+	}
+
+	:global(.tag-box) {
+		position: static;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0.05rem 0.2rem;
+		border-radius: 0.2rem;
+		background: transparent !important;
+		border: 0 !important;
+		backdrop-filter: none;
+		color: var(--text-secondary);
+		text-decoration: none;
+		box-shadow: none;
+		transition: color 160ms ease, opacity 160ms ease, transform 160ms ease;
+		line-height: 1.1;
+		white-space: nowrap;
+	}
+
+	:global(.tag-box span) {
+		pointer-events: none;
+	}
+
+	:global(.tag-box:hover) {
+		transform: translateY(-1px);
+		color: var(--text-main);
+	}
+
+	:global(.tag-box.active) {
+		color: var(--text-main);
+		font-weight: 700;
+		text-decoration: underline;
+		text-decoration-thickness: 2px;
+		text-underline-offset: 0.16em;
+	}
+
+	:global(.tag-box--strong) {
+		background: transparent !important;
+		color: var(--text-main);
+		font-weight: 700;
+	}
+
+	.cloud-controls button {
+		background: transparent;
+		border: 0px solid var(--border);
+		color: var(--text-secondary);
+		margin-top: 1.5rem;
+	}
+
+	.cloud-controls button:hover {
+		color: var(--text-main);
 	}
 </style>

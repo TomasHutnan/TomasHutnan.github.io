@@ -1,0 +1,43 @@
+---
+import { slugify } from '../utils/slug';
+
+interface Props {
+	tag: string;
+	size?: number;
+}
+
+const { tag, size } = Astro.props;
+const href = `/projects?tags=${slugify(tag)}`;
+---
+
+<a class="tag-link" href={href} data-tag-slug={slugify(tag)} style={size ? `font-size: ${size}rem;` : undefined}>
+	<span>{tag}</span>
+</a>
+
+<style>
+	.tag-link {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0.3rem 0.7rem;
+		border-radius: 999px;
+		background: rgba(34, 211, 238, 0.12);
+		color: var(--primary-soft);
+		text-decoration: none;
+		font-weight: 600;
+		line-height: 1.1;
+		white-space: nowrap;
+		transition: transform 160ms ease, background 160ms ease, color 160ms ease;
+	}
+
+	.tag-link:hover {
+		transform: translateY(-1px);
+		background: rgba(34, 211, 238, 0.18);
+		color: var(--text-main);
+	}
+
+	.tag-link.active {
+		background: linear-gradient(90deg, rgba(34, 211, 238, 0.18), rgba(167, 139, 250, 0.16));
+		color: var(--text-main);
+	}
+</style>
