@@ -27,6 +27,7 @@ const projects = defineCollection({
             gallery: z.array(image()).optional(),
 
             role: z.string().optional(),
+            shortRoleDescription: z.string().optional(),
             contribution: z.string().optional(),
             collaborators: z.array(z.string()).optional()
         })

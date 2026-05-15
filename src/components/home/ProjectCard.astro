@@ -1,10 +1,10 @@
 ---
-import type { CollectionEntry } from 'astro:content';
-import { slugify } from '../../utils/slug';
-import TagLink from '../TagLink.astro';
+import type { CollectionEntry } from "astro:content";
+import { slugify } from "../../utils/slug";
+import TagLink from "../TagLink.astro";
 
 interface Props {
-	project: CollectionEntry<'projects'>;
+	project: CollectionEntry<"projects">;
 }
 
 const { project } = Astro.props;
@@ -13,12 +13,19 @@ const coverRatio = project.data.cover.width / project.data.cover.height;
 const keepNaturalCover = coverRatio >= 0.5 && coverRatio <= 2;
 ---
 
-<article class="project-card" data-tags={project.data.tags.join(' ')} data-tag-slugs={project.data.tags.map((t) => slugify(t)).join(' ')}>
-		<a
-			class:list={['project-cover-link', keepNaturalCover ? 'project-cover-link--natural' : 'project-cover-link--framed']}
-			href={projectHref}
-			aria-label={`Open ${project.data.title}`}
-		>
+<article
+	class="project-card"
+	data-tags={project.data.tags.join(" ")}
+	data-tag-slugs={project.data.tags.map((t) => slugify(t)).join(" ")}
+>
+	<a
+		class:list={[
+			"project-cover-link",
+			"project-cover-link--framed",
+		]}
+		href={projectHref}
+		aria-label={`Open ${project.data.title}`}
+	>
 		<img
 			src={project.data.cover.src}
 			alt={project.data.title}
@@ -31,7 +38,11 @@ const keepNaturalCover = coverRatio >= 0.5 && coverRatio <= 2;
 	<div class="project-copy">
 		<div class="project-topline">
 			<span class="project-type">{project.data.type}</span>
-			{project.data.role && <span class="project-role">{project.data.role}</span>}
+			{
+				project.data.role && (
+					<span class="project-role">{project.data.role}</span>
+				)
+			}
 		</div>
 
 		<h3>
@@ -40,24 +51,30 @@ const keepNaturalCover = coverRatio >= 0.5 && coverRatio <= 2;
 		<p>{project.data.description}</p>
 
 		<ul class="tag-list">
-			{project.data.tags.slice(0, 4).map((tag) => (
-				<li>
-					<TagLink tag={tag} size={0.75}/>
-				</li>
-			))}
+			{
+				project.data.tags.slice(0, 4).map((tag) => (
+					<li>
+						<TagLink tag={tag} size={0.75} />
+					</li>
+				))
+			}
 		</ul>
 	</div>
 </article>
 
 <style>
 	.project-card {
-		display: grid;
+		display: block;
 		gap: 1rem;
 		height: 100%;
 		padding: 1rem;
 		border: 1px solid var(--border);
 		border-radius: var(--radius-lg);
-		background: linear-gradient(180deg, rgba(17, 24, 39, 0.94), rgba(15, 23, 42, 0.92));
+		background: linear-gradient(
+			180deg,
+			rgba(17, 24, 39, 0.94),
+			rgba(15, 23, 42, 0.92)
+		);
 		box-shadow: var(--shadow-card);
 	}
 
@@ -88,6 +105,7 @@ const keepNaturalCover = coverRatio >= 0.5 && coverRatio <= 2;
 	}
 
 	.project-copy {
+		margin-top: 1rem;
 		display: grid;
 		gap: 0.8rem;
 	}

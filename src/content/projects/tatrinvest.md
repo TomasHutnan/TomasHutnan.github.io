@@ -25,7 +25,8 @@ repo: https://github.com/dejvokep/hk2024-app
 
 cover: ../../assets/projects/tatrinvest/cover.webp
 
-role: Machine Learning Engineer
+role: ML Engineer
+shortRoleDescription: Built AI-powered investment features including prediction models and a financial assistant.
 contribution: Worked on interpolation techniques for stock price prediction and co-developed an LLM-based AI financial assistant, primarily focusing on backend implementation and API design.
 
 collaborators:

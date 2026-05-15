@@ -22,7 +22,8 @@ demo: https://www.youtube.com/watch?v=HhdKHjrPklo
 
 cover: ../../assets/projects/rizumu/cover.webp
 
-role: Frontend / UI Systems Developer
+role: UI Engineer
+shortRoleDescription: Developed responsive UI systems and rhythm-driven animations for interactive gameplay.
 contribution: Developed UI systems including menus, settings, and level selection, implemented rhythm-synchronized animations, and worked on debugging and stabilizing gameplay systems, particularly within UI and level editor components.
 
 collaborators:

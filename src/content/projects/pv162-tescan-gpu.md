@@ -1,6 +1,6 @@
 ---
-title: CUDA Image Enhancement (TESCAN Collaboration)
-description: GPU-accelerated image enhancemnt via CUDA, focusing on performance, validation, and architectural clarity.
+title: CUDA Image Enhancement
+description: GPU-accelerated image enhancemnt pipeline, focusing on performance, validation, and architectural clarity. (TESCAN Collaboration)
 tags:
   - cuda
   - cplusplus
@@ -19,6 +19,7 @@ repo: https://gitlab.fi.muni.cz/xhutnan/pv162-tescan-gpu
 cover: ../../assets/projects/pv162-tescan-gpu/cover.webp
 
 role: GPU Engineer
+shortRoleDescription: Built a high-performance CUDA pipeline for image processing and validation.
 contribution: Designed and implemented a multi-stage CUDA-based image processing pipeline, optimized performance-critical kernels, and developed testing and validation workflows to ensure numerical correctness and reproducibility.
 ---
 

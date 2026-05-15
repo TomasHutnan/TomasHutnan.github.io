@@ -20,6 +20,7 @@ repo: https://github.com/dejvokep/hk2026-app
 cover: ../../assets/projects/tatrashare/cover.webp
 
 role: Technical Advisor
+shortRoleDescription: Guided technical decisions for an AI-powered shared finance platform.
 contribution: Provided architectural guidance, design feedback, and suggested implementation approaches during development, helping the team make informed technical decisions under time constraints.
 
 collaborators:

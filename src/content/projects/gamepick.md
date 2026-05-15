@@ -23,6 +23,7 @@ repo: https://github.com/TomasHutnan/bloomreach_challenge-recommendation_algorit
 cover: ../../assets/projects/gamepick/cover.webp
 
 role: Data Engineer
+shortRoleDescription: Built a data-driven game recommendation system using real user activity data.
 contribution: Developed backend data processing pipelines using Python, Pandas, and NumPy, set up the Google Cloud environment, and worked with real-world user data to build the recommendation system.
 
 collaborators:

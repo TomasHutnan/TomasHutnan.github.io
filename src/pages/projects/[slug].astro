@@ -1,25 +1,30 @@
 ---
-import { getCollection, getEntries, render, type CollectionEntry } from 'astro:content';
-import Layout from '../../layouts/Layout.astro';
-import { slugify } from '../../utils/slug';
-import TagLink from '../../components/TagLink.astro';
-import demoIcon from '../../assets/icons/demo.svg';
-import paperIcon from '../../assets/icons/paper.svg';
-import repoIcon from '../../assets/icons/repository.svg';
+import {
+    getCollection,
+    getEntries,
+    render,
+    type CollectionEntry,
+} from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+import { slugify } from "../../utils/slug";
+import TagLink from "../../components/TagLink.astro";
+import demoIcon from "../../assets/icons/demo.svg";
+import paperIcon from "../../assets/icons/paper.svg";
+import repoIcon from "../../assets/icons/repository.svg";
 
 export async function getStaticPaths() {
-    const projects = await getCollection('projects');
+    const projects = await getCollection("projects");
 
     return projects.map((project) => {
         return {
             params: { slug: slugify(project.id) },
-            props: { project }
+            props: { project },
         };
     });
 }
 
 interface Props {
-    project: CollectionEntry<'projects'>;
+    project: CollectionEntry<"projects">;
 }
 
 const { project } = Astro.props;
@@ -38,116 +43,193 @@ const { Content } = await render(project);
                     <div class="meta-left">
                         <span class="pill">{project.data.type}</span>
                         <span>
-                            {project.data.startedAt ? `${project.data.startedAt.getFullYear()} ${['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][project.data.startedAt.getMonth()]} ${String(project.data.startedAt.getDate()).padStart(2, '0')}` : 'Planned'}
-                            {' - '}
-                            {project.data.completedAt ? `${project.data.completedAt.getFullYear()} ${['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][project.data.completedAt.getMonth()]} ${String(project.data.completedAt.getDate()).padStart(2, '0')}` : 'In progress'}
+                            {
+                                project.data.startedAt
+                                    ? `${project.data.startedAt.getFullYear()} ${["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][project.data.startedAt.getMonth()]} ${String(project.data.startedAt.getDate()).padStart(2, "0")}`
+                                    : "Planned"
+                            }
+                            {" - "}
+                            {
+                                project.data.completedAt
+                                    ? `${project.data.completedAt.getFullYear()} ${["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][project.data.completedAt.getMonth()]} ${String(project.data.completedAt.getDate()).padStart(2, "0")}`
+                                    : "In progress"
+                            }
                         </span>
                     </div>
 
-                    {(project.data.repo || project.data.demo || project.data.paper) && (
-                        <div class="project-links">
-                            {project.data.demo && (
-                                <a href={project.data.demo} target="_blank" rel="noopener noreferrer" class="link-item">
-                                    <img src={demoIcon.src} alt="Demo" class="link-icon" />
-                                    <span>Demo</span>
-                                </a>
-                            )}
-                            {project.data.paper && (
-                                <a href={project.data.paper} target="_blank" rel="noopener noreferrer" class="link-item">
-                                    <img src={paperIcon.src} alt="Paper" class="link-icon" />
-                                    <span>Paper</span>
-                                </a>
-                            )}
-                            {project.data.repo && (
-                                <a href={project.data.repo} target="_blank" rel="noopener noreferrer" class="link-item">
-                                    <img src={repoIcon.src} alt="Repository" class="link-icon" />
-                                    <span>Repository</span>
-                                </a>
-                            )}
-                        </div>
-                    )}
-
+                    {
+                        (project.data.repo ||
+                            project.data.demo ||
+                            project.data.paper) && (
+                            <div class="project-links">
+                                {project.data.demo && (
+                                    <a
+                                        href={project.data.demo}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        class="link-item"
+                                    >
+                                        <img
+                                            src={demoIcon.src}
+                                            alt="Demo"
+                                            class="link-icon"
+                                        />
+                                        <span>Demo</span>
+                                    </a>
+                                )}
+                                {project.data.paper && (
+                                    <a
+                                        href={project.data.paper}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        class="link-item"
+                                    >
+                                        <img
+                                            src={paperIcon.src}
+                                            alt="Paper"
+                                            class="link-icon"
+                                        />
+                                        <span>Paper</span>
+                                    </a>
+                                )}
+                                {project.data.repo && (
+                                    <a
+                                        href={project.data.repo}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        class="link-item"
+                                    >
+                                        <img
+                                            src={repoIcon.src}
+                                            alt="Repository"
+                                            class="link-icon"
+                                        />
+                                        <span>Repository</span>
+                                    </a>
+                                )}
+                            </div>
+                        )
+                    }
                 </div>
 
-                {(project.data.role || project.data.collaborators) && (
-                    <div class="project-info">
-                        {project.data.role && <div><strong>Role:</strong> {project.data.role}</div>}
-                        {project.data.collaborators && project.data.collaborators.length > 0 && (
-                            <div><strong>Collaborators:</strong> {project.data.collaborators.join(', ')}</div>
-                        )}
-                    </div>
-                )}
+                {
+                    (project.data.role || project.data.collaborators) && (
+                        <div class="project-info">
+                            {project.data.role &&
+                                (project.data.shortRoleDescription ? (
+                                    <div>
+                                        <strong>Role:</strong>{" "}
+                                        {project.data.role}
+                                        <p style="margin-top: 0;">{project.data.shortRoleDescription}</p>
+                                    </div>
+                                ) : (
+                                    <div>
+                                        <strong>Role:</strong>{" "}
+                                        {project.data.role}
+                                    </div>
+                                ))}
+                            {project.data.collaborators &&
+                                project.data.collaborators.length > 0 && (
+                                    <div>
+                                        <strong>Collaborators:</strong>{" "}
+                                        {project.data.collaborators.join(", ")}
+                                    </div>
+                                )}
+                        </div>
+                    )
+                }
             </header>
 
             <figure class="project-cover">
-                <img src={project.data.cover.src} alt={project.data.title} width={project.data.cover.width} height={project.data.cover.height} loading="eager" />
+                <img
+                    src={project.data.cover.src}
+                    alt={project.data.title}
+                    width={project.data.cover.width}
+                    height={project.data.cover.height}
+                    loading="eager"
+                />
             </figure>
 
             <ul class="tag-list">
-                {project.data.tags.map((tag) => (
-                    <li>
-                        <TagLink tag={tag} />
-                    </li>
-                ))}
+                {
+                    project.data.tags.map((tag) => (
+                        <li>
+                            <TagLink tag={tag} />
+                        </li>
+                    ))
+                }
             </ul>
 
             <div class="content-body">
                 <Content />
             </div>
 
-            {project.data.gallery && project.data.gallery.length > 0 && (
-                <section class="gallery-section">
-                    <h2>Gallery</h2>
-                    <ul class="gallery-grid">
-                        {project.data.gallery.map((image) => (
-                            <li>
-                                <img 
-                                    src={image.src} 
-                                    alt={project.data.title} 
-                                    width={image.width} 
-                                    height={image.height}
-                                    loading="lazy"
-                                />
+            {
+                project.data.gallery && project.data.gallery.length > 0 && (
+                    <section class="gallery-section">
+                        <h2>Gallery</h2>
+                        <ul class="gallery-grid">
+                            {project.data.gallery.map((image) => (
+                                <li>
+                                    <img
+                                        src={image.src}
+                                        alt={project.data.title}
+                                        width={image.width}
+                                        height={image.height}
+                                        loading="lazy"
+                                    />
+                                </li>
+                            ))}
+                        </ul>
+                    </section>
+                )
+            }
+
+            {
+                project.data.contribution && (
+                    <section class="contribution-section">
+                        <h2>Contribution</h2>
+                        <p>{project.data.contribution}</p>
+                    </section>
+                )
+            }
+        </article>
+
+        {
+            awards.length > 0 && (
+                <section class="awards-section">
+                    <h2>Awards</h2>
+                    <ul class="award-grid">
+                        {awards.map((award) => (
+                            <li class="award-card">
+                                {award.data.cover && (
+                                    <img
+                                        class="award-cover"
+                                        src={award.data.cover.src}
+                                        alt={award.data.title}
+                                        width={award.data.cover.width}
+                                        height={award.data.cover.height}
+                                        loading="lazy"
+                                    />
+                                )}
+                                <div class="award-copy">
+                                    <strong>{award.data.title}</strong>
+                                    <span>
+                                        {award.data.event} - {award.data.issuer}
+                                    </span>
+                                    <span>
+                                        {award.data.date.toLocaleDateString(
+                                            "en-US",
+                                            { month: "short", year: "numeric" },
+                                        )}
+                                    </span>
+                                </div>
                             </li>
                         ))}
                     </ul>
                 </section>
-            )}
-
-            {project.data.contribution && (
-                <section class="contribution-section">
-                    <h2>Contribution</h2>
-                    <p>{project.data.contribution}</p>
-                </section>
-            )}
-        </article>
-
-        {awards.length > 0 && (
-            <section class="awards-section">
-                <h2>Awards</h2>
-                <ul class="award-grid">
-                    {awards.map((award) => (
-                        <li class="award-card">
-                            {award.data.cover && (
-                                <img
-                                    class="award-cover"
-                                    src={award.data.cover.src}
-                                    alt={award.data.title}
-                                    width={award.data.cover.width}
-                                    height={award.data.cover.height}
-                                    loading="lazy"
-                                />
-                            )}
-                            <div class="award-copy">
-                                <strong>{award.data.title}</strong>
-                                <span>{award.data.event} - {award.data.issuer}</span>
-                                <span>{award.data.date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</span>
-                            </div>
-                        </li>
-                    ))}
-                </ul>
-            </section>
-        )}
+            )
+        }
     </main>
 </Layout>
 
@@ -267,7 +349,8 @@ const { Content } = await render(project);
         display: inline-block;
         align-self: center;
         vertical-align: middle;
-        filter: invert(1) sepia(1) saturate(1000%) hue-rotate(180deg) brightness(1.2);
+        filter: invert(1) sepia(1) saturate(1000%) hue-rotate(180deg)
+            brightness(1.2);
     }
 
     .project-links .link-item span {

@@ -21,7 +21,8 @@ demo: https://youtu.be/HhdKHjrPklo
 
 cover: ../../assets/projects/aninos-odyssey/cover.webp
 
-role: Frontend / Gameplay Systems Developer
+role: Gameplay Engineer
+shortRoleDescription: Built core gameplay systems and integrated features into a cohesive game experience.
 contribution: Implemented core gameplay systems in Unity, including UI, menus, dialogs, tutorials, inventory, shop mechanics, and scene management, working closely with the game designer to integrate features into a cohesive player experience.
 
 collaborators:

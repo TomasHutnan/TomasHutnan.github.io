@@ -23,6 +23,7 @@ repo: https://github.com/TomasHutnan/ae-tearz/
 cover: ../../assets/projects/tearz/cover.webp
 
 role: Project Lead
+shortRoleDescription: Built an AI-driven diagnostic system for non-invasive disease detection.
 contribution: Led development of the diagnostic pipeline, including preprocessing design, feature engineering, and model architecture decisions, as well as overall system integration and technical direction.
 
 collaborators:

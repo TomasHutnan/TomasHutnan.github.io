@@ -23,6 +23,7 @@ repo: https://github.com/TomasHutnan/ai-comics-generation_hk
 cover: ../../assets/projects/telecomic/cover.webp
 
 role: Backend Engineer
+shortRoleDescription: Developed an AI-driven backend for generating coherent multi-panel comics.
 contribution: Developed the backend API using Python and Flask, integrating OpenAI models for text and image generation, and optimized prompt design for consistent multi-panel comic outputs. Contributed to API contract design alongside frontend development.
 
 collaborators:
