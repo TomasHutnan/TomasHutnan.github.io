@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
+import { buildTagCloud } from '../../utils/tags';
 import Section from '../../components/home/Section.astro';
 import ProjectCard from '../../components/home/ProjectCard.astro';
 
@@ -22,9 +23,316 @@ const sortedProjects = projects.sort((left, right) => {
 			title="All projects"
 			description="A complete list of selected work across AI, systems, and interactive software."
 		>
+			<div class="cloud-shell">
+				<div id="interactive-cloud" class="tag-cloud">
+					{buildTagCloud(sortedProjects).items.map((item) => (
+						<a
+							class:list={['tag-box', item.count > 2 && 'tag-box--strong']}
+							href={`/projects?tags=${item.slug}`}
+							data-slug={item.slug}
+							aria-label={`${item.tag} (${item.count} projects)`}
+							style={`left: ${item.x}px; top: ${item.y}px; width: ${item.width}px; height: ${item.height}px; font-size: ${item.fontSize}px;`}
+						>
+							<span>{item.tag}</span>
+						</a>
+					))}
+				</div>
+				<div id="filter-summary" class="filter-summary" aria-live="polite"></div>
+				<div class="cloud-controls"><button id="clear-filter" hidden>Clear filter</button></div>
+			</div>
+
 			<div class="projects-grid">
 				{sortedProjects.map((project) => <ProjectCard project={project} />)}
 			</div>
+
+			<script type="module">
+				const cloud = document.getElementById('interactive-cloud');
+				const filterSummary = document.getElementById('filter-summary');
+				const clearBtn = document.getElementById('clear-filter');
+				const cards = Array.from(document.querySelectorAll('.projects-grid .project-card'));
+				const tagLinks = Array.from(document.querySelectorAll('[data-tag-slug]'));
+				const slugToLabel = new Map();
+				const cloudPadding = 2.5;
+
+				function estimateTagBox(tag, fontSize) {
+					return {
+						width: Math.max(72, tag.length * fontSize * 0.62 + 28),
+						height: Math.max(36, fontSize * 1.55 + 18)
+					};
+				}
+
+				function overlaps(left, right, gap = 0.8) {
+					return !(
+						left.x + left.width / 2 + gap <= right.x - right.width / 2 ||
+						left.x - left.width / 2 - gap >= right.x + right.width / 2 ||
+						left.y + left.height / 2 + gap <= right.y - right.height / 2 ||
+						left.y - left.height / 2 - gap >= right.y + right.height / 2
+					);
+				}
+
+				function spiralPoint(step) {
+					const angle = step * 0.52;
+					const radius = 18 * Math.sqrt(step);
+
+					return {
+						x: radius * Math.cos(angle),
+						y: radius * Math.sin(angle)
+					};
+				}
+
+				function getVisibleTagStats() {
+					const counts = new Map();
+
+					for (const card of cards) {
+						if (card.hidden) continue;
+
+						for (const tagLink of card.querySelectorAll('.tag-link[data-tag-slug]')) {
+							const slug = tagLink.getAttribute('data-tag-slug');
+							if (!slug) continue;
+							const tag = tagLink.textContent?.trim() || slug;
+							const existing = counts.get(slug);
+
+							if (existing) {
+								existing.count += 1;
+							} else {
+								counts.set(slug, { slug, tag, count: 1 });
+							}
+						}
+					}
+
+					return [...counts.values()].sort((left, right) => right.count - left.count || left.tag.localeCompare(right.tag));
+				}
+
+				function buildCloudItems(stats) {
+					if (stats.length === 0) {
+						return { width: 0, height: 0, items: [] };
+					}
+
+					const maxCount = stats[0]?.count ?? 1;
+					const placed = [];
+					const rawItems = stats.map((stat) => {
+						const fontSize = 15 + (stat.count / maxCount) * 18;
+						const { width, height } = estimateTagBox(stat.tag, fontSize);
+
+						return {
+							...stat,
+							fontSize,
+							width,
+							height
+						};
+					});
+
+					const sortedItems = [...rawItems].sort((left, right) => right.count - left.count || left.tag.localeCompare(right.tag));
+					const positioned = sortedItems.map((item, index) => {
+						let candidate = { x: 0, y: 0 };
+						let found = false;
+
+						for (let step = 0; step < 2500; step += 1) {
+							const point = step === 0 ? { x: 0, y: 0 } : spiralPoint(step + index * 7);
+							candidate = { x: point.x, y: point.y };
+							const testBox = { ...candidate, width: item.width, height: item.height };
+
+							if (placed.every((existing) => !overlaps(testBox, existing))) {
+								placed.push(testBox);
+								found = true;
+								break;
+							}
+						}
+
+						if (!found) {
+							placed.push({ x: candidate.x, y: candidate.y, width: item.width, height: item.height });
+						}
+
+						return {
+							...item,
+							x: candidate.x,
+							y: candidate.y
+						};
+					});
+
+					const minX = Math.min(...placed.map((item) => item.x - item.width / 2));
+					const maxX = Math.max(...placed.map((item) => item.x + item.width / 2));
+					const minY = Math.min(...placed.map((item) => item.y - item.height / 2));
+					const maxY = Math.max(...placed.map((item) => item.y + item.height / 2));
+					const width = Math.max(80, maxX - minX + cloudPadding * 2);
+					const height = Math.max(48, maxY - minY + cloudPadding * 2);
+					const offsetX = -minX + cloudPadding;
+					const offsetY = -minY + cloudPadding;
+
+					return {
+						width,
+						height,
+						items: positioned.map((item) => ({
+							...item,
+							x: item.x + offsetX,
+							y: item.y + offsetY
+						}))
+					};
+				}
+
+				function renderCloud(selected) {
+					const stats = getVisibleTagStats();
+					const layout = buildCloudItems(stats);
+
+					cloud.replaceChildren();
+					cloud.style.width = layout.width ? `${layout.width}px` : '100%';
+					cloud.style.height = layout.height ? `${layout.height}px` : '0px';
+
+					for (const item of layout.items) {
+						const link = document.createElement('a');
+						link.className = 'tag-box';
+						if (item.count > 2) {
+							link.classList.add('tag-box--strong');
+						}
+						if (selected.has(item.slug)) {
+							link.classList.add('active');
+						}
+						const nextSelected = selected.has(item.slug) ? [...selected].filter((slug) => slug !== item.slug) : [...selected, item.slug];
+						link.href = nextSelected.length === 0 ? '/projects' : `/projects?tags=${nextSelected.join(',')}`;
+						link.dataset.slug = item.slug;
+						link.setAttribute('aria-label', `${item.tag} (${item.count} projects)`);
+						link.style.left = `${item.x}px`;
+						link.style.top = `${item.y}px`;
+						link.style.width = `${item.width}px`;
+						link.style.height = `${item.height}px`;
+						link.style.fontSize = `${item.fontSize}px`;
+
+						const label = document.createElement('span');
+						label.textContent = item.tag;
+						link.append(label);
+						cloud.append(link);
+					}
+				}
+
+				if (!(cloud instanceof HTMLElement) || !(filterSummary instanceof HTMLElement) || !(clearBtn instanceof HTMLButtonElement)) {
+					throw new Error('Projects filter UI failed to initialize.');
+				}
+
+				for (const link of cloud.querySelectorAll('a[data-slug]')) {
+					const slug = link.getAttribute('data-slug');
+					if (slug) {
+						slugToLabel.set(slug, link.textContent.trim());
+					}
+				}
+
+				for (const link of tagLinks) {
+					const slug = link.getAttribute('data-tag-slug');
+					if (slug && !slugToLabel.has(slug)) {
+						slugToLabel.set(slug, link.textContent.trim());
+					}
+				}
+
+				function getSelectedFromURL() {
+					const params = new URLSearchParams(window.location.search);
+					return new Set((params.get('tags') || '').split(',').map((value) => value.trim()).filter(Boolean));
+				}
+
+				function setSelectedToURL(selected) {
+					const nextUrl = selected.size === 0
+						? window.location.pathname
+						: `${window.location.pathname}?tags=${[...selected].join(',')}`;
+					history.replaceState({}, '', nextUrl);
+				}
+
+				function applyFilters(selected) {
+					if (selected.size === 0) {
+						cards.forEach((card) => {
+							card.hidden = false;
+						});
+						return;
+					}
+
+					cards.forEach((card) => {
+						const tags = (card.getAttribute('data-tag-slugs') || '').split(/\s+/).filter(Boolean);
+						card.hidden = ![...selected].every((tag) => tags.includes(tag));
+					});
+				}
+
+				function renderSummary(selected) {
+					const visibleCount = cards.filter((card) => !card.hidden).length;
+					const totalCount = cards.length;
+					filterSummary.replaceChildren();
+
+					const text = document.createElement('div');
+					text.className = 'filter-summary__text';
+					text.textContent = `Showing ${visibleCount} of ${totalCount} projects`;
+
+					const chips = document.createElement('div');
+					chips.className = 'filter-summary__chips';
+
+					for (const slug of selected) {
+						const label = slugToLabel.get(slug) ?? slug;
+						const button = document.createElement('button');
+						button.type = 'button';
+						button.className = 'filter-chip';
+						button.dataset.removeTag = slug;
+						button.textContent = `${label} ×`;
+
+						button.addEventListener('click', () => {
+							const nextSelected = getSelectedFromURL();
+							nextSelected.delete(slug);
+							setSelectedToURL(nextSelected);
+							sync();
+						});
+
+						chips.appendChild(button);
+					}
+
+					filterSummary.append(text, chips);
+				}
+
+				function updateActiveState(selected) {
+					for (const link of [...cloud.querySelectorAll('a[data-slug]'), ...tagLinks]) {
+						const slug = link.getAttribute('data-slug') || link.getAttribute('data-tag-slug');
+						link.classList.toggle('active', Boolean(slug && selected.has(slug)));
+					}
+				}
+
+				function sync() {
+					const selected = getSelectedFromURL();
+					applyFilters(selected);
+					renderCloud(selected);
+					renderSummary(selected);
+					updateActiveState(selected);
+					clearBtn.hidden = selected.size === 0;
+				}
+
+				cloud.addEventListener('click', (event) => {
+					const target = event.target;
+					if (!(target instanceof Element)) return;
+					const link = target.closest('a[data-slug]');
+					if (!link) return;
+					event.preventDefault();
+					const slug = link.getAttribute('data-slug');
+					if (!slug) return;
+					const selected = getSelectedFromURL();
+					selected.has(slug) ? selected.delete(slug) : selected.add(slug);
+					setSelectedToURL(selected);
+					sync();
+				});
+
+				document.addEventListener('click', (event) => {
+					const target = event.target;
+					if (!(target instanceof Element)) return;
+					const link = target.closest('[data-tag-slug]');
+					if (!link || !tagLinks.includes(link)) return;
+					event.preventDefault();
+					const slug = link.getAttribute('data-tag-slug');
+					if (!slug) return;
+					const selected = getSelectedFromURL();
+					selected.has(slug) ? selected.delete(slug) : selected.add(slug);
+					setSelectedToURL(selected);
+					sync();
+				});
+
+				clearBtn.addEventListener('click', () => {
+					history.replaceState({}, '', window.location.pathname);
+					sync();
+				});
+
+				window.addEventListener('popstate', sync);
+				sync();
+			</script>
 		</Section>
 	</main>
 </Layout>
@@ -40,5 +348,111 @@ const sortedProjects = projects.sort((left, right) => {
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 		gap: 1rem;
+	}
+
+	:global(.projects-grid .project-card[hidden]) {
+		display: none !important;
+	}
+
+	.cloud-shell {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		margin-bottom: 1.25rem;
+	}
+
+	:global(.filter-summary) {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.7rem;
+		margin-top: 0.5rem;
+		color: var(--text-secondary);
+	}
+
+	:global(.filter-summary__text) {
+		font-size: 0.92rem;
+		font-weight: 600;
+	}
+
+	:global(.filter-summary__chips) {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+	}
+
+	:global(.filter-chip) {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.35rem;
+		padding: 0.35rem 0.65rem;
+		border-radius: 999px;
+		border: 1px solid rgba(34, 211, 238, 0.22);
+		background: rgba(34, 211, 238, 0.1);
+		color: var(--text-main);
+		font: inherit;
+		cursor: pointer;
+	}
+
+	:global(.filter-chip:hover) {
+		background: rgba(34, 211, 238, 0.16);
+	}
+
+	:global(.tag-cloud) {
+		position: relative;
+        margin: 4rem;
+		width: 100%;
+		height: 220px;
+		min-height: 140px;
+		display: block;
+		overflow: visible;
+	}
+
+	:global(.tag-box) {
+		position: absolute;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0.35rem 0.7rem;
+		border-radius: 10px;
+		background: rgba(255,255,255,0.04);
+		border: 1px solid rgba(255,255,255,0.04);
+		backdrop-filter: blur(2px);
+		color: var(--text);
+		text-decoration: none;
+		box-shadow: var(--shadow-card);
+		transition: transform 180ms ease, background 180ms ease;
+	}
+
+	:global(.tag-box span) {
+		pointer-events: none;
+	}
+
+	:global(.tag-box:hover) {
+		transform: translateY(-4px) scale(1.02);
+		background: rgba(255,255,255,0.06);
+	}
+
+	:global(.tag-box.active) {
+		background: linear-gradient(90deg, rgba(34,211,238,0.16), rgba(167,139,250,0.14));
+		border-color: rgba(34,211,238,0.35);
+		color: var(--text-main);
+	}
+
+	:global(.tag-box--strong) {
+		background: linear-gradient(90deg, rgba(34,211,238,0.08), rgba(167,139,250,0.06));
+		border-color: rgba(34,211,238,0.12);
+	}
+
+	.cloud-controls {
+		margin-top: 0.5rem;
+	}
+
+	.cloud-controls button {
+		background: transparent;
+		border: 1px solid var(--border);
+		color: var(--text-secondary);
+		padding: 0.35rem 0.6rem;
+		border-radius: 8px;
 	}
 </style>

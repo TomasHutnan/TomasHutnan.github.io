@@ -7,10 +7,10 @@ interface Props {
 }
 
 const { tag, size } = Astro.props;
-const href = `/tags/${slugify(tag)}`;
+const href = `/projects?tags=${slugify(tag)}`;
 ---
 
-<a class="tag-link" href={href} style={size ? `font-size: ${size}rem;` : undefined}>
+<a class="tag-link" href={href} data-tag-slug={slugify(tag)} style={size ? `font-size: ${size}rem;` : undefined}>
 	<span>{tag}</span>
 </a>
 
@@ -33,6 +33,11 @@ const href = `/tags/${slugify(tag)}`;
 	.tag-link:hover {
 		transform: translateY(-1px);
 		background: rgba(34, 211, 238, 0.18);
+		color: var(--text-main);
+	}
+
+	.tag-link.active {
+		background: linear-gradient(90deg, rgba(34, 211, 238, 0.18), rgba(167, 139, 250, 0.16));
 		color: var(--text-main);
 	}
 </style>

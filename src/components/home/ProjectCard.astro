@@ -13,12 +13,12 @@ const coverRatio = project.data.cover.width / project.data.cover.height;
 const keepNaturalCover = coverRatio >= 0.5 && coverRatio <= 2;
 ---
 
-<article class="project-card">
-	<a
-		class:list={['project-cover-link', keepNaturalCover ? 'project-cover-link--natural' : 'project-cover-link--framed']}
-		href={projectHref}
-		aria-label={`Open ${project.data.title}`}
-	>
+<article class="project-card" data-tags={project.data.tags.join(' ')} data-tag-slugs={project.data.tags.map((t) => slugify(t)).join(' ')}>
+		<a
+			class:list={['project-cover-link', keepNaturalCover ? 'project-cover-link--natural' : 'project-cover-link--framed']}
+			href={projectHref}
+			aria-label={`Open ${project.data.title}`}
+		>
 		<img
 			src={project.data.cover.src}
 			alt={project.data.title}
