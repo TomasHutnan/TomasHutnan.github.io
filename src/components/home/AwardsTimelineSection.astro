@@ -1,0 +1,92 @@
+---
+import Section from './Section.astro';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+	awards: CollectionEntry<'awards'>[];
+}
+
+const { awards } = Astro.props;
+
+const groupedAwards = awards.reduce<Map<string, CollectionEntry<'awards'>[]>>((groups, award) => {
+	const year = String(award.data.date.getFullYear());
+	const existingAwards = groups.get(year) ?? [];
+	existingAwards.push(award);
+	groups.set(year, existingAwards);
+	return groups;
+}, new Map());
+
+const orderedYears = [...groupedAwards.keys()].sort((left, right) => Number(right) - Number(left));
+---
+
+<Section
+	id="awards"
+	eyebrow="Awards"
+	title="Recognition over time"
+	description="A concise timeline of competition results and sponsor awards across recent years."
+>
+	<div class="timeline">
+		{orderedYears.map((year) => (
+			<section class="timeline-group">
+				<h3>{year}</h3>
+				<ul>
+					{groupedAwards.get(year)?.map((award) => (
+						<li>
+							<strong>{award.data.title}</strong>
+							<span>{award.data.event} - {award.data.issuer}</span>
+						</li>
+					))}
+				</ul>
+			</section>
+		))}
+	</div>
+</Section>
+
+<style>
+	.timeline {
+		display: grid;
+		gap: 1rem;
+	}
+
+	.timeline-group {
+		padding: 1rem 1.1rem;
+		border: 1px solid var(--border);
+		border-radius: var(--radius-md);
+		background: rgba(15, 23, 42, 0.86);
+	}
+
+	.timeline-group h3 {
+		margin: 0 0 0.9rem;
+		font-size: 1.1rem;
+	}
+
+	.timeline-group ul {
+		list-style: none;
+		display: grid;
+		gap: 0.8rem;
+		padding: 0;
+		margin: 0;
+	}
+
+	.timeline-group li {
+		display: grid;
+		gap: 0.2rem;
+		padding-left: 1rem;
+		border-left: 2px solid rgba(34, 211, 238, 0.25);
+	}
+
+	.timeline-group strong {
+		font-size: 0.98rem;
+	}
+
+	.timeline-group span {
+		color: var(--text-secondary);
+		line-height: 1.6;
+	}
+
+	@media (min-width: 900px) {
+		.timeline {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+	}
+</style>

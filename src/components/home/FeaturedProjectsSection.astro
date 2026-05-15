@@ -1,0 +1,49 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Section from './Section.astro';
+import ProjectCard from './ProjectCard.astro';
+
+interface Props {
+	projects: CollectionEntry<'projects'>[];
+}
+
+const { projects } = Astro.props;
+---
+
+<Section
+	id="featured-projects"
+	eyebrow="Featured projects"
+	title="Selected work"
+	description="A small set of projects that show the mix of machine learning, systems, and product work I tend to build."
+>
+	<div class="project-grid">
+		{projects.map((project) => <ProjectCard project={project} />)}
+	</div>
+
+	<div class="section-footer with-top-spacing">
+		<a href="/projects">View all projects</a>
+	</div>
+</Section>
+
+<style>
+	.project-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+		gap: 1rem;
+	}
+
+	.section-footer {
+		display: flex;
+		justify-content: flex-end;
+	}
+
+	.section-footer a {
+		color: var(--primary-soft);
+		text-decoration: none;
+		font-weight: 600;
+	}
+
+	.with-top-spacing {
+		margin-top: 1rem;
+	}
+</style>

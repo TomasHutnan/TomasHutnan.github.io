@@ -1,0 +1,146 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { slugify } from '../../utils/slug';
+
+interface Props {
+	project: CollectionEntry<'projects'>;
+}
+
+const { project } = Astro.props;
+const projectHref = `/projects/${slugify(project.id)}`;
+const coverRatio = project.data.cover.width / project.data.cover.height;
+const keepNaturalCover = coverRatio >= 0.5 && coverRatio <= 2;
+---
+
+<article class="project-card">
+	<a
+		class:list={['project-cover-link', keepNaturalCover ? 'project-cover-link--natural' : 'project-cover-link--framed']}
+		href={projectHref}
+		aria-label={`Open ${project.data.title}`}
+	>
+		<img
+			src={project.data.cover.src}
+			alt={project.data.title}
+			width={project.data.cover.width}
+			height={project.data.cover.height}
+			loading="lazy"
+		/>
+	</a>
+
+	<div class="project-copy">
+		<div class="project-topline">
+			<span class="project-type">{project.data.type}</span>
+			{project.data.role && <span class="project-role">{project.data.role}</span>}
+		</div>
+
+		<h3>
+			<a href={projectHref}>{project.data.title}</a>
+		</h3>
+		<p>{project.data.description}</p>
+
+		<ul class="tag-list">
+			{project.data.tags.slice(0, 4).map((tag) => <li>{tag}</li>)}
+		</ul>
+	</div>
+</article>
+
+<style>
+	.project-card {
+		display: grid;
+		gap: 1rem;
+		height: 100%;
+		padding: 1rem;
+		border: 1px solid var(--border);
+		border-radius: var(--radius-lg);
+		background: linear-gradient(180deg, rgba(17, 24, 39, 0.94), rgba(15, 23, 42, 0.92));
+		box-shadow: var(--shadow-card);
+	}
+
+	.project-cover-link {
+		display: block;
+		border-radius: var(--radius-md);
+		overflow: hidden;
+	}
+
+	.project-cover-link--natural {
+		background: rgba(15, 23, 42, 0.4);
+	}
+
+	.project-cover-link img {
+		display: block;
+		width: 100%;
+		height: auto;
+		max-height: 360px;
+		object-fit: contain;
+	}
+
+	.project-cover-link--framed img {
+		aspect-ratio: 16 / 10;
+		max-height: 260px;
+		object-fit: cover;
+	}
+
+	.project-copy {
+		display: grid;
+		gap: 0.8rem;
+	}
+
+	.project-topline {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+		align-items: center;
+	}
+
+	.project-type,
+	.project-role {
+		display: inline-flex;
+		align-items: center;
+		padding: 0.28rem 0.65rem;
+		border-radius: 999px;
+		font-size: 0.75rem;
+		font-weight: 600;
+	}
+
+	.project-type {
+		background: rgba(34, 211, 238, 0.12);
+		color: var(--primary-soft);
+	}
+
+	.project-role {
+		background: rgba(167, 139, 250, 0.12);
+		color: #c4b5fd;
+	}
+
+	h3 {
+		margin: 0;
+		font-size: 1.15rem;
+	}
+
+	h3 a {
+		text-decoration: none;
+	}
+
+	p {
+		margin: 0;
+		line-height: 1.7;
+		color: var(--text-secondary);
+	}
+
+	.tag-list {
+		list-style: none;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+		padding: 0;
+		margin: 0;
+	}
+
+	.tag-list li {
+		padding: 0.28rem 0.6rem;
+		border-radius: 999px;
+		font-size: 0.76rem;
+		background: rgba(34, 211, 238, 0.1);
+		color: var(--primary-soft);
+	}
+</style>
