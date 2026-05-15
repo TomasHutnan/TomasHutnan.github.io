@@ -2,17 +2,24 @@
 interface Props {
 	id?: string;
 	eyebrow?: string;
+	eyebrowHref?: string;
 	title: string;
 	description?: string;
 	class?: string;
 }
 
-const { id, eyebrow, title, description, class: className = '' } = Astro.props;
+const { id, eyebrow, eyebrowHref, title, description, class: className = '' } = Astro.props;
 ---
 
 <section id={id} class:list={['section', className]}>
 	<div class="section-heading">
-		{eyebrow && <p class="eyebrow">{eyebrow}</p>}
+		{eyebrow && (
+			(eyebrowHref) ? (
+				<a class="eyebrow" href={eyebrowHref}>{eyebrow}</a>
+			) : (
+				<p class="eyebrow">{eyebrow}</p>
+			)
+		)}
 		<h2>{title}</h2>
 		{description && <p class="section-description">{description}</p>}
 	</div>

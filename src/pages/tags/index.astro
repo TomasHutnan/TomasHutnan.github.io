@@ -1,0 +1,123 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Section from '../../components/home/Section.astro';
+import { buildTagCloud } from '../../utils/tags';
+
+const projects = await getCollection('projects');
+const tagCloud = buildTagCloud(projects);
+---
+
+<Layout
+	title="Tags | Tomáš Hutňan"
+	description="A weighted word cloud of the portfolio tags, where larger tags appear more often across projects."
+>
+	<main class="tags-page">
+		<Section
+			eyebrow="Tags"
+			title="Word cloud"
+			description="The more often a tag appears, the larger it becomes. Click any tag to open the filtered project list."
+		>
+			<div class="cloud-shell">
+				{tagCloud.items.length > 0 ? (
+					<div class="tag-cloud" style={`width: ${tagCloud.width}px; height: ${tagCloud.height}px;`}>
+						{tagCloud.items.map((item) => (
+							<a
+								class:list={['tag-box', item.count > 2 && 'tag-box--strong']}
+								href={`/tags/${item.slug}`}
+								aria-label={`${item.tag} (${item.count} projects)`}
+								style={`left: ${item.x}px; top: ${item.y}px; width: ${item.width}px; height: ${item.height}px; font-size: ${item.fontSize}px;`}
+							>
+								<span>{item.tag}</span>
+							</a>
+						))}
+					</div>
+				) : (
+					<p class="empty-state">No tags found yet.</p>
+				)}
+			</div>
+
+			<div class="page-footer">
+				<a href="/projects">Browse all projects</a>
+			</div>
+		</Section>
+	</main>
+</Layout>
+
+<style>
+	.tags-page {
+		max-width: 1160px;
+		margin: 0 auto;
+		padding: 2rem 1rem 4rem;
+	}
+
+	.cloud-shell {
+		position: relative;
+		min-height: 34rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 1rem;
+		border: 1px solid var(--border);
+		border-radius: var(--radius-lg);
+		background:
+			radial-gradient(circle at center, rgba(34, 211, 238, 0.14), transparent 46%),
+			linear-gradient(180deg, rgba(15, 23, 42, 0.92), rgba(17, 24, 39, 0.96));
+		box-shadow: var(--shadow-card);
+		overflow: hidden;
+	}
+
+	.tag-cloud {
+		position: relative;
+		max-width: 100%;
+		max-height: 32rem;
+		overflow: hidden;
+	}
+
+	.tag-box {
+		position: absolute;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0.35em 0.65em;
+		border-radius: 999px;
+		background: rgba(34, 211, 238, 0.14);
+		color: var(--primary-soft);
+		text-decoration: none;
+		font-family: 'Space Grotesk', 'Inter', sans-serif;
+		font-weight: 600;
+		line-height: 1;
+		text-align: center;
+		white-space: nowrap;
+		transform: translate(-50%, -50%);
+		transition: transform 160ms ease, background 160ms ease, color 160ms ease;
+		box-sizing: border-box;
+	}
+
+	.tag-box:hover {
+		background: rgba(34, 211, 238, 0.22);
+		color: var(--text-main);
+		transform: translate(-50%, -50%) scale(1.03);
+	}
+
+	.tag-box--strong {
+		color: var(--text-main);
+	}
+
+	.empty-state {
+		margin: 0;
+		color: var(--text-secondary);
+	}
+
+	.page-footer {
+		display: flex;
+		justify-content: flex-end;
+		margin-top: 1rem;
+	}
+
+	.page-footer a {
+		color: var(--primary-soft);
+		text-decoration: none;
+		font-weight: 600;
+	}
+</style>

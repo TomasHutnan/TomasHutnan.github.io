@@ -2,6 +2,7 @@
 import { getCollection, getEntries, render, type CollectionEntry } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import { slugify } from '../../utils/slug';
+import TagLink from '../../components/TagLink.astro';
 import demoIcon from '../../assets/icons/demo.svg';
 import paperIcon from '../../assets/icons/paper.svg';
 import repoIcon from '../../assets/icons/repository.svg';
@@ -83,7 +84,11 @@ const { Content } = await render(project);
             </figure>
 
             <ul class="tag-list">
-                {project.data.tags.map((tag) => <li>{tag}</li>)}
+                {project.data.tags.map((tag) => (
+                    <li>
+                        <TagLink tag={tag} />
+                    </li>
+                ))}
             </ul>
 
             <div class="content-body">
@@ -218,11 +223,7 @@ const { Content } = await render(project);
     }
 
     .tag-list li {
-        background: rgba(34, 211, 238, 0.12);
-        color: var(--primary-soft);
-        border-radius: 999px;
-        padding: 0.3rem 0.7rem;
-        font-size: 0.82rem;
+        display: flex;
     }
 
     .content-body {
