@@ -15,9 +15,9 @@ completedAt: 2026-05-19
 featured: true
 featuredOrder: 2
 
-repo: https://gitlab.fi.muni.cz/xhutnan/pv162-tescan-gpu
+repo: https://github.com/TomasHutnan/cuda-image-enhacement
 
-cover: ../../assets/projects/pv162-tescan-gpu/cover.webp
+cover: ../../assets/projects/cuda-image-enhacement/cover.webp
 
 role: GPU Engineer
 shortRoleDescription: Built a high-performance CUDA pipeline for image processing and validation.
