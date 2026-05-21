@@ -39,16 +39,29 @@ const formatDate = (date?: Date) =>
           })
         : "";
 
+const formatDateMonth = (date?: Date) =>
+    date
+        ? date.toLocaleDateString("en-US", {
+              month: "short",
+          })
+        : "";
+
 const sameMonth = (a?: Date, b?: Date) =>
     a &&
     b &&
-    a.getFullYear() === b.getFullYear() &&
     a.getMonth() === b.getMonth();
+
+const sameYear = (a?: Date, b?: Date) =>
+    a &&
+    b &&
+    a.getFullYear() === b.getFullYear();
 
 const dateRange = project.data.startedAt
     ? project.data.completedAt
-        ? sameMonth(project.data.startedAt, project.data.completedAt)
-            ? formatDate(project.data.startedAt)
+        ? sameYear(project.data.startedAt, project.data.completedAt)
+            ? sameMonth(project.data.startedAt, project.data.completedAt)
+                ? formatDate(project.data.startedAt)
+                : `${formatDateMonth(project.data.startedAt)} — ${formatDate(project.data.completedAt)}`
             : `${formatDate(project.data.startedAt)} — ${formatDate(project.data.completedAt)}`
         : `${formatDate(project.data.startedAt)} — In progress`
     : "";
