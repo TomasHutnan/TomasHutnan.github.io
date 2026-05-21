@@ -67,7 +67,7 @@ export const experienceEntries: ExperienceEntry[] = [
 ];
 
 export const contactLinks: ContactLink[] = [
-	{ label: 'Email', href: 'mailto:tomas.hutnan147@gmail.com', value: 'tomas.hutnan147@gmail.com' },
+	{ label: 'Email', href: 'mailto:tomas@hutnan.dev', value: 'tomas@hutnan.dev' },
 	{ label: 'LinkedIn', href: 'https://linkedin.com/in/hutnan', value: 'linkedin.com/in/hutnan' },
 	{ label: 'GitHub', href: 'https://github.com/TomasHutnan', value: 'github.com/TomasHutnan' }
 ];
