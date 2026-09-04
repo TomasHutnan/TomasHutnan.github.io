@@ -59,9 +59,9 @@ export const experienceEntries: ExperienceEntry[] = [
 		organization: 'Masaryk University',
 		period: 'Current',
 		bullets: [
-			'Teaching Foundations of Programming.',
+			'Teaching Introduction to Artificial Intelligence.',
 			'Teaching Algorithms & Data Structures.',
-			'Reviewing assignments and mentoring students.'
+			'Teaching Foundations of Programming.',
 		]
 	}
 ];
