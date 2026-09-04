@@ -5,5 +5,8 @@ import { defineConfig } from 'astro/config';
 export default defineConfig({
     site: 'https://hutnan.dev',
     base: '/',
+    redirects: {
+        '/resume': '/resume.pdf',
+    },
 });
 
