@@ -9,6 +9,7 @@ import FeaturedProjectsSection from "../components/home/FeaturedProjectsSection.
 import AwardsTimelineSection from "../components/home/AwardsTimelineSection.astro";
 import ExperienceSection from "../components/home/ExperienceSection.astro";
 import ContactSection from "../components/home/ContactSection.astro";
+import { slugify } from "../utils/slug";
 import {
     hero,
     quickInfo,
@@ -20,6 +21,13 @@ import {
 
 const projects = await getCollection("projects");
 const awards = await getCollection("awards");
+
+const awardProjectMap = new Map(
+    projects.flatMap((project) =>
+        (project.data.awards ?? []).map((awardRef) => [awardRef.id, project]),
+    ),
+);
+
 const featuredProjects = projects
     .filter((project) => project.data.featured)
     .sort((a, b) => (a.data.featuredOrder ?? 0) - (b.data.featuredOrder ?? 0));
@@ -45,7 +53,10 @@ const featuredProjects = projects
             <AboutSection paragraphs={aboutParagraphs} />
             <SkillsSection groups={skillGroups} />
             <FeaturedProjectsSection projects={featuredProjects} />
-            <AwardsTimelineSection awards={awards} />
+            <AwardsTimelineSection
+                awards={awards}
+                awardProjectMap={awardProjectMap}
+            />
             <ExperienceSection entries={experienceEntries} />
             <ContactSection links={contactLinks} />
         </div>
