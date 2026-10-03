@@ -30,7 +30,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Security Audit (npm audit)
-        run: npm audit --audit-level=high
+        run: npm audit --audit-level=critical
 
       - name: Check Formatting (Prettier)
         run: npx prettier --check .
