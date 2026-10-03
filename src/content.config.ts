@@ -25,7 +25,7 @@ const projects = defineCollection({
 			paper: z.url().optional(),
 
 			cover: image(),
-			gallery: z.array(image()).optional(),
+			gallery: z.array(z.union([image(), z.string()])).optional(),
 
 			role: z.string().optional(),
 			shortRoleDescription: z.string().optional(),
