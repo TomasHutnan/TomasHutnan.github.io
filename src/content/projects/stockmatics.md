@@ -2,22 +2,22 @@
 title: StockMatics
 description: AI-powered financial market analytics platform for tracking sentiment, political influence, and event-driven market behavior.
 tags:
-  - python
-  - machine-learning
-  - natural-language-processing
-  - pytorch
-  - transformers
-  - fastapi
-  - nextjs
-  - typescript
-  - postgresql
-  - data-analysis
-  - fintech
+    - python
+    - machine-learning
+    - natural-language-processing
+    - pytorch
+    - transformers
+    - fastapi
+    - nextjs
+    - typescript
+    - postgresql
+    - data-analysis
+    - fintech
 type: team
 startedAt: 2025-02-28
 completedAt: 2025-03-01
 awards:
-  - newsmatics-hackathon-2025-winner
+    - newsmatics-hackathon-2025-winner
 featured: true
 featuredOrder: 3
 
@@ -31,9 +31,9 @@ shortRoleDescription: Developed NLP-driven analytics linking news sentiment with
 contribution: Designed database schemas and implemented PostgreSQL infrastructure using Neon, developed NLP-based sentiment analysis for the Fear and Greed index using NLTK, worked on transformer-based text embeddings for consensus analysis, and contributed to LLM-powered market summaries.
 
 collaborators:
-  - Robert Hudák
-  - Dávid Kepič
-  - Adrián Mikolaj
+    - Robert Hudák
+    - Dávid Kepič
+    - Adrián Mikolaj
 ---
 
 StockMatics was developed during the Newsmatics Hackathon 2025 as a platform for analyzing financial markets through the lens of news data, sentiment, and political influence. The goal was to uncover relationships between real-world events and market behavior using data-driven and machine learning approaches.

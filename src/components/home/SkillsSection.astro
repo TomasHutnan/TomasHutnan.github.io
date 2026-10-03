@@ -1,6 +1,6 @@
 ---
-import Section from './Section.astro';
-import type { SkillGroup } from '../../data/home';
+import Section from "./Section.astro";
+import type { SkillGroup } from "../../data/home";
 
 interface Props {
 	groups: SkillGroup[];
@@ -15,7 +15,9 @@ const { groups } = Astro.props;
 			<article class="skill-card">
 				<h3>{group.title}</h3>
 				<ul>
-					{group.items.map((item) => <li>{item}</li>)}
+					{group.items.map((item) => (
+						<li>{item}</li>
+					))}
 				</ul>
 			</article>
 		))}

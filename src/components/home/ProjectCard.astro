@@ -19,10 +19,7 @@ const keepNaturalCover = coverRatio >= 0.5 && coverRatio <= 2;
 	data-tag-slugs={project.data.tags.map((t) => slugify(t)).join(" ")}
 >
 	<a
-		class:list={[
-			"project-cover-link",
-			"project-cover-link--framed",
-		]}
+		class:list={["project-cover-link", "project-cover-link--framed"]}
 		href={projectHref}
 		aria-label={`Open ${project.data.title}`}
 	>
@@ -40,18 +37,18 @@ const keepNaturalCover = coverRatio >= 0.5 && coverRatio <= 2;
 			<a href={projectHref}>{project.data.title}</a>
 		</h3>
 
-		<p class="project-role">{project.data.role} • {project.data.type}</p>
+		<p class="project-role">
+			{project.data.role} • {project.data.type}
+		</p>
 
 		<p>{project.data.description}</p>
 
 		<ul class="tag-list">
-			{
-				project.data.tags.slice(0, 4).map((tag) => (
-					<li>
-						<TagLink tag={tag} size={0.70} />
-					</li>
-				))
-			}
+			{project.data.tags.slice(0, 4).map((tag) => (
+				<li>
+					<TagLink tag={tag} size={0.7} />
+				</li>
+			))}
 		</ul>
 	</div>
 </article>

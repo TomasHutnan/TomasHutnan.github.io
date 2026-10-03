@@ -1,6 +1,6 @@
 ---
-import Section from './Section.astro';
-import type { ExperienceEntry } from '../../data/home';
+import Section from "./Section.astro";
+import type { ExperienceEntry } from "../../data/home";
 
 interface Props {
 	entries: ExperienceEntry[];
@@ -9,7 +9,11 @@ interface Props {
 const { entries } = Astro.props;
 ---
 
-<Section id="experience" eyebrow="Experience" title="Professional and teaching experience">
+<Section
+	id="experience"
+	eyebrow="Experience"
+	title="Professional and teaching experience"
+>
 	<div class="experience-grid">
 		{entries.map((entry) => (
 			<article class="experience-card">
@@ -19,7 +23,9 @@ const { entries } = Astro.props;
 				</div>
 				<p class="organization">{entry.organization}</p>
 				<ul>
-					{entry.bullets.map((bullet) => <li>{bullet}</li>)}
+					{entry.bullets.map((bullet) => (
+						<li>{bullet}</li>
+					))}
 				</ul>
 			</article>
 		))}

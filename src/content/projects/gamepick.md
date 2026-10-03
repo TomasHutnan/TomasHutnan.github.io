@@ -2,20 +2,20 @@
 title: GAMEPICK
 description: Game recommendation platform that analyzes user behavior to suggest personalized game choices.
 tags:
-  - react
-  - javascript
-  - python
-  - pandas
-  - numpy
-  - machine-learning
-  - data-analysis
-  - google-cloud
-  - firebase
+    - react
+    - javascript
+    - python
+    - pandas
+    - numpy
+    - machine-learning
+    - data-analysis
+    - google-cloud
+    - firebase
 type: team
 startedAt: 2022-04-23
 completedAt: 2022-04-24
 awards:
-  - mlh-google-cloud-hackkosice-2022
+    - mlh-google-cloud-hackkosice-2022
 featured: false
 
 repo: https://github.com/TomasHutnan/bloomreach_challenge-recommendation_algorithm
@@ -27,9 +27,9 @@ shortRoleDescription: Built a data-driven game recommendation system using real 
 contribution: Developed backend data processing pipelines using Python, Pandas, and NumPy, set up the Google Cloud environment, and worked with real-world user data to build the recommendation system.
 
 collaborators:
-  - Robert Hudák
-  - Dávid Kepič
-  - Jakub Kollár
+    - Robert Hudák
+    - Dávid Kepič
+    - Jakub Kollár
 ---
 
 GAMEPICK was developed at Hack Košice 2022 as a full-stack application designed to recommend video games based on user behavior and preferences. The goal was to combine a user-friendly frontend with a data-driven backend capable of analyzing large datasets.

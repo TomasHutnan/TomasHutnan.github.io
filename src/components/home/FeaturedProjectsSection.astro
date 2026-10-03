@@ -1,10 +1,10 @@
 ---
-import type { CollectionEntry } from 'astro:content';
-import Section from './Section.astro';
-import ProjectCard from './ProjectCard.astro';
+import type { CollectionEntry } from "astro:content";
+import Section from "./Section.astro";
+import ProjectCard from "./ProjectCard.astro";
 
 interface Props {
-	projects: CollectionEntry<'projects'>[];
+	projects: CollectionEntry<"projects">[];
 }
 
 const { projects } = Astro.props;
@@ -17,7 +17,9 @@ const { projects } = Astro.props;
 	description="A small set of projects that show the mix of machine learning, systems, and product work I tend to build."
 >
 	<div class="project-grid">
-		{projects.map((project) => <ProjectCard project={project} />)}
+		{projects.map((project) => (
+			<ProjectCard project={project} />
+		))}
 	</div>
 
 	<div class="section-footer with-top-spacing">

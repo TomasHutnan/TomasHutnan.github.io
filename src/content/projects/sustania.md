@@ -2,16 +2,16 @@
 title: Sustania
 description: AR-based sustainability game prototype integrating real-world environmental data, focusing on backend architecture, deployment, and system design.
 tags:
-  - python
-  - fastapi
-  - postgresql
-  - docker
-  - backend
-  - system-design
-  - deployment
-  - godot
-  - real-time-systems
-  - data-driven
+    - python
+    - fastapi
+    - postgresql
+    - docker
+    - backend
+    - system-design
+    - deployment
+    - godot
+    - real-time-systems
+    - data-driven
 type: team
 startedAt: 2025-11-07
 completedAt: 2025-11-09
@@ -27,11 +27,11 @@ shortRoleDescription: Designed and deployed a scalable backend system for an AR-
 contribution: Designed the system architecture, database schema, and API structure; implemented core backend services using FastAPI; handled authentication and security design; containerized the backend using Docker and deployed it; contributed to early Godot-based prototype development and environment effects.
 
 collaborators:
-  - Robert Hudák
-  - Dávid Kepič
-  - Jakub Kollár
-  - Adrián Mikolaj
-  - Jakub Blišťan
+    - Robert Hudák
+    - Dávid Kepič
+    - Jakub Kollár
+    - Adrián Mikolaj
+    - Jakub Blišťan
 ---
 
 Sustania was developed as a prototype for an augmented reality game focused on sustainability and urban environmental awareness. The project aimed to connect real-world environments with interactive gameplay driven by live environmental and geospatial data.

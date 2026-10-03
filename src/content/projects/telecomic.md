@@ -2,20 +2,20 @@
 title: TeleComic
 description: AI-powered platform for generating comics from user ideas using large language models and image generation tools.
 tags:
-  - nextjs
-  - react
-  - javascript
-  - python
-  - flask
-  - machine-learning
-  - generative-ai
-  - openai
-  - mongodb
+    - nextjs
+    - react
+    - javascript
+    - python
+    - flask
+    - machine-learning
+    - generative-ai
+    - openai
+    - mongodb
 type: team
 startedAt: 2023-04-01
 completedAt: 2023-04-02
 awards:
-  - hackkosice-2023-3rd-place
+    - hackkosice-2023-3rd-place
 featured: false
 
 repo: https://github.com/TomasHutnan/ai-comics-generation_hk
@@ -27,9 +27,9 @@ shortRoleDescription: Developed an AI-driven backend for generating coherent mul
 contribution: Developed the backend API using Python and Flask, integrating OpenAI models for text and image generation, and optimized prompt design for consistent multi-panel comic outputs. Contributed to API contract design alongside frontend development.
 
 collaborators:
-  - Robert Hudák
-  - Dávid Kepič
-  - Adrián Mikolaj
+    - Robert Hudák
+    - Dávid Kepič
+    - Adrián Mikolaj
 ---
 
 TeleComic was developed at Hack Košice 2023 as a platform that allows users to transform their ideas into fully generated comic books using AI. The goal was to enable creative expression without requiring artistic or writing expertise.

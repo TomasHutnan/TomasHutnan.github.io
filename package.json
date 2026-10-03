@@ -1,20 +1,33 @@
 {
-  "name": "",
-  "type": "module",
-  "version": "0.0.1",
-  "engines": {
-    "node": ">=22.12.0"
-  },
-  "scripts": {
-    "dev": "astro dev",
-    "build": "astro build",
-    "preview": "astro preview",
-    "astro": "astro"
-  },
-  "dependencies": {
-    "@fontsource/inter": "^5.2.8",
-    "@fontsource/space-grotesk": "^5.2.10",
-    "astro": "^6.3.3",
-    "zod": "^4.4.3"
-  }
+	"name": "",
+	"type": "module",
+	"version": "0.0.1",
+	"engines": {
+		"node": ">=22.12.0"
+	},
+	"scripts": {
+		"dev": "astro dev",
+		"build": "astro build",
+		"preview": "astro preview",
+		"astro": "astro",
+		"format": "prettier --write .",
+		"lint": "eslint .",
+		"typecheck": "astro check"
+	},
+	"dependencies": {
+		"@astrojs/sitemap": "^3.7.4",
+		"@fontsource/inter": "^5.2.8",
+		"@fontsource/space-grotesk": "^5.2.10",
+		"astro": "^7.3.5",
+		"zod": "^4.4.3"
+	},
+	"devDependencies": {
+		"@astrojs/check": "^0.9.10",
+		"eslint": "^10.12.0",
+		"eslint-plugin-astro": "^3.2.1",
+		"prettier": "^3.9.9",
+		"prettier-plugin-astro": "^1.1.0",
+		"typescript": "^6.0.3",
+		"typescript-eslint": "^8.71.0"
+	}
 }
