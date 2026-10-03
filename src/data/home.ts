@@ -45,15 +45,41 @@ export const aboutParagraphs = [
 
 export const skillGroups: SkillGroup[] = [
 	{
-		title: "Machine Learning & Data",
-		items: ["Python", "PyTorch", "Pandas / NumPy", "Computer Vision"],
+		title: "Core Stack",
+		items: [
+			"Python",
+			"C++",
+			"PyTorch",
+			"Docker",
+			"Linux",
+			"OpenCV",
+			"Pandas",
+		],
 	},
 	{
-		title: "Backend & Systems",
-		items: ["C#", "SQL / NoSQL", "REST / gRPC APIs", "Docker"],
+		title: "Also Used",
+		items: [
+			"TypeScript",
+			"C#",
+			"FastAPI",
+			"PostgreSQL",
+			"MongoDB",
+			"React",
+		],
 	},
-	{ title: "Fullstack", items: ["React", "TypeScript", "Next.js"] },
-	{ title: "Tools", items: ["Git", "Cloud Platforms", "Auth Systems"] },
+	{
+		title: "Specializations",
+		items: [
+			"Computer Vision",
+			"NLP",
+			"GPU Optimization",
+			"Automated Testing",
+		],
+	},
+	{
+		title: "Languages",
+		items: ["English (C1/C2)", "German (A1/A2)", "Slovak (Native)"],
+	},
 ];
 
 export const experienceEntries: ExperienceEntry[] = [
@@ -64,6 +90,7 @@ export const experienceEntries: ExperienceEntry[] = [
 		bullets: [
 			"Develop automation systems in Python.",
 			"Work with SQL, APIs, and Docker-based infrastructure.",
+			"Authored 1,000+ automated test cases.",
 		],
 	},
 	{
