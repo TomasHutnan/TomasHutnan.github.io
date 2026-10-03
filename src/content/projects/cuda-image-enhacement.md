@@ -32,7 +32,7 @@ The architecture emphasizes a device-resident pipeline, minimizing host-device t
 
 A comprehensive validation framework was developed using both C++ and Python tooling. Unit tests powered by Catch2 verify functional correctness, while reference comparison metrics such as MAE, RMSE, PSNR, and SSIM ensure numerical parity with the baseline pipeline.
 
-Performance optimizations were applied to computationally intensive stages, including Non-local Means and Richardson–Lucy kernels, improving execution efficiency while maintaining output stability. A recent refinement introduced symmetric mirroring for border handling, enhancing edge quality without impacting performance or test consistency.
+Performance optimizations were applied to computationally intensive stages, including Non-local Means and Richardson–Lucy kernels, improving execution efficiency while maintaining output stability and achieving a 25+ FPS processing throughput. A recent refinement introduced symmetric mirroring for border handling, enhancing edge quality without impacting performance or test consistency.
 
 Additional tools include CLI-based execution workflows, dataset manifest validation, and experimental OpenGL-based visualization for interactive inspection of intermediate results.
 

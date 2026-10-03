@@ -43,4 +43,4 @@ For classification, a 5-fold ResNet50 ensemble was trained using transfer learni
 
 Key challenges included removing fine-grained sensor noise without damaging structural detail, dealing with a small dataset of only 169 samples, and optimizing computation by transitioning from 16-bit to 8-bit processing pipelines.
 
-The project demonstrated strong performance in pathology screening and emphasized the importance of preprocessing quality and interpretable model design in low-data medical contexts.
+The project demonstrated strong performance in pathology screening, achieving a 93% F1 score, and emphasized the importance of preprocessing quality and interpretable model design in low-data medical contexts.
