@@ -2,13 +2,13 @@
 title: Ministry of Truth
 description: Text-based decision-making game implemented in .NET MAUI, focusing on data-driven architecture and clean separation of concerns.
 tags:
-  - csharp
-  - dotnet
-  - maui
-  - game-development
-  - mvvm
-  - software-architecture
-  - data-processing
+    - csharp
+    - dotnet
+    - maui
+    - game-development
+    - mvvm
+    - software-architecture
+    - data-processing
 type: solo
 startedAt: 2026-04-17
 completedAt: 2026-05-10

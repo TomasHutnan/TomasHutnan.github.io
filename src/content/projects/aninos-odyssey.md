@@ -2,18 +2,18 @@
 title: Anino's Odyssey
 description: Action-adventure game featuring custom-built systems, enemy AI, and immersive gameplay developed in Unity.
 tags:
-  - unity
-  - csharp
-  - game-development
-  - frontend
-  - game-design
-  - systems-design
+    - unity
+    - csharp
+    - game-development
+    - frontend
+    - game-design
+    - systems-design
 type: team
 startedAt: 2022-11-03
 completedAt: 2023-05-31
 awards:
-  - ihra-2023-2nd-place
-  - spongia-2022-4th-place
+    - ihra-2023-2nd-place
+    - spongia-2022-4th-place
 featured: false
 
 repo: https://github.com/TomasHutnan/aninos-odyssey
@@ -26,11 +26,11 @@ shortRoleDescription: Built core gameplay systems and integrated features into a
 contribution: Implemented core gameplay systems in Unity, including UI, menus, dialogs, tutorials, inventory, shop mechanics, and scene management, working closely with the game designer to integrate features into a cohesive player experience.
 
 collaborators:
-  - Robert Hudák
-  - Dávid Kepič
-  - Adrián Mikolaj
-  - Jakub Blišťan
-  - Martin Hlivka
+    - Robert Hudák
+    - Dávid Kepič
+    - Adrián Mikolaj
+    - Jakub Blišťan
+    - Martin Hlivka
 ---
 
 Anino's Odyssey is a long-term action-adventure game project developed with the goal of creating a rich and immersive gameplay experience. The project focused on combining custom-built systems, engaging combat mechanics, and a handcrafted visual and audio design.

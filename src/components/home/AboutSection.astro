@@ -1,5 +1,5 @@
 ---
-import Section from './Section.astro';
+import Section from "./Section.astro";
 
 interface Props {
 	paragraphs: string[];
@@ -8,9 +8,15 @@ interface Props {
 const { paragraphs } = Astro.props;
 ---
 
-<Section id="about" eyebrow="About" title="A practical focus on AI and software">
+<Section
+	id="about"
+	eyebrow="About"
+	title="A practical focus on AI and software"
+>
 	<div class="about-copy">
-		{paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+		{paragraphs.map((paragraph) => (
+			<p>{paragraph}</p>
+		))}
 	</div>
 </Section>
 

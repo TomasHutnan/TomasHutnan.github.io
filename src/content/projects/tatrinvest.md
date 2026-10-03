@@ -2,23 +2,23 @@
 title: Tatrinvest
 description: AI-assisted investment platform combining machine learning, gamification, and financial education to simplify investing for all experience levels.
 tags:
-  - nextjs
-  - react
-  - typescript
-  - python
-  - pytorch
-  - machine-learning
-  - natural-language-processing
-  - fintech
-  - mongodb
-  - postgresql
-  - auth0
+    - nextjs
+    - react
+    - typescript
+    - python
+    - pytorch
+    - machine-learning
+    - natural-language-processing
+    - fintech
+    - mongodb
+    - postgresql
+    - auth0
 type: team
 startedAt: 2026-04-06
 completedAt: 2026-04-07
 awards:
-  - mlh-auth0-hackkosice-2024
-  - tatrabanka-hackkosice-2024
+    - mlh-auth0-hackkosice-2024
+    - tatrabanka-hackkosice-2024
 featured: true
 featuredOrder: 4
 
@@ -31,9 +31,9 @@ shortRoleDescription: Built AI-powered investment features including prediction 
 contribution: Worked on interpolation techniques for stock price prediction and co-developed an LLM-based AI financial assistant, primarily focusing on backend implementation and API design.
 
 collaborators:
-  - Robert Hudák
-  - Dávid Kepič
-  - Adrián Mikolaj
+    - Robert Hudák
+    - Dávid Kepič
+    - Adrián Mikolaj
 ---
 
 Tatrinvest was developed as a user-friendly investment platform designed to make financial markets accessible to a wide audience, from beginners to experienced investors. The goal was to combine intelligent automation with an engaging user experience to simplify decision-making and encourage active participation in investing.

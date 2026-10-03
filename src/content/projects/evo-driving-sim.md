@@ -2,12 +2,12 @@
 title: Evolutionary Driving Simulator
 description: 2D simulation environment using evolutionary neural networks to train autonomous driving agents without backpropagation.
 tags:
-  - python
-  - machine-learning
-  - evolutionary-algorithms
-  - simulation
-  - neural-networks
-  - reinforcement-learning
+    - python
+    - machine-learning
+    - evolutionary-algorithms
+    - simulation
+    - neural-networks
+    - reinforcement-learning
 type: solo
 startedAt: 2026-01-11
 completedAt: 2026-01-26
@@ -32,9 +32,10 @@ The architecture cleanly separates simulation, evolution, and visualization. A c
 To improve generalization, a retention-based training strategy was implemented across multiple tracks, encouraging agents to retain useful behaviors instead of overfitting to a single environment.
 
 ### Key Features
-- Genetic algorithm training for neural network controllers  
-- Multi-track retention strategy for improved generalization  
-- Real-time visualization of agent behavior and training  
-- Interactive map editor for rapid experimentation  
+
+- Genetic algorithm training for neural network controllers
+- Multi-track retention strategy for improved generalization
+- Real-time visualization of agent behavior and training
+- Interactive map editor for rapid experimentation
 
 This project demonstrates a strong understanding of machine learning fundamentals, including neural network representation, optimization strategies, and system design for experimentation.

@@ -11,69 +11,69 @@ import ExperienceSection from "../components/home/ExperienceSection.astro";
 import ContactSection from "../components/home/ContactSection.astro";
 import { slugify } from "../utils/slug";
 import {
-    hero,
-    quickInfo,
-    aboutParagraphs,
-    skillGroups,
-    experienceEntries,
-    contactLinks,
+	hero,
+	quickInfo,
+	aboutParagraphs,
+	skillGroups,
+	experienceEntries,
+	contactLinks,
 } from "../data/home";
 
 const projects = await getCollection("projects");
 const awards = await getCollection("awards");
 
 const awardProjectMap = new Map(
-    projects.flatMap((project) =>
-        (project.data.awards ?? []).map((awardRef) => [awardRef.id, project]),
-    ),
+	projects.flatMap((project) =>
+		(project.data.awards ?? []).map((awardRef) => [awardRef.id, project]),
+	),
 );
 
 const featuredProjects = projects
-    .filter((project) => project.data.featured)
-    .sort((a, b) => (a.data.featuredOrder ?? 0) - (b.data.featuredOrder ?? 0));
+	.filter((project) => project.data.featured)
+	.sort((a, b) => (a.data.featuredOrder ?? 0) - (b.data.featuredOrder ?? 0));
 ---
 
 <Layout
-    pageTitle="Home"
-    description="Portfolio of Tomáš Hutňan, an informatics student focused on machine learning, computer vision, and full-stack software."
+	pageTitle="Home"
+	description="Portfolio of Tomáš Hutňan, an informatics student focused on machine learning, computer vision, and full-stack software."
 >
-    <main class="home-page">
-        <HeroSection
-            name={hero.name}
-            title={hero.title}
-            summary={hero.summary}
-            primaryHref="/projects"
-            primaryLabel="View Projects"
-            secondaryHref="/resume.pdf"
-            secondaryLabel="Download Resume"
-        />
+	<main class="home-page">
+		<HeroSection
+			name={hero.name}
+			title={hero.title}
+			summary={hero.summary}
+			primaryHref="/projects"
+			primaryLabel="View Projects"
+			secondaryHref="/resume.pdf"
+			secondaryLabel="Download Resume"
+		/>
 
-        <div class="home-sections">
-            <QuickInfoSection items={quickInfo} />
-            <AboutSection paragraphs={aboutParagraphs} />
-            <SkillsSection groups={skillGroups} />
-            <FeaturedProjectsSection projects={featuredProjects} />
-            <AwardsTimelineSection
-                awards={awards}
-                awardProjectMap={awardProjectMap}
-            />
-            <ExperienceSection entries={experienceEntries} />
-            <ContactSection links={contactLinks} />
-        </div>
-    </main>
+		<div class="home-sections">
+			<QuickInfoSection items={quickInfo} />
+			<AboutSection paragraphs={aboutParagraphs} />
+			<SkillsSection groups={skillGroups} />
+			<FeaturedProjectsSection projects={featuredProjects} />
+			<AwardsTimelineSection
+				awards={awards}
+				awardProjectMap={awardProjectMap}
+			/>
+			<ExperienceSection entries={experienceEntries} />
+			<ContactSection links={contactLinks} />
+		</div>
+	</main>
 </Layout>
 
 <style>
-    .home-page {
-        max-width: 1160px;
-        margin: 0 auto;
-        padding: 2rem 1rem 4rem;
-        display: grid;
-        gap: 2.2rem;
-    }
+	.home-page {
+		max-width: 1160px;
+		margin: 0 auto;
+		padding: 2rem 1rem 4rem;
+		display: grid;
+		gap: 2.2rem;
+	}
 
-    .home-sections {
-        display: grid;
-        gap: 2.2rem;
-    }
+	.home-sections {
+		display: grid;
+		gap: 2.2rem;
+	}
 </style>

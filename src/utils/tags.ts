@@ -1,5 +1,5 @@
-import type { CollectionEntry } from 'astro:content';
-import { slugify } from './slug';
+import type { CollectionEntry } from "astro:content";
+import { slugify } from "./slug";
 
 export interface TagStat {
 	tag: string;
@@ -12,7 +12,11 @@ export interface TagCloudOptions {
 	maxFontSize?: number;
 }
 
-export function getTagCloudFontSize(count: number, maxCount: number, options: TagCloudOptions = {}) {
+export function getTagCloudFontSize(
+	count: number,
+	maxCount: number,
+	options: TagCloudOptions = {},
+) {
 	const minFontSize = options.minFontSize ?? 15;
 	const maxFontSize = options.maxFontSize ?? 33;
 	const ratio = maxCount <= 1 ? 0 : (count - 1) / (maxCount - 1);
@@ -20,7 +24,9 @@ export function getTagCloudFontSize(count: number, maxCount: number, options: Ta
 	return minFontSize + ratio * (maxFontSize - minFontSize);
 }
 
-export function collectTagStats(projects: CollectionEntry<'projects'>[]): TagStat[] {
+export function collectTagStats(
+	projects: CollectionEntry<"projects">[],
+): TagStat[] {
 	const counts = new Map<string, { tag: string; count: number }>();
 
 	for (const project of projects) {
@@ -38,5 +44,8 @@ export function collectTagStats(projects: CollectionEntry<'projects'>[]): TagSta
 
 	return [...counts.entries()]
 		.map(([slug, entry]) => ({ tag: entry.tag, slug, count: entry.count }))
-		.sort((left, right) => right.count - left.count || left.tag.localeCompare(right.tag));
+		.sort(
+			(left, right) =>
+				right.count - left.count || left.tag.localeCompare(right.tag),
+		);
 }

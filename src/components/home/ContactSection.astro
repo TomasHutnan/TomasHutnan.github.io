@@ -21,26 +21,22 @@ const { links } = Astro.props;
 		</p>
 
 		<div class="contact-links">
-			{
-				links.map((link) => (
-					<a
-						href={link.href}
-						target={
-							link.href.startsWith("mailto:")
-								? undefined
-								: "_blank"
-						}
-						rel={
-							link.href.startsWith("mailto:")
-								? undefined
-								: "noopener noreferrer"
-						}
-					>
-						<strong>{link.label}</strong>
-						<span>{link.value}</span>
-					</a>
-				))
-			}
+			{links.map((link) => (
+				<a
+					href={link.href}
+					target={
+						link.href.startsWith("mailto:") ? undefined : "_blank"
+					}
+					rel={
+						link.href.startsWith("mailto:")
+							? undefined
+							: "noopener noreferrer"
+					}
+				>
+					<strong>{link.label}</strong>
+					<span>{link.value}</span>
+				</a>
+			))}
 		</div>
 	</div>
 </Section>
@@ -61,26 +57,24 @@ const { links } = Astro.props;
 		box-shadow: var(--shadow-card);
 	}
 
-
 	.contact-panel {
-	position: relative;
-	overflow: hidden;
+		position: relative;
+		overflow: hidden;
 	}
 
 	.contact-panel::before {
-	content: "";
-	position: absolute;
-	inset: 0;
+		content: "";
+		position: absolute;
+		inset: 0;
 
-	background: radial-gradient(
-		circle at top left,
-		rgba(34, 211, 238, 0.15),
-		transparent 60%
-	);
+		background: radial-gradient(
+			circle at top left,
+			rgba(34, 211, 238, 0.15),
+			transparent 60%
+		);
 
-	pointer-events: none;
+		pointer-events: none;
 	}
-
 
 	.contact-copy {
 		margin: 0;

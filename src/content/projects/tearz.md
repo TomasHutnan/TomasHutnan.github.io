@@ -2,19 +2,19 @@
 title: Tearz
 description: AI-powered tear ferning microscopy diagnostic tool for non-invasive detection of systemic diseases.
 tags:
-  - machine-learning
-  - computer-vision
-  - deep-learning
-  - pytorch
-  - keras
-  - scikit-learn
-  - medical-ai
+    - machine-learning
+    - computer-vision
+    - deep-learning
+    - pytorch
+    - keras
+    - scikit-learn
+    - medical-ai
 type: team
 startedAt: 2026-04-18
 completedAt: 2026-04-19
 
 awards:
-  - upjs-hackkosice-2026-honorable
+    - upjs-hackkosice-2026-honorable
 
 featured: true
 featuredOrder: 1
@@ -28,9 +28,9 @@ shortRoleDescription: Built an AI-driven diagnostic system for non-invasive dise
 contribution: Led development of the diagnostic pipeline, including preprocessing design, feature engineering, and model architecture decisions, as well as overall system integration and technical direction.
 
 collaborators:
-  - Robert Hudák
-  - Dávid Kepič
-  - Adrián Mikolaj
+    - Robert Hudák
+    - Dávid Kepič
+    - Adrián Mikolaj
 ---
 
 Tearz was developed as a diagnostic tool based on tear ferning microscopy, aiming to provide a non-invasive method for early detection of systemic diseases such as multiple sclerosis and diabetes.

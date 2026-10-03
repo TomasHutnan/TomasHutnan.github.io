@@ -2,13 +2,13 @@
 title: CUDA Image Enhancement
 description: GPU-accelerated image enhancemnt pipeline, focusing on performance, validation, and architectural clarity. (TESCAN Collaboration)
 tags:
-  - cuda
-  - cplusplus
-  - gpu-programming
-  - image-processing
-  - computer-vision
-  - performance-optimization
-  - testing
+    - cuda
+    - cplusplus
+    - gpu-programming
+    - image-processing
+    - computer-vision
+    - performance-optimization
+    - testing
 type: university
 startedAt: 2026-03-01
 completedAt: 2026-05-19

@@ -7,8 +7,7 @@ import "@fontsource/space-grotesk/500.css";
 import "@fontsource/space-grotesk/600.css";
 import "@fontsource/space-grotesk/700.css";
 
-
-import '../styles/global.css';
+import "../styles/global.css";
 import Navbar from "../components/Navbar.astro";
 
 interface Props {
@@ -17,11 +16,16 @@ interface Props {
 	pageTitle?: string;
 }
 
-const { title, description = 'Tomáš Hutňan portfolio: machine learning, computer vision, and full-stack software projects.', pageTitle } = Astro.props;
+const {
+	title,
+	description = "Tomáš Hutňan portfolio: machine learning, computer vision, and full-stack software projects.",
+	pageTitle,
+} = Astro.props;
 
-const siteOwner = 'Tomáš Hutňan';
-const computedTitle = pageTitle ? `${pageTitle} • ${siteOwner}` : (title ?? siteOwner);
-
+const siteOwner = "Tomáš Hutňan";
+const computedTitle = pageTitle
+	? `${pageTitle} • ${siteOwner}`
+	: (title ?? siteOwner);
 ---
 
 <!doctype html>
@@ -35,7 +39,7 @@ const computedTitle = pageTitle ? `${pageTitle} • ${siteOwner}` : (title ?? si
 		<title>{computedTitle}</title>
 	</head>
 	<body>
-  		<Navbar />
+		<Navbar />
 		<slot />
 	</body>
 </html>
