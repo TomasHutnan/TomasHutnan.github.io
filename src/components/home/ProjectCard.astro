@@ -2,6 +2,8 @@
 import { getEntries, type CollectionEntry } from "astro:content";
 import { slugify } from "../../utils/slug";
 import TagLink from "../TagLink.astro";
+import demoIcon from "../../assets/icons/demo.svg";
+import repoIcon from "../../assets/icons/repository.svg";
 
 interface Props {
 	project: CollectionEntry<"projects">;
@@ -9,8 +11,6 @@ interface Props {
 
 const { project } = Astro.props;
 const projectHref = `/projects/${slugify(project.id)}`;
-const coverRatio = project.data.cover.width / project.data.cover.height;
-const keepNaturalCover = coverRatio >= 0.5 && coverRatio <= 2;
 const awards = project.data.awards ? await getEntries(project.data.awards) : [];
 ---
 
@@ -20,7 +20,7 @@ const awards = project.data.awards ? await getEntries(project.data.awards) : [];
 	data-tag-slugs={project.data.tags.map((t) => slugify(t)).join(" ")}
 >
 	<a
-		class:list={["project-cover-link", "project-cover-link--framed"]}
+		class="project-cover-link"
 		href={projectHref}
 		aria-label={`Open ${project.data.title}`}
 	>
@@ -34,9 +34,45 @@ const awards = project.data.awards ? await getEntries(project.data.awards) : [];
 	</a>
 
 	<div class="project-copy">
-		<h3>
-			<a href={projectHref}>{project.data.title}</a>
-		</h3>
+		<div class="project-card-header">
+			<h3>
+				<a href={projectHref}>{project.data.title}</a>
+			</h3>
+			{(project.data.demo || project.data.repo) && (
+				<div class="project-card-links">
+					{project.data.demo && (
+						<a
+							href={project.data.demo}
+							target="_blank"
+							rel="noopener noreferrer"
+							class="card-link"
+							aria-label="Demo"
+						>
+							<img
+								src={demoIcon.src}
+								alt="Demo"
+								class="card-link-icon"
+							/>
+						</a>
+					)}
+					{project.data.repo && (
+						<a
+							href={project.data.repo}
+							target="_blank"
+							rel="noopener noreferrer"
+							class="card-link"
+							aria-label="Repository"
+						>
+							<img
+								src={repoIcon.src}
+								alt="Repository"
+								class="card-link-icon"
+							/>
+						</a>
+					)}
+				</div>
+			)}
+		</div>
 
 		<p class="project-role">
 			{project.data.role} • {project.data.type}
@@ -85,24 +121,13 @@ const awards = project.data.awards ? await getEntries(project.data.awards) : [];
 		overflow: hidden;
 	}
 
-	.project-cover-link--natural {
-		background: rgba(15, 23, 42, 0.4);
-	}
-
 	.project-cover-link img {
 		display: block;
-		border-radius: var(--radius-md);
 		width: 100%;
 		height: auto;
-		max-height: 360px;
-		object-fit: contain;
-	}
-
-	.project-cover-link--framed img {
-		aspect-ratio: 16 / 10;
-		border-radius: var(--radius-md);
-		max-height: 260px;
+		aspect-ratio: 16 / 9;
 		object-fit: cover;
+		border-radius: var(--radius-md);
 	}
 
 	.project-copy {
@@ -117,6 +142,37 @@ const awards = project.data.awards ? await getEntries(project.data.awards) : [];
 		display: flex;
 		flex-wrap: wrap;
 		align-items: center;
+	}
+
+	.project-card-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-start;
+		gap: 0.5rem;
+	}
+
+	.project-card-links {
+		display: flex;
+		gap: 0.5rem;
+		align-items: center;
+	}
+
+	.card-link {
+		display: inline-flex;
+		align-items: center;
+		opacity: 0.7;
+		transition: opacity 0.2s;
+	}
+
+	.card-link:hover {
+		opacity: 1;
+	}
+
+	.card-link-icon {
+		width: 18px;
+		height: 18px;
+		filter: invert(1) sepia(1) saturate(1000%) hue-rotate(180deg)
+			brightness(1.2);
 	}
 
 	h3 {

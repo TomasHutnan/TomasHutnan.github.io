@@ -190,15 +190,27 @@ const dateRange = project.data.startedAt
 				<section class="gallery-section">
 					<h2>Gallery</h2>
 					<ul class="gallery-grid">
-						{project.data.gallery.map((image) => (
+						{project.data.gallery.map((media) => (
 							<li>
-								<img
-									src={image.src}
-									alt={project.data.title}
-									width={image.width}
-									height={image.height}
-									loading="lazy"
-								/>
+								{typeof media === "string" ? (
+									<video
+										src={media}
+										autoplay
+										loop
+										muted
+										playsinline
+										class="gallery-media"
+									/>
+								) : (
+									<img
+										src={media.src}
+										alt={project.data.title}
+										width={media.width}
+										height={media.height}
+										loading="lazy"
+										class="gallery-media"
+									/>
+								)}
 							</li>
 						))}
 					</ul>
@@ -299,8 +311,8 @@ const dateRange = project.data.startedAt
 		display: block;
 		width: 100%;
 		height: auto;
-		max-height: min(70vh, 640px);
-		object-fit: contain;
+		aspect-ratio: 16 / 9;
+		object-fit: cover;
 		border-radius: var(--radius-sm);
 	}
 
@@ -410,7 +422,7 @@ const dateRange = project.data.startedAt
 		overflow: hidden;
 	}
 
-	.gallery-grid img {
+	.gallery-media {
 		display: block;
 		width: 100%;
 		height: auto;
