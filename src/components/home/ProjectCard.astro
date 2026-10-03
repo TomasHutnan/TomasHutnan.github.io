@@ -1,5 +1,5 @@
 ---
-import type { CollectionEntry } from "astro:content";
+import { getEntries, type CollectionEntry } from "astro:content";
 import { slugify } from "../../utils/slug";
 import TagLink from "../TagLink.astro";
 
@@ -11,6 +11,7 @@ const { project } = Astro.props;
 const projectHref = `/projects/${slugify(project.id)}`;
 const coverRatio = project.data.cover.width / project.data.cover.height;
 const keepNaturalCover = coverRatio >= 0.5 && coverRatio <= 2;
+const awards = project.data.awards ? await getEntries(project.data.awards) : [];
 ---
 
 <article
@@ -43,6 +44,15 @@ const keepNaturalCover = coverRatio >= 0.5 && coverRatio <= 2;
 
 		<p>{project.data.description}</p>
 
+		{awards.length > 0 && (
+			<div class="project-awards">
+				{awards.map((award) => (
+					<span class="award-badge" title={award.data.title}>
+						🏆 {award.data.title}
+					</span>
+				))}
+			</div>
+		)}
 		<ul class="tag-list">
 			{project.data.tags.slice(0, 4).map((tag) => (
 				<li>
@@ -138,5 +148,22 @@ const keepNaturalCover = coverRatio >= 0.5 && coverRatio <= 2;
 
 	.tag-list li {
 		display: flex;
+	}
+
+	.project-awards {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.4rem;
+		margin-bottom: -0.2rem;
+	}
+	.award-badge {
+		font-size: 0.8rem;
+		background: rgba(255, 215, 0, 0.15);
+		color: #ffd700;
+		padding: 0.2rem 0.5rem;
+		border-radius: 4px;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.2rem;
 	}
 </style>
