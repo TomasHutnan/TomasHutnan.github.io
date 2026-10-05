@@ -12,6 +12,8 @@ role: Data Scientist
 startedAt: 2026-02-01
 completedAt: 2026-04-30
 cover: ../../assets/projects/ib031-nutritional-clustering/cover.webp
+collaborators:
+    - Eva Hatalčíková
 ---
 
 This project focused on the semantic categorization of over 10,000 USDA food ingredients using unsupervised learning techniques.
