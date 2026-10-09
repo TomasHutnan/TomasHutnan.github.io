@@ -84,6 +84,25 @@ export const skillGroups: SkillGroup[] = [
 
 export const experienceEntries: ExperienceEntry[] = [
 	{
+		title: "Research Assistant",
+		organization: "Masaryk University",
+		period: "2026 Oct — Present",
+		bullets: [
+			"Research LLM safety and clinical guardrails within Project EMPOWER.",
+			"Generate synthetic oncology datasets to stress-test model boundaries.",
+		],
+	},
+	{
+		title: "Teaching Assistant",
+		organization: "Masaryk University",
+		period: "2025 Sep — Present",
+		bullets: [
+			"Teaching Introduction to Artificial Intelligence.",
+			"Teaching Algorithms & Data Structures.",
+			"Teaching Foundations of Programming.",
+		],
+	},
+	{
 		title: "SQA Intern",
 		organization: "ChyronHego",
 		period: "2024 Nov — 2025 Dec",
@@ -91,16 +110,6 @@ export const experienceEntries: ExperienceEntry[] = [
 			"Develop automation systems in Python.",
 			"Work with SQL, APIs, and Docker-based infrastructure.",
 			"Authored 1,000+ automated test cases.",
-		],
-	},
-	{
-		title: "Teaching Assistant",
-		organization: "Masaryk University",
-		period: "Current",
-		bullets: [
-			"Teaching Introduction to Artificial Intelligence.",
-			"Teaching Algorithms & Data Structures.",
-			"Teaching Foundations of Programming.",
 		],
 	},
 ];
