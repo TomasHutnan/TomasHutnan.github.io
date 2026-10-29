@@ -19,7 +19,7 @@ demo: https://www.youtube.com/watch?v=o8Fo_oQnjxc
 
 cover: ../../assets/projects/interax/cover.webp
 
-role: Data Architect & ML Engineer
+role: ML Engineer
 shortRoleDescription: Architected clinical data integration, FHIR infrastructure, and vector search for DDI screening.
 contribution: Harmonized disparate clinical datasets (SÚKL, DDInter, CPIC), developed initial extraction and transformation logic in Jupyter prototypes, structured the local Drug-Drug Interaction database, architected HL7 FHIR cloud deployment, and implemented an InterSystems IRIS Vector Search database for RAG-powered clinical guideline evaluation.
 
