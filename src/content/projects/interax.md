@@ -18,6 +18,10 @@ repo: https://github.com/TomasHutnan/interax
 demo: https://www.youtube.com/watch?v=o8Fo_oQnjxc
 
 cover: ../../assets/projects/interax/cover.webp
+# gallery:
+#     - ../../assets/projects/interax/1.webp
+#     - ../../assets/projects/interax/2.webp
+#     - ../../assets/projects/interax/3.webp
 
 role: ML Engineer
 shortRoleDescription: Architected clinical data integration, FHIR infrastructure, and vector search for DDI screening.
