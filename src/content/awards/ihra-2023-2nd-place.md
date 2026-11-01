@@ -7,4 +7,4 @@ date: 2023-05-31
 cover: ../../assets/awards/covers/ihra-2023-2nd-place.webp
 ---
 
-Awarded 2nd place at iHRA 2023, a national high school game development competition, for Anino's Odyssey, recognizing excellence in gameplay systems, design, and technical implementation.
+2nd place at iHRA 2023 for Anino's Odyssey.

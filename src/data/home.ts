@@ -28,14 +28,14 @@ export const hero = {
 	name: "Tomáš Hutňan",
 	title: "Informatics Student — Machine Learning & Computer Vision",
 	summary:
-		"I build intelligent systems, data-driven applications, and interactive software.",
+		"I build machine learning systems and the software around them, from medical imaging to GPU pipelines.",
 };
 
 export const quickInfo: QuickInfoItem[] = [
 	{ label: "Location", value: "Brno, Czechia / Slovakia" },
 	{
 		label: "Education",
-		value: "Masaryk University — Informatics (BC, in progress)",
+		value: "Masaryk University — Bachelor's in Informatics (in progress)",
 	},
 	{
 		label: "Current roles",
@@ -44,9 +44,7 @@ export const quickInfo: QuickInfoItem[] = [
 ];
 
 export const aboutParagraphs = [
-	"An informatics student focused on machine learning, computer vision, and data-driven systems.",
-	"I enjoy building practical applications of AI, from medical diagnostics and financial systems to generative tools and interactive games.",
-	"Alongside my studies, I teach programming and algorithms, helping students build strong foundations in software development.",
+	"I like building practical AI: medical diagnostics, financial tools, generative apps and games. Alongside my studies, I teach AI, algorithms and programming, and research LLM safety for clinical use.",
 ];
 
 export const skillGroups: SkillGroup[] = [
@@ -95,7 +93,7 @@ export const experienceEntries: ExperienceEntry[] = [
 		period: "2026 Oct — Present",
 		bullets: [
 			"Research LLM safety and clinical guardrails within Project EMPOWER.",
-			"Generate synthetic oncology datasets to stress-test model boundaries.",
+			"Generate synthetic oncology datasets to test where models fail.",
 		],
 	},
 	{
@@ -103,9 +101,7 @@ export const experienceEntries: ExperienceEntry[] = [
 		organization: "Masaryk University",
 		period: "2025 Sep — Present",
 		bullets: [
-			"Teaching Introduction to Artificial Intelligence.",
-			"Teaching Algorithms & Data Structures.",
-			"Teaching Foundations of Programming.",
+			"Teach Introduction to AI, Algorithms & Data Structures, and Foundations of Programming.",
 		],
 	},
 	{
@@ -113,9 +109,8 @@ export const experienceEntries: ExperienceEntry[] = [
 		organization: "ChyronHego",
 		period: "2024 Nov — 2025 Dec",
 		bullets: [
-			"Developed automation systems in Python.",
+			"Built Python test automation and wrote 1,000+ automated test cases.",
 			"Worked with SQL, APIs, and Docker-based infrastructure.",
-			"Authored 1,000+ automated test cases.",
 		],
 	},
 ];

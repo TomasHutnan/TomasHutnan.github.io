@@ -34,12 +34,4 @@ collaborators:
     - Adrián Mikolaj
 ---
 
-TeleComic was developed at Hack Košice 2023 as a platform that allows users to transform their ideas into fully generated comic books using AI. The goal was to enable creative expression without requiring artistic or writing expertise.
-
-The system combines text generation and image synthesis to create coherent comic panels from user input. Large language models are used to structure narratives, while image generation models produce consistent visual representations of scenes and characters.
-
-A key challenge was maintaining visual consistency across multiple panels. Through extensive prompt engineering and experimentation, the team developed a structured prompting approach that significantly improved both coherence and stylistic consistency of generated images.
-
-The backend was implemented using Python and Flask, serving as an interface between the frontend application and OpenAI APIs. The system was designed to efficiently handle prompt processing and coordinate text-to-image generation workflows.
-
-TeleComic demonstrated the potential of generative AI in creative applications, highlighting how large models can be guided to produce structured, high-quality visual storytelling experiences.
+TeleComic was developed at Hack Košice 2023 as a platform that turns user ideas into AI-generated comics, with no artistic or writing skill required. Large language models structure the narrative, while image generation models produce the scenes and characters. A key challenge was keeping visuals consistent across panels. Structured prompts kept characters and style more consistent. The backend was implemented using Python and Flask, connecting the frontend to OpenAI APIs and coordinating text and image generation.

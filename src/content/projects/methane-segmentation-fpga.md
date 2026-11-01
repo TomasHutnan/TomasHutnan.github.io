@@ -1,6 +1,6 @@
 ---
 title: Methane Segmentation on FPGA
-description: Onboard optimization of ML pipelines for methane segmentation on FPGA edge devices to solve aerospace data-downlink bottlenecks.
+description: Ongoing research into running methane segmentation on FPGA edge devices to reduce satellite downlink data.
 tags:
     - computer-vision
     - machine-learning
@@ -13,8 +13,4 @@ startedAt: 2026-06-01
 cover: ../../assets/projects/methane-segmentation-fpga/cover.webp
 ---
 
-This project focuses on the onboard optimization of machine learning pipelines for methane segmentation on FPGA edge devices. The primary goal is to address and solve aerospace data-downlink bottlenecks by processing data directly at the edge.
-
-The core pillars of the research include comparing Post-Training Quantization (PTQ) versus Quantization-Aware Training (QAT). The impact of INT8 quantization is extensively evaluated in terms of memory footprint, processing throughput, and power consumption on the ZCU104 FPGA utilizing Vitis AI.
-
-Finally, the implemented solutions are benchmarked against low-power CPUs using the MARS-EMIT dataset to demonstrate the effectiveness and efficiency of the FPGA-based approach.
+This ongoing project tests whether methane segmentation can run on board, so less data has to be sent to the ground. It compares Post-Training Quantization (PTQ) with Quantization-Aware Training (QAT), measuring how INT8 quantization affects memory, throughput and power on a ZCU104 FPGA with Vitis AI. The models are benchmarked against low-power CPUs on the MARS-EMIT dataset.

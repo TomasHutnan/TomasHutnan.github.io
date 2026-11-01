@@ -1,6 +1,6 @@
 ---
 title: InteraX
-description: End-to-end clinical pharmacology pipeline screening for critical drug-drug interactions with HL7 FHIR export and local RAG search.
+description: Hackathon prototype that screens medications for drug-drug interactions, with HL7 FHIR export and guideline-based RAG search.
 tags:
     - medical-ai
     - rag
@@ -27,9 +27,9 @@ gallery:
     - image: ../../assets/projects/interax/3.webp
       alt: Mobile views of a patient form with voice input and a saved form with a temporary access PIN.
 
-role: ML Engineer
+role: Data Engineer
 shortRoleDescription: Architected clinical data integration, FHIR infrastructure, and vector search for DDI screening.
-contribution: Harmonized disparate clinical datasets (SÚKL, DDInter, CPIC), developed initial extraction and transformation logic in Jupyter prototypes, structured the local Drug-Drug Interaction database, architected HL7 FHIR cloud deployment, and implemented an InterSystems IRIS Vector Search database for RAG-powered clinical guideline evaluation.
+contribution: Harmonized clinical datasets (SÚKL, DDInter, CPIC), built the initial extraction and transformation logic in Jupyter prototypes, structured the drug-drug interaction database, deployed HL7 FHIR infrastructure on Azure, and implemented InterSystems IRIS Vector Search for RAG over clinical guidelines.
 
 collaborators:
     - Dávid Kepič
@@ -37,12 +37,6 @@ collaborators:
     - Jakub Blišťan
 ---
 
-InteraX was developed during Rakathon 2026 for the PillGaze challenge as an end-to-end clinical pharmacology pipeline designed to streamline medication safety. The system tackles the challenge of ingesting unstructured medication data, standardizing it against trusted medical registries, and screening for critical drug-drug interactions (DDIs) before exporting interoperable patient health records.
+InteraX was built at Rakathon 2026 for the PillGaze challenge. It reads a patient's medications from photos, matches them against the Czech SÚKL registry, DDInter and CPIC guidelines, screens them for dangerous drug-drug interactions, and exports the result as HL7 FHIR R4. For each interaction, it tries to explain the cause and specific symptoms where the guideline sources allow. Clinical guidelines are embedded in InterSystems IRIS Vector Search, so the RAG layer runs inside our own deployment rather than through a third-party API.
 
-To ensure clinical reliability, the pipeline harmonizes disparate data sources into a unified extraction and screening format. This includes linking national databases such as the Czech State Institute for Drug Control (SÚKL) registry with interaction databases like DDInter and clinical pharmacogenomics guidelines from CPIC. Unstructured medication inputs are parsed, normalized, and converted into secure, standardized HL7 FHIR Release 4 payloads ready for modern healthcare system integration.
-
-To avoid reliance on restrictive external third-party APIs, the platform incorporates a local vector database built on InterSystems IRIS Vector Search. Complex clinical guidelines and interaction literature are embedded and indexed locally, powering a context-aware Retrieval-Augmented Generation (RAG) system that evaluates interaction risks directly within the project's self-hosted infrastructure.
-
-Development followed a rapid iterative workflow, starting with Jupyter notebook proofs of concept to validate extraction, transformation, and interaction logic against sample datasets. Once validated, workflows were transitioned into production API services backed by a structured local interaction database and cloud-deployed FHIR infrastructure.
-
-InteraX demonstrates how modern data engineering, local vector search, and healthcare interoperability standards can be united to deliver a reliable, privacy-preserving clinical decision support system under hackathon time constraints.
+The system was deployed on Azure and shares no patient identifiers. Only medication photos are sent for analysis. Doctors receive a drug list through a one-time code, and that upload contains no patient information and expires after a few hours. We validated the logic in Jupyter notebooks before moving it into API services.

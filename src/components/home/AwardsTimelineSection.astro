@@ -12,12 +12,7 @@ interface Props {
 const { groups, awardProjectMap } = Astro.props;
 ---
 
-<Section
-	id="awards"
-	eyebrow="Awards"
-	title="Recognition over time"
-	description="A concise timeline of competition results and sponsor awards across recent years."
->
+<Section id="awards" eyebrow="Awards" title="Recognition over time">
 	<div class="timeline">
 		{groups.map(({ year, awards }) => (
 			<section class="timeline-group">

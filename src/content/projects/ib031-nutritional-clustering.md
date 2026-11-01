@@ -17,8 +17,4 @@ collaborators:
     - Eva Hatalčíková
 ---
 
-This project focused on the semantic categorization of over 10,000 USDA food ingredients using unsupervised learning techniques.
-
-Key techniques included rigorous data preprocessing utilizing Log1p transformations, standard scaling, and Atwater equation validation. Custom feature engineering was performed by developing specific nutrient ratios to better capture essential dietary relationships. For dimensionality reduction and visualization, techniques such as t-SNE and UMAP were applied.
-
-The project involved comparing various clustering algorithms, including DBSCAN, HDBSCAN, and K-Means. The winning approach was a K-Means model with k=6, which successfully mapped complex mathematical coordinates into human-interpretable dietary categories.
+Preprocessing used Log1p transformations, standard scaling, and Atwater equation validation. Custom nutrient ratios captured key dietary relationships, and t-SNE and UMAP were applied for dimensionality reduction and visualization. The project compared DBSCAN, HDBSCAN, and K-Means. K-Means with k=6 was selected, grouping ingredients into six interpretable dietary categories.

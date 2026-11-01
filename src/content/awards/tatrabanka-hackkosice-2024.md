@@ -6,4 +6,4 @@ date: 2024-04-07
 cover: ../../assets/awards/covers/tatrabanka-hackkosice-2024.webp
 ---
 
-Awarded at Hack Košice 2024 for Tatrinvest, an AI-driven investment platform focused on accessibility, intelligent recommendations, and gamified user experience.
+Won the Tatra Banka challenge at Hack Košice 2024 with Tatrinvest.

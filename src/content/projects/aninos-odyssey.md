@@ -1,6 +1,6 @@
 ---
 title: Anino's Odyssey
-description: Action-adventure game featuring custom-built systems, enemy AI, and immersive gameplay developed in Unity.
+description: Action-adventure Unity game with combat, loot tiers, leveling and an in-game economy.
 tags:
     - unity
     - csharp
@@ -31,12 +31,4 @@ collaborators:
     - Martin Hlivka
 ---
 
-Anino's Odyssey is a long-term action-adventure game project developed with the goal of creating a rich and immersive gameplay experience. The project focused on combining custom-built systems, engaging combat mechanics, and a handcrafted visual and audio design.
-
-The game features an expansive progression system with multiple item tiers, leveling mechanics, and increasingly challenging enemies. Players explore a stylized world, collect loot, and compete with others through shared progression systems.
-
-Development took place over several months, allowing for significantly deeper system design compared to typical hackathon projects. The architecture included enemy AI behavior, inventory management, in-game economy, and persistent progression features.
-
-A major focus of the project was building robust gameplay systems in Unity. This included implementing menus, dialog systems, tutorials, shop mechanics, player inventory, and scene transitions, ensuring that all components worked together seamlessly.
-
-The project was recognized in multiple national competitions, highlighting both its technical depth and overall game design quality. It demonstrates strong experience in systems integration, long-term teamwork, and game development workflows.
+Anino's Odyssey is an action-adventure game built in Unity over about seven months, with combat, loot tiers, leveling and an in-game economy. Players explore a stylized world, collect loot and face increasingly challenging enemies. The game has a handcrafted visual and audio design. It placed 2nd at iHRA 2023 and 4th at Špongia 2022.
