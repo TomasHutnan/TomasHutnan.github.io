@@ -1,6 +1,6 @@
 ---
 title: Sustania
-description: AR-based sustainability game prototype integrating real-world environmental data, focusing on backend architecture, deployment, and system design.
+description: MMO sustainability game with AR elements, where players explore the real world to manage and build up their resources.
 tags:
     - backend
     - system-design
@@ -22,7 +22,7 @@ demo: https://www.youtube.com/watch?v=yBXOGQOw0nI
 cover: ../../assets/projects/sustania/cover.webp
 
 role: Backend Engineer
-shortRoleDescription: Designed and deployed a scalable backend system for an AR-based application.
+shortRoleDescription: Designed and deployed the backend for an MMO game with AR elements.
 contribution: Designed the system architecture, database schema, and API structure; implemented core backend services using FastAPI; handled authentication and security design; containerized the backend using Docker and deployed it; contributed to early Godot-based prototype development and environment effects.
 
 collaborators:
@@ -33,12 +33,6 @@ collaborators:
     - Jakub Blišťan
 ---
 
-Sustania was developed as a prototype for an augmented reality game focused on sustainability and urban environmental awareness. The project aimed to connect real-world environments with interactive gameplay driven by live environmental and geospatial data.
+Sustania is an MMO sustainability game with AR elements, built during the CASSINI hackathon. As in Pokémon GO, players explore the real world, using it to manage and build up their resources. Satellite imagery and weather data bring real environmental conditions into the game.
 
-The concept combines AR gameplay with real-world data sources, such as satellite imagery and weather data, allowing players to explore their surroundings, complete location-based objectives, and make decisions related to urban sustainability.
-
-The primary focus of the project was backend architecture and system design. A scalable API was developed using FastAPI, supported by a PostgreSQL database hosted on Neon. The system was designed to handle persistent data, user interaction, and real-time game state, following principles similar to MMO-style backend services.
-
-Deployment and infrastructure were an important part of the implementation. The backend was containerized using Docker and deployed to a cloud environment, with attention given to configuration, reliability, and ease of iteration during development.
-
-Although the project remained at a prototype stage, it demonstrates experience in designing and implementing backend systems, deploying real-world services, and working with data-driven applications under time constraints.
+The backend is a FastAPI service with a PostgreSQL database on Neon, designed for persistent game state and player data. It runs in Docker and was deployed to the cloud. The game remained at the prototype stage.

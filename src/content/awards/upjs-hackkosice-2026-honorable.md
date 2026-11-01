@@ -5,6 +5,4 @@ issuer: Pavol Jozef Šafárik University
 date: 2026-04-19
 ---
 
-Selected as an honorable mention at HackKosice 2026 for work on tear ferning analysis in diseased patients.
-
-The project attracted academic interest, with faculty members reaching out for potential future collaboration.
+Honorable mention at Hack Košice 2026 for Tearz, our tear ferning analysis project. Faculty members later reached out about potential collaboration.

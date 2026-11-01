@@ -1,6 +1,6 @@
 ---
 title: TatraShare
-description: AI-powered platform for managing shared finances, enabling seamless expense splitting, shared savings, and real-time payment settlement.
+description: Hackathon prototype for managing shared finances, with expense splitting, shared savings and payment settlement.
 tags:
     - fintech
     - react-native
@@ -21,7 +21,7 @@ cover: ../../assets/projects/tatrashare/cover.webp
 
 role: Technical Advisor
 shortRoleDescription: Guided technical decisions for an AI-powered shared finance platform.
-contribution: Provided architectural guidance, design feedback, and suggested implementation approaches during development, helping the team make informed technical decisions under time constraints.
+contribution: My main project at this hackathon was Tearz, but I discussed features and architectural decisions with the team extensively.
 
 collaborators:
     - Robert Hudák
@@ -29,12 +29,4 @@ collaborators:
     - Adrián Mikolaj
 ---
 
-TatraShare was developed at Hack Košice 2026 as a platform for simplifying shared financial management in groups. The goal was to eliminate friction in handling group expenses, savings, and real-time settlements through a unified and intelligent system.
-
-The application enables users to split expenses, manage pooled funds, and create shared savings goals, all within a mobile interface. Virtual payment cards integrated with Apple Pay and Google Pay allow for immediate and seamless transaction settlement, removing the need for manual reconciliation.
-
-The platform incorporates AI-driven features such as receipt parsing, automated transaction categorization, and contextual financial assistance, helping users better understand and manage their financial activity.
-
-Built using React Native and a scalable backend powered by MongoDB Atlas, the system leverages modern authentication through Auth0 and explores integration with PSD2 APIs and blockchain (Solana) for secure and flexible financial interactions.
-
-TatraShare demonstrates how machine learning and modern fintech infrastructure can be combined to deliver a fast, intuitive, and intelligent shared finance experience.
+TatraShare is a shared-finance prototype built by a team at Hack Košice 2026. It splits expenses, manages pooled funds and tracks shared savings goals in a mobile app. Virtual payment cards for Apple Pay and Google Pay were designed for instant settlement. The payment protocols were in place but mostly mocked, though ready for deployment if needed. AI features include receipt parsing, automated transaction categorization and contextual financial assistance. It was built with React Native, MongoDB Atlas and Auth0, and explored PSD2 APIs and blockchain (Solana) integration.

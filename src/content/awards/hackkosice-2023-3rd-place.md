@@ -7,4 +7,4 @@ date: 2023-04-02
 cover: ../../assets/awards/covers/hackkosice-2023-3rd-place.webp
 ---
 
-Awarded 3rd place overall at Hack Košice 2023 for TeleComic, an AI-powered platform enabling users to generate comics from their ideas using large language models and image generation.
+3rd place overall at Hack Košice 2023 for TeleComic.

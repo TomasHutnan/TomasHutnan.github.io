@@ -7,6 +7,4 @@ date: 2025-03-01
 cover: ../../assets/awards/covers/newsmatics-hackathon-2025-winner.webp
 ---
 
-Awarded 1st place at the Newsmatics Hackathon 2025 for StockMatics, a financial analytics platform that analyzes relationships between news events, sentiment, and market movements using machine learning and NLP.
-
-The project was recognized for its innovative use of data analysis and real-world applicability in financial markets.
+1st place at the Newsmatics Hackathon 2025 for StockMatics.
