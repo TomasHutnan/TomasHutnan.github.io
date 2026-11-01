@@ -29,6 +29,11 @@ export function groupAwardsByYear(awards: Award[]): AwardYearGroup[] {
 	return groups;
 }
 
+// "iHRA 2023 – National High School…" -> "iHRA 2023"
+export function getShortEventName(event: string): string {
+	return event.split(" – ")[0];
+}
+
 export function mapAwardsToProjects(projects: Project[]): Map<string, Project> {
 	return new Map(
 		projects.flatMap((project) =>

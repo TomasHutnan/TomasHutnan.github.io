@@ -27,6 +27,9 @@ repo: https://github.com/newsmatics-hackathon-2025/team-ae2025-02-28
 demo: https://www.youtube.com/watch?v=mfA4vSHSiD0
 
 cover: ../../assets/projects/stockmatics/cover.webp
+gallery:
+    - image: ../../assets/projects/stockmatics/full.webp
+      alt: Meta stock page with a price chart, a news feed labeled by political leaning, and a political bias breakdown.
 
 role: ML Engineer
 shortRoleDescription: Developed NLP-driven analytics linking news sentiment with financial market behavior.

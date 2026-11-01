@@ -1,5 +1,6 @@
 ---
 title: MLH Best Use of Google Cloud
+shortTitle: "MLH Best Use of Google Cloud"
 event: Hack Košice 2022
 issuer: Major League Hacking
 date: 2022-04-24

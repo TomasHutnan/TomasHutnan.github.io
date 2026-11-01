@@ -1,5 +1,6 @@
 ---
 title: 3rd Place Overall
+shortTitle: "3rd place, Hack Košice 2023"
 event: Hack Košice 2023
 issuer: Hack Košice
 date: 2023-04-02

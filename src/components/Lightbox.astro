@@ -1,0 +1,75 @@
+---
+interface Props {
+	label: string;
+}
+
+const { label } = Astro.props;
+---
+
+<dialog class="lightbox" data-lightbox aria-label={label}>
+	<img class="lightbox-image" data-lightbox-image alt="" />
+	<button
+		class="overlay-button lightbox-close"
+		type="button"
+		data-lightbox-close
+		aria-label="Close"
+	>
+		<span aria-hidden="true">×</span>
+	</button>
+	<button
+		class="overlay-button overlay-button--prev"
+		type="button"
+		data-lightbox-prev
+		aria-label="Previous image"
+	>
+		<span aria-hidden="true">‹</span>
+	</button>
+	<button
+		class="overlay-button overlay-button--next"
+		type="button"
+		data-lightbox-next
+		aria-label="Next image"
+	>
+		<span aria-hidden="true">›</span>
+	</button>
+</dialog>
+
+<style>
+	.lightbox {
+		width: 100vw;
+		max-width: none;
+		height: 100dvh;
+		max-height: none;
+		margin: 0;
+		padding: 1rem;
+		border: 0;
+		background: transparent;
+		overflow: hidden;
+	}
+
+	.lightbox[open] {
+		display: grid;
+		place-items: center;
+	}
+
+	.lightbox::backdrop {
+		background: var(--bg-overlay);
+	}
+
+	.lightbox-image {
+		max-width: 100%;
+		max-height: 100%;
+		object-fit: contain;
+		border-radius: var(--radius-sm);
+	}
+
+	.lightbox .overlay-button {
+		position: fixed;
+	}
+
+	.lightbox .lightbox-close {
+		top: 1rem;
+		right: 1rem;
+		transform: none;
+	}
+</style>

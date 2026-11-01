@@ -1,5 +1,6 @@
 ---
 title: Honorable Mention – UPJŠ Challenge
+shortTitle: "Honorable mention, UPJŠ"
 event: Hack Košice 2026
 issuer: Pavol Jozef Šafárik University
 date: 2026-04-19

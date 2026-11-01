@@ -70,6 +70,8 @@ const awards = defineCollection({
 	schema: ({ image }) =>
 		z.object({
 			title: z.string(),
+			// One line on project cards, so it must make sense on its own.
+			shortTitle: z.string(),
 			event: z.string(),
 			issuer: z.string(),
 			date: z.coerce.date(),

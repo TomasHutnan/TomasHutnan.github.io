@@ -9,11 +9,7 @@ interface Props {
 const { entries } = Astro.props;
 ---
 
-<Section
-	id="experience"
-	eyebrow="Experience"
-	title="Industry, teaching and research"
->
+<Section id="experience" title="Industry, teaching and research">
 	<div class="experience-grid">
 		{entries.map((entry) => (
 			<article class="experience-card">

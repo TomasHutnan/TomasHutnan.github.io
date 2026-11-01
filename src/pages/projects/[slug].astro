@@ -8,6 +8,7 @@ import {
 import { Image } from "astro:assets";
 import Layout from "../../layouts/Layout.astro";
 import TagList from "../../components/TagList.astro";
+import Lightbox from "../../components/Lightbox.astro";
 import AwardCard from "../../components/project/AwardCard.astro";
 import ProjectGallery from "../../components/project/ProjectGallery.astro";
 import ProjectLinks from "../../components/project/ProjectLinks.astro";
@@ -105,19 +106,32 @@ const galleryItems = getGalleryItems(project);
 		</article>
 
 		{awards.length > 0 && (
-			<section class="project-section">
+			<section class="project-section" data-award-photos>
 				<h2>Awards</h2>
-				<ul class="award-grid">
+				<ul class="award-list">
 					{awards.map((award) => (
 						<AwardCard award={award} />
 					))}
 				</ul>
+				<Lightbox label={`${title} award photos`} />
 			</section>
 		)}
 	</main>
 </Layout>
 
+<script>
+	import "../../scripts/award-lightbox";
+</script>
+
 <style>
+	/* Long lines are tiring to read, even though media uses the full width. */
+	header > p,
+	.project-role,
+	.content-body,
+	.contribution {
+		max-width: 72ch;
+	}
+
 	h1 {
 		margin: 0;
 		font-size: clamp(1.9rem, 3.2vw, 2.8rem);
@@ -194,17 +208,17 @@ const galleryItems = getGalleryItems(project);
 		line-height: 1.7;
 	}
 
-	.award-grid {
+	.award-list {
 		list-style: none;
 		display: grid;
-		grid-template-columns: repeat(2, minmax(0, 1fr));
-		gap: 1.5rem;
+		grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+		gap: 1rem 1.5rem;
 		padding: 0;
 		margin: 0;
 	}
 
 	@media (max-width: 720px) {
-		.award-grid {
+		.award-list {
 			grid-template-columns: minmax(0, 1fr);
 		}
 	}

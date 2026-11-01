@@ -1,5 +1,5 @@
 ---
-import type { ContactIcon, ContactLink } from "../../data/home";
+import type { ContactIcon, ContactLink, QuickInfoItem } from "../../data/home";
 import { getExternalLinkProps } from "../../utils/links";
 import EmailIcon from "../../assets/icons/email.svg";
 import GitHubIcon from "../../assets/icons/github.svg";
@@ -14,6 +14,8 @@ interface Props {
 	secondaryHref: string;
 	secondaryLabel: string;
 	links: ContactLink[];
+	facts: QuickInfoItem[];
+	highlights: string[];
 }
 
 const ICONS: Record<ContactIcon, typeof EmailIcon> = {
@@ -31,12 +33,13 @@ const {
 	secondaryHref,
 	secondaryLabel,
 	links,
+	facts,
+	highlights,
 } = Astro.props;
 ---
 
 <section class="hero">
 	<div class="hero-copy">
-		<p class="eyebrow">Portfolio</p>
 		<h1>{name}</h1>
 		<p class="hero-title">{title}</p>
 		<p class="hero-summary">{summary}</p>
@@ -69,25 +72,79 @@ const {
 			})}
 		</div>
 	</div>
+
+	<dl class="hero-facts">
+		{facts.map(({ label, value }) => (
+			<div>
+				<dt>{label}</dt>
+				<dd>{value}</dd>
+			</div>
+		))}
+		<div>
+			<dt>Highlights</dt>
+			<dd>
+				<ul>
+					{highlights.map((highlight) => (
+						<li>{highlight}</li>
+					))}
+				</ul>
+			</dd>
+		</div>
+	</dl>
 </section>
 
 <style>
 	.hero {
+		display: grid;
+		grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+		gap: 2.5rem;
+		align-items: center;
 		padding: 2.2rem 0 0.5rem;
 	}
 
 	.hero-copy {
 		display: grid;
 		gap: 1rem;
-		max-width: 760px;
 	}
 
-	.eyebrow {
+	.hero-facts {
+		display: grid;
+		gap: 1rem;
 		margin: 0;
-		font-size: 0.82rem;
-		letter-spacing: 0.16em;
+		padding: 1.25rem;
+		border: 1px solid var(--border);
+		border-radius: var(--radius-lg);
+		background: var(--card-gradient);
+		box-shadow: var(--shadow-card);
+	}
+
+	dt {
+		margin-bottom: 0.25rem;
+		font-size: 0.78rem;
+		letter-spacing: 0.08em;
 		text-transform: uppercase;
-		color: var(--primary-soft);
+		color: var(--text-secondary);
+	}
+
+	dd {
+		margin: 0;
+		font-weight: 600;
+		line-height: 1.45;
+	}
+
+	dd ul {
+		display: grid;
+		gap: 0.3rem;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	@media (max-width: 900px) {
+		.hero {
+			grid-template-columns: minmax(0, 1fr);
+			gap: 1.5rem;
+		}
 	}
 
 	h1 {

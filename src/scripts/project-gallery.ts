@@ -1,3 +1,5 @@
+import { createLightbox, isPlainLeftClick } from "./lightbox";
+
 const SWITCH_THRESHOLD = 0.6;
 
 const prefersReducedMotion = () =>
@@ -6,13 +8,6 @@ const prefersReducedMotion = () =>
 const scrollBehavior = (): ScrollBehavior =>
 	prefersReducedMotion() ? "auto" : "smooth";
 
-const isPlainLeftClick = (event: MouseEvent) =>
-	event.button === 0 &&
-	!event.metaKey &&
-	!event.ctrlKey &&
-	!event.shiftKey &&
-	!event.altKey;
-
 function createYouTubeFrame(videoId: string, title: string) {
 	const iframe = document.createElement("iframe");
 	iframe.src = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0`;
@@ -20,63 +15,6 @@ function createYouTubeFrame(videoId: string, title: string) {
 	iframe.allow = "autoplay; encrypted-media; picture-in-picture; fullscreen";
 	iframe.allowFullscreen = true;
 	return iframe;
-}
-
-function initLightbox(
-	gallery: HTMLElement,
-	showSlideFor: (link: HTMLAnchorElement) => void,
-) {
-	const dialog = gallery.querySelector<HTMLDialogElement>("[data-lightbox]");
-	const image = gallery.querySelector<HTMLImageElement>(
-		"[data-lightbox-image]",
-	);
-	if (!dialog || !image) return null;
-
-	const links = [
-		...gallery.querySelectorAll<HTMLAnchorElement>("[data-zoom]"),
-	];
-	const prevButton = dialog.querySelector<HTMLElement>(
-		"[data-lightbox-prev]",
-	);
-	const nextButton = dialog.querySelector<HTMLElement>(
-		"[data-lightbox-next]",
-	);
-	let currentIndex = 0;
-
-	const showImage = (index: number) => {
-		currentIndex = (index + links.length) % links.length;
-		const link = links[currentIndex];
-		image.src = link.href;
-		image.alt = link.querySelector("img")?.alt ?? "";
-		showSlideFor(link);
-	};
-
-	const step = (delta: number) => showImage(currentIndex + delta);
-
-	for (const button of [prevButton, nextButton]) {
-		if (button) button.hidden = links.length < 2;
-	}
-	prevButton?.addEventListener("click", () => step(-1));
-	nextButton?.addEventListener("click", () => step(1));
-	dialog
-		.querySelector("[data-lightbox-close]")
-		?.addEventListener("click", () => dialog.close());
-
-	// A click on the dialog itself, not its content, landed on the backdrop.
-	dialog.addEventListener("click", (event) => {
-		if (event.target === dialog) dialog.close();
-	});
-
-	links.forEach((link, index) => {
-		link.addEventListener("click", (event) => {
-			if (!isPlainLeftClick(event)) return;
-			event.preventDefault();
-			showImage(index);
-			dialog.showModal();
-		});
-	});
-
-	return { isOpen: () => dialog.open, step };
 }
 
 function initGallery(gallery: HTMLElement) {
@@ -151,7 +89,7 @@ function initGallery(gallery: HTMLElement) {
 		});
 	};
 
-	const lightbox = initLightbox(gallery, (link) => {
+	const lightbox = createLightbox(gallery, (link) => {
 		const slide = link.closest("li");
 		if (slide) show(slides.indexOf(slide));
 	});
@@ -206,13 +144,10 @@ function initGallery(gallery: HTMLElement) {
 		// Arrow keys on a focused player seek within the video.
 		if (event.target instanceof HTMLVideoElement) return;
 
+		if (lightbox?.isOpen()) return;
+
 		event.preventDefault();
-		const delta = event.key === "ArrowLeft" ? -1 : 1;
-		if (lightbox?.isOpen()) {
-			lightbox.step(delta);
-		} else {
-			show(activeIndex + delta);
-		}
+		show(activeIndex + (event.key === "ArrowLeft" ? -1 : 1));
 	});
 
 	setActive(0);

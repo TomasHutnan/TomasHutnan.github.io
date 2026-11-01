@@ -43,6 +43,12 @@ export const quickInfo: QuickInfoItem[] = [
 	},
 ];
 
+export const highlights = [
+	"1st place, Newsmatics Hackathon 2025",
+	"Tatra Banka Challenge winner, 2024 and 2026",
+	"1,000+ automated test cases at ChyronHego",
+];
+
 export const aboutParagraphs = [
 	"I like building practical AI: medical diagnostics, financial tools, generative apps and games. Alongside my studies, I teach AI, algorithms and programming, and research LLM safety for clinical use.",
 ];

@@ -50,10 +50,12 @@ export function getGalleryItems(project: Project): GalleryItem[] {
 
 	const videoId = getYouTubeVideoId(demo);
 	if (videoId) {
+		// Covers can be tight crops meant for cards, too small for the full stage.
+		const firstImage = gallery.find((item) => "image" in item)?.image;
 		items.push({
 			kind: "youtube",
 			videoId,
-			poster: cover,
+			poster: firstImage ?? cover,
 			alt: `${title} demo video`,
 		});
 	}

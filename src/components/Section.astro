@@ -1,24 +1,16 @@
 ---
 interface Props {
 	id?: string;
-	eyebrow?: string;
 	title: string;
 	description?: string;
 	headingLevel?: "h1" | "h2";
 }
 
-const {
-	id,
-	eyebrow,
-	title,
-	description,
-	headingLevel: Heading = "h2",
-} = Astro.props;
+const { id, title, description, headingLevel: Heading = "h2" } = Astro.props;
 ---
 
 <section id={id} class="section">
 	<div class="section-heading">
-		{eyebrow && <p class="eyebrow">{eyebrow}</p>}
 		<Heading class="section-title">{title}</Heading>
 		{description && <p class="section-description">{description}</p>}
 	</div>
@@ -37,14 +29,6 @@ const {
 	.section-heading {
 		display: grid;
 		gap: 0.5rem;
-	}
-
-	.eyebrow {
-		margin: 0;
-		font-size: 0.82rem;
-		letter-spacing: 0.14em;
-		text-transform: uppercase;
-		color: var(--primary-soft);
 	}
 
 	.section-title {

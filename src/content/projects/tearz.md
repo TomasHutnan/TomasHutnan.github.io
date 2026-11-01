@@ -24,6 +24,9 @@ featuredOrder: 1
 repo: https://github.com/TomasHutnan/ae-tearz/
 
 cover: ../../assets/projects/tearz/cover.webp
+gallery:
+    - image: ../../assets/projects/tearz/full.webp
+      alt: Tearz desktop app showing a tear ferning sample, its processing pipeline and predicted diagnosis probabilities.
 
 role: Project Lead
 shortRoleDescription: Led a diagnostic prototype for non-invasive disease screening.
@@ -39,4 +42,4 @@ Tearz is a diagnostic prototype built on tear ferning microscopy, a non-invasive
 
 The preprocessing pipeline was inspired by Gwyddion-based techniques, incorporating pseudo-field flattening, row alignment, CLAHE, and skeletonization to isolate crystalline tear structures from noise. Feature engineering focused on extracting topological and textural properties, including fractal dimension and Haralick features, which were used in a logistic regression classifier for initial screening. For classification, a 5-fold ResNet50 ensemble was trained using transfer learning, label smoothing, and test-time augmentation. Special care was taken to prevent data leakage by enforcing subject-level splits.
 
-Key challenges included removing fine-grained sensor noise without damaging structural detail, working with a small dataset, and optimizing computation by moving from 16-bit to 8-bit processing. The screener reached a 93% F1 score for detecting whether any condition is present. We measured this on our own train/test split of the 169 samples provided by UPJŠ, which supplied the challenge.
+Key challenges included removing fine-grained sensor noise without damaging structural detail, working with a small dataset, and optimizing computation by moving from 16-bit to 8-bit processing. The screener reached a 93% F1 score for detecting whether any condition is present. We measured this on our own train/test split of the 169 samples provided by UPJŠ, which supplied the challenge. It won an honorable mention in the UPJŠ challenge, and faculty members later reached out about potential collaboration.

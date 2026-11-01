@@ -1,5 +1,6 @@
 ---
 title: MLH Best Use of MongoDB
+shortTitle: "MLH Best Use of MongoDB"
 event: Hack Košice 2026
 issuer: Major League Hacking
 date: 2026-04-19

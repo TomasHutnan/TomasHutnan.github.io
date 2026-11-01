@@ -1,7 +1,7 @@
 ---
 import Section from "../Section.astro";
 import type { CollectionEntry } from "astro:content";
-import type { AwardYearGroup } from "../../utils/awards";
+import { getShortEventName, type AwardYearGroup } from "../../utils/awards";
 import { getProjectHref } from "../../utils/projects";
 
 interface Props {
@@ -12,10 +12,10 @@ interface Props {
 const { groups, awardProjectMap } = Astro.props;
 ---
 
-<Section id="awards" eyebrow="Awards" title="Recognition over time">
-	<div class="timeline">
+<Section id="awards" title="Awards">
+	<div class="award-years">
 		{groups.map(({ year, awards }) => (
-			<section class="timeline-group">
+			<section class="year-group">
 				<h3>{year}</h3>
 				<ul>
 					{awards.map((award) => {
@@ -24,13 +24,10 @@ const { groups, awardProjectMap } = Astro.props;
 							<li>
 								<strong>{award.data.title}</strong>
 								<span>
-									{award.data.event} - {award.data.issuer}
+									{getShortEventName(award.data.event)}
 								</span>
 								{project && (
-									<a
-										class="award-project-link"
-										href={getProjectHref(project)}
-									>
+									<a href={getProjectHref(project)}>
 										{project.data.title}
 									</a>
 								)}
@@ -44,61 +41,70 @@ const { groups, awardProjectMap } = Astro.props;
 </Section>
 
 <style>
-	.timeline {
+	.award-years {
 		display: grid;
 		gap: 1rem;
 	}
 
-	.timeline-group {
-		padding: 1rem 1.1rem;
+	.year-group {
+		display: grid;
+		grid-template-columns: 4.5rem minmax(0, 1fr);
+		gap: 1rem;
+		padding-top: 1rem;
+		border-top: 1px solid var(--border);
 	}
 
-	.timeline-group h3 {
-		margin: 0 0 0.9rem;
-		font-size: 1.1rem;
+	h3 {
+		margin: 0;
+		font-size: 1.05rem;
+		color: var(--text-secondary);
 	}
 
-	.timeline-group ul {
+	ul {
 		list-style: none;
 		display: grid;
-		gap: 0.8rem;
+		gap: 0.7rem;
 		padding: 0;
 		margin: 0;
 	}
 
-	.timeline-group li {
+	li {
 		display: grid;
-		gap: 0.2rem;
-		padding-left: 1rem;
-		border-left: 2px solid var(--primary-line);
+		grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr) minmax(
+				0,
+				0.8fr
+			);
+		gap: 1rem;
+		align-items: baseline;
 	}
 
-	.timeline-group strong {
+	strong {
 		font-size: 0.98rem;
 	}
 
-	.timeline-group span {
+	span {
 		color: var(--text-secondary);
-		line-height: 1.6;
 	}
 
-	.award-project-link {
-		align-self: start;
-		width: fit-content;
-		font-size: 0.82rem;
-		font-weight: 500;
-		color: var(--primary-muted);
+	a {
+		color: var(--primary-soft);
 		text-decoration: none;
-		transition: color 0.2s ease;
+		font-size: 0.92rem;
 	}
 
-	.award-project-link:hover {
+	a:hover {
 		color: var(--primary);
 	}
 
-	@media (min-width: 900px) {
-		.timeline {
-			grid-template-columns: repeat(2, minmax(0, 1fr));
+	@media (max-width: 720px) {
+		.year-group {
+			grid-template-columns: minmax(0, 1fr);
+			gap: 0.6rem;
+		}
+
+		li {
+			grid-template-columns: minmax(0, 1fr);
+			gap: 0.1rem;
 		}
 	}
 </style>

@@ -13,6 +13,9 @@ role: Data Scientist
 startedAt: 2026-02-01
 completedAt: 2026-04-30
 cover: ../../assets/projects/ib031-nutritional-clustering/cover.webp
+gallery:
+    - image: ../../assets/projects/ib031-nutritional-clustering/full.webp
+      alt: Six charts comparing the food clusters, including t-SNE, silhouette and macronutrient plots.
 collaborators:
     - Eva Hatalčíková
 ---
