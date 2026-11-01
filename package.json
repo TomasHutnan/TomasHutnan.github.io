@@ -1,5 +1,5 @@
 {
-	"name": "",
+	"name": "hutnan-portfolio",
 	"type": "module",
 	"version": "0.0.1",
 	"engines": {
@@ -18,8 +18,7 @@
 		"@astrojs/sitemap": "^3.7.4",
 		"@fontsource/inter": "^5.2.8",
 		"@fontsource/space-grotesk": "^5.2.10",
-		"astro": "^7.3.5",
-		"zod": "^4.4.3"
+		"astro": "^7.3.5"
 	},
 	"devDependencies": {
 		"@astrojs/check": "^0.9.10",

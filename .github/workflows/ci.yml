@@ -1,24 +1,24 @@
 name: CI Checks
 
 on:
-    push:
-        branches: [main]
     pull_request:
         branches: [main]
+    # Pushes to main run these checks through deploy.yml, which waits for them.
+    workflow_call:
 
 jobs:
     quality-and-security:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout repository
-              uses: actions/checkout@v4
+              uses: actions/checkout@v6
               with:
                   fetch-depth: 0 # Required for secret scanning
 
             - name: Setup Node.js
               uses: actions/setup-node@v4
               with:
-                  node-version: "22"
+                  node-version: "24"
                   cache: "npm"
 
             - name: Install dependencies
@@ -30,7 +30,7 @@ jobs:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
             - name: Security Audit (npm audit)
-              run: npm audit --audit-level=critical
+              run: npm audit --audit-level=high
 
             - name: Check Formatting (Prettier)
               run: npx prettier --check .

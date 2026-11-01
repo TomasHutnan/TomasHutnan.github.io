@@ -1,14 +1,15 @@
 ---
 title: CUDA Image Enhancement
-description: GPU-accelerated image enhancemnt pipeline, focusing on performance, validation, and architectural clarity. (TESCAN Collaboration)
+description: GPU-accelerated image enhancement pipeline, focusing on performance, validation, and architectural clarity. (TESCAN Collaboration)
 tags:
     - cuda
-    - cplusplus
+    - cpp
     - gpu-programming
     - image-processing
     - computer-vision
     - performance-optimization
     - testing
+    - python
 type: university
 startedAt: 2026-03-01
 completedAt: 2026-05-19
@@ -17,7 +18,7 @@ featuredOrder: 2
 
 repo: https://github.com/TomasHutnan/cuda-image-enhacement
 
-cover: ../../assets/projects/cuda-image-enhacement/cover.webp
+cover: ../../assets/projects/cuda-image-enhancement/cover.webp
 
 role: GPU Engineer
 shortRoleDescription: Built a high-performance CUDA pipeline for image processing and validation.

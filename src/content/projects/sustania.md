@@ -2,16 +2,15 @@
 title: Sustania
 description: AR-based sustainability game prototype integrating real-world environmental data, focusing on backend architecture, deployment, and system design.
 tags:
+    - backend
+    - system-design
     - python
     - fastapi
     - postgresql
     - docker
-    - backend
-    - system-design
-    - deployment
+    - game-development
     - godot
-    - real-time-systems
-    - data-driven
+    - augmented-reality
 type: team
 startedAt: 2025-11-07
 completedAt: 2025-11-09

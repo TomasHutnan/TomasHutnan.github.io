@@ -4,11 +4,9 @@ description: Text-based decision-making game implemented in .NET MAUI, focusing 
 tags:
     - csharp
     - dotnet
-    - maui
     - game-development
-    - mvvm
-    - software-architecture
-    - data-processing
+    - system-design
+    - ui-development
 type: university
 startedAt: 2026-04-17
 completedAt: 2026-05-10

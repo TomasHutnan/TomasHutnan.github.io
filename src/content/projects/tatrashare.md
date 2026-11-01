@@ -2,12 +2,12 @@
 title: TatraShare
 description: AI-powered platform for managing shared finances, enabling seamless expense splitting, shared savings, and real-time payment settlement.
 tags:
+    - fintech
     - react-native
     - typescript
-    - mongodb-atlas
-    - auth0
-    - fintech
+    - mongodb
     - machine-learning
+    - auth0
     - blockchain
 type: team
 startedAt: 2026-04-18

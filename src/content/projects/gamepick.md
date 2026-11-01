@@ -2,13 +2,14 @@
 title: GAMEPICK
 description: Game recommendation platform that analyzes user behavior to suggest personalized game choices.
 tags:
-    - react
-    - javascript
+    - recommender-systems
+    - machine-learning
+    - data-science
     - python
     - pandas
     - numpy
-    - machine-learning
-    - data-analysis
+    - react
+    - javascript
     - google-cloud
     - firebase
 type: team

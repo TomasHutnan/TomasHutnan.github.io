@@ -15,10 +15,13 @@ export interface ExperienceEntry {
 	bullets: string[];
 }
 
+export type ContactIcon = "email" | "linkedin" | "github";
+
 export interface ContactLink {
 	label: string;
 	href: string;
 	value: string;
+	icon: ContactIcon;
 }
 
 export const hero = {
@@ -34,7 +37,10 @@ export const quickInfo: QuickInfoItem[] = [
 		label: "Education",
 		value: "Masaryk University — Informatics (BC, in progress)",
 	},
-	{ label: "Current role", value: "Teaching Assistant" },
+	{
+		label: "Current roles",
+		value: "Teaching Assistant & Research Assistant",
+	},
 ];
 
 export const aboutParagraphs = [
@@ -107,8 +113,8 @@ export const experienceEntries: ExperienceEntry[] = [
 		organization: "ChyronHego",
 		period: "2024 Nov — 2025 Dec",
 		bullets: [
-			"Develop automation systems in Python.",
-			"Work with SQL, APIs, and Docker-based infrastructure.",
+			"Developed automation systems in Python.",
+			"Worked with SQL, APIs, and Docker-based infrastructure.",
 			"Authored 1,000+ automated test cases.",
 		],
 	},
@@ -119,15 +125,18 @@ export const contactLinks: ContactLink[] = [
 		label: "Email",
 		href: "mailto:tomas@hutnan.dev",
 		value: "tomas@hutnan.dev",
+		icon: "email",
 	},
 	{
 		label: "LinkedIn",
 		href: "https://linkedin.com/in/hutnan",
 		value: "linkedin.com/in/hutnan",
+		icon: "linkedin",
 	},
 	{
 		label: "GitHub",
 		href: "https://github.com/TomasHutnan",
 		value: "github.com/TomasHutnan",
+		icon: "github",
 	},
 ];

@@ -1,29 +1,15 @@
 ---
-import Section from "./Section.astro";
+import Section from "../Section.astro";
 import type { CollectionEntry } from "astro:content";
-import { slugify } from "../../utils/slug";
+import type { AwardYearGroup } from "../../utils/awards";
+import { getProjectHref } from "../../utils/projects";
 
 interface Props {
-	awards: CollectionEntry<"awards">[];
+	groups: AwardYearGroup[];
 	awardProjectMap: Map<string, CollectionEntry<"projects">>;
 }
 
-const { awards, awardProjectMap } = Astro.props;
-
-const groupedAwards = awards.reduce<Map<string, CollectionEntry<"awards">[]>>(
-	(groups, award) => {
-		const year = String(award.data.date.getFullYear());
-		const existingAwards = groups.get(year) ?? [];
-		existingAwards.push(award);
-		groups.set(year, existingAwards);
-		return groups;
-	},
-	new Map(),
-);
-
-const orderedYears = [...groupedAwards.keys()].sort(
-	(left, right) => Number(right) - Number(left),
-);
+const { groups, awardProjectMap } = Astro.props;
 ---
 
 <Section
@@ -33,27 +19,24 @@ const orderedYears = [...groupedAwards.keys()].sort(
 	description="A concise timeline of competition results and sponsor awards across recent years."
 >
 	<div class="timeline">
-		{orderedYears.map((year) => (
+		{groups.map(({ year, awards }) => (
 			<section class="timeline-group">
 				<h3>{year}</h3>
 				<ul>
-					{groupedAwards.get(year)?.map((award) => {
-						const linkedProject = awardProjectMap.get(award.id);
-						const projectHref = linkedProject
-							? `/projects/${slugify(linkedProject.id)}`
-							: null;
+					{awards.map((award) => {
+						const project = awardProjectMap.get(award.id);
 						return (
 							<li>
 								<strong>{award.data.title}</strong>
 								<span>
 									{award.data.event} - {award.data.issuer}
 								</span>
-								{projectHref && (
+								{project && (
 									<a
 										class="award-project-link"
-										href={projectHref}
+										href={getProjectHref(project)}
 									>
-										{linkedProject!.data.title}
+										{project.data.title}
 									</a>
 								)}
 							</li>
@@ -92,7 +75,7 @@ const orderedYears = [...groupedAwards.keys()].sort(
 		display: grid;
 		gap: 0.2rem;
 		padding-left: 1rem;
-		border-left: 2px solid rgba(34, 211, 238, 0.25);
+		border-left: 2px solid var(--primary-line);
 	}
 
 	.timeline-group strong {
