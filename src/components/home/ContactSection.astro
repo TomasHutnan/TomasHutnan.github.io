@@ -5,9 +5,10 @@ import { getExternalLinkProps } from "../../utils/links";
 
 interface Props {
 	links: ContactLink[];
+	location: string;
 }
 
-const { links } = Astro.props;
+const { links, location } = Astro.props;
 ---
 
 <Section id="contact" title="Let's build something interesting">
@@ -15,6 +16,7 @@ const { links } = Astro.props;
 		<p class="contact-copy">
 			I'm open to projects, collaborations, and conversations around
 			machine learning, computer vision, and product-focused software.
+			Based in {location}.
 		</p>
 
 		<div class="contact-links">

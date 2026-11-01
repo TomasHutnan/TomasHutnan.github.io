@@ -1,6 +1,7 @@
 ---
-import type { ContactIcon, ContactLink, QuickInfoItem } from "../../data/home";
+import type { ContactIcon, ContactLink } from "../../data/home";
 import { getExternalLinkProps } from "../../utils/links";
+import AwardIcon from "../../assets/icons/award.svg";
 import EmailIcon from "../../assets/icons/email.svg";
 import GitHubIcon from "../../assets/icons/github.svg";
 import LinkedInIcon from "../../assets/icons/linkedin.svg";
@@ -14,7 +15,6 @@ interface Props {
 	secondaryHref: string;
 	secondaryLabel: string;
 	links: ContactLink[];
-	facts: QuickInfoItem[];
 	highlights: string[];
 }
 
@@ -33,29 +33,26 @@ const {
 	secondaryHref,
 	secondaryLabel,
 	links,
-	facts,
 	highlights,
 } = Astro.props;
 ---
 
 <section class="hero">
-	<div class="hero-copy">
-		<h1>{name}</h1>
-		<p class="hero-title">{title}</p>
-		<p class="hero-summary">{summary}</p>
+	<h1>{name}</h1>
+	<p class="hero-title">{title}</p>
+	<p class="hero-summary">{summary}</p>
 
-		<div class="hero-actions">
-			<a class="btn btn-primary" href={primaryHref}>
-				{primaryLabel}
-			</a>
-			<a
-				class="btn btn-outline"
-				href={secondaryHref}
-				download="Tomas_Hutnan_Resume.pdf"
-			>
-				{secondaryLabel}
-			</a>
-		</div>
+	<div class="hero-actions">
+		<a class="btn btn-primary" href={primaryHref}>
+			{primaryLabel}
+		</a>
+		<a
+			class="btn btn-outline"
+			href={secondaryHref}
+			download="Tomas_Hutnan_Resume.pdf"
+		>
+			{secondaryLabel}
+		</a>
 
 		<div class="hero-social">
 			{links.map(({ href, label, icon }) => {
@@ -73,78 +70,21 @@ const {
 		</div>
 	</div>
 
-	<dl class="hero-facts">
-		{facts.map(({ label, value }) => (
-			<div>
-				<dt>{label}</dt>
-				<dd>{value}</dd>
-			</div>
+	<ul class="hero-highlights">
+		{highlights.map((highlight) => (
+			<li>
+				<AwardIcon class="award-icon" aria-hidden="true" />
+				{highlight}
+			</li>
 		))}
-		<div>
-			<dt>Highlights</dt>
-			<dd>
-				<ul>
-					{highlights.map((highlight) => (
-						<li>{highlight}</li>
-					))}
-				</ul>
-			</dd>
-		</div>
-	</dl>
+	</ul>
 </section>
 
 <style>
 	.hero {
 		display: grid;
-		grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
-		gap: 2.5rem;
-		align-items: center;
-		padding: 2.2rem 0 0.5rem;
-	}
-
-	.hero-copy {
-		display: grid;
 		gap: 1rem;
-	}
-
-	.hero-facts {
-		display: grid;
-		gap: 1rem;
-		margin: 0;
-		padding: 1.25rem;
-		border: 1px solid var(--border);
-		border-radius: var(--radius-lg);
-		background: var(--card-gradient);
-		box-shadow: var(--shadow-card);
-	}
-
-	dt {
-		margin-bottom: 0.25rem;
-		font-size: 0.78rem;
-		letter-spacing: 0.08em;
-		text-transform: uppercase;
-		color: var(--text-secondary);
-	}
-
-	dd {
-		margin: 0;
-		font-weight: 600;
-		line-height: 1.45;
-	}
-
-	dd ul {
-		display: grid;
-		gap: 0.3rem;
-		margin: 0;
-		padding: 0;
-		list-style: none;
-	}
-
-	@media (max-width: 900px) {
-		.hero {
-			grid-template-columns: minmax(0, 1fr);
-			gap: 1.5rem;
-		}
+		padding: 3.5rem 0 1rem;
 	}
 
 	h1 {
@@ -154,24 +94,51 @@ const {
 	}
 
 	.hero-title {
-		margin: 0;
-		font-size: clamp(1.05rem, 2vw, 1.35rem);
+		margin: 0.4rem 0 0;
+		font-family: var(--font-heading);
+		font-size: clamp(1.5rem, 3.2vw, 2.25rem);
 		font-weight: 600;
+		line-height: 1.2;
 	}
 
 	.hero-summary {
 		margin: 0;
 		max-width: 60ch;
 		font-size: 1.05rem;
-		line-height: 1.75;
+		line-height: 1.7;
 		color: var(--text-secondary);
 	}
 
 	.hero-actions {
 		display: flex;
 		flex-wrap: wrap;
+		align-items: center;
 		gap: 0.9rem;
-		padding-top: 0.4rem;
+		padding-top: 0.6rem;
+	}
+
+	.hero-highlights {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.4rem 1.75rem;
+		margin: 0.6rem 0 0;
+		padding: 0;
+		list-style: none;
+		font-size: 0.92rem;
+		color: var(--text-secondary);
+	}
+
+	.hero-highlights li {
+		display: flex;
+		align-items: center;
+		gap: 0.4rem;
+	}
+
+	.award-icon {
+		width: 16px;
+		height: 16px;
+		flex: none;
+		color: var(--award);
 	}
 
 	.btn {
