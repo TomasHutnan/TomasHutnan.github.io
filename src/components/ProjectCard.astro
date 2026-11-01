@@ -4,82 +4,92 @@ import { Image } from "astro:assets";
 import { getProjectHref } from "../utils/projects";
 import ProjectLinks from "./project/ProjectLinks.astro";
 import TagList from "./TagList.astro";
+import AwardIcon from "../assets/icons/award.svg";
 
 interface Props {
 	project: CollectionEntry<"projects">;
 }
 
-const MAX_VISIBLE_TAGS = 4;
+const MAX_VISIBLE_TAGS = 3;
 
 const { project } = Astro.props;
 const { title, cover, role, type, description, tags } = project.data;
 
-const projectHref = getProjectHref(project);
 const awards = project.data.awards ? await getEntries(project.data.awards) : [];
+const [topAward, ...otherAwards] = awards;
+const otherAwardTitles = otherAwards
+	.map((award) => award.data.shortTitle)
+	.join(", ");
 ---
 
 <article class="project-card" data-tag-slugs={tags.join(" ")}>
-	<a
-		class="project-cover-link"
-		href={projectHref}
-		aria-label={`Open ${title}`}
-	>
-		<Image
-			src={cover}
-			alt=""
-			widths={[320, 480, 640, 800]}
-			sizes="(max-width: 600px) 100vw, (max-width: 1000px) 50vw, 280px"
-		/>
-	</a>
+	<Image
+		class="project-cover"
+		src={cover}
+		alt=""
+		widths={[320, 480, 640, 800]}
+		sizes="(max-width: 600px) 100vw, (max-width: 1000px) 50vw, 280px"
+	/>
 
 	<div class="project-copy">
 		<div class="project-card-header">
 			<h3>
-				<a href={projectHref}>{title}</a>
+				<a href={getProjectHref(project)}>{title}</a>
 			</h3>
 			<ProjectLinks project={project} iconOnly />
 		</div>
 
 		<p class="project-role">
-			{role} • {type}
+			{role} • <span class="project-type">{type}</span>
 		</p>
+
+		{topAward && (
+			<p class="project-award">
+				<AwardIcon class="award-icon" aria-hidden="true" />
+				<span>{topAward.data.shortTitle}</span>
+				{otherAwards.length > 0 && (
+					<span class="award-more" title={otherAwardTitles}>
+						<span aria-hidden="true">+{otherAwards.length}</span>
+						<span class="sr-only">and {otherAwardTitles}</span>
+					</span>
+				)}
+			</p>
+		)}
 
 		<p>{description}</p>
 
-		{awards.length > 0 && (
-			<div class="project-awards">
-				{awards.map((award) => (
-					<span class="award-badge" title={award.data.title}>
-						🏆 {award.data.title}
-					</span>
-				))}
-			</div>
-		)}
-		<TagList tags={tags.slice(0, MAX_VISIBLE_TAGS)} compact />
+		<div class="project-tags">
+			<TagList tags={tags.slice(0, MAX_VISIBLE_TAGS)} compact />
+		</div>
 	</div>
 </article>
 
 <style>
 	.project-card {
+		position: relative;
+		display: flex;
+		flex-direction: column;
 		height: 100%;
 		padding: 1rem;
 		border: 1px solid var(--border);
 		border-radius: var(--radius-lg);
 		background: var(--card-gradient);
 		box-shadow: var(--shadow-card);
+		transition:
+			border-color 0.2s ease,
+			transform 0.2s ease;
+	}
+
+	.project-card:hover {
+		border-color: var(--primary-line);
+		transform: translateY(-2px);
 	}
 
 	.project-card[hidden] {
 		display: none;
 	}
 
-	.project-cover-link {
-		display: block;
-		border-radius: var(--radius-md);
-		overflow: hidden;
-	}
-
-	.project-cover-link img {
+	.project-cover {
 		display: block;
 		width: 100%;
 		height: auto;
@@ -89,14 +99,11 @@ const awards = project.data.awards ? await getEntries(project.data.awards) : [];
 	}
 
 	.project-copy {
+		flex: 1;
 		margin-top: 1rem;
-		display: grid;
-		gap: 0.8rem;
-	}
-
-	.project-role {
-		color: var(--text-secondary);
-		font-size: 0.85rem;
+		display: flex;
+		flex-direction: column;
+		gap: 0.7rem;
 	}
 
 	.project-card-header {
@@ -117,6 +124,31 @@ const awards = project.data.awards ? await getEntries(project.data.awards) : [];
 		text-decoration: none;
 	}
 
+	/* Stretches the title link over the card, so the whole card is one link. */
+	h3 a::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+		border-radius: var(--radius-lg);
+	}
+
+	h3 a:focus-visible {
+		outline: none;
+	}
+
+	h3 a:focus-visible::after {
+		outline: 2px solid var(--primary);
+		outline-offset: 2px;
+	}
+
+	/* Keeps these clickable above the stretched title link. */
+	.project-card-header :global(.project-links),
+	.project-tags,
+	.award-more {
+		position: relative;
+		z-index: 1;
+	}
+
 	p {
 		margin: 0;
 		font-size: 0.95rem;
@@ -124,21 +156,46 @@ const awards = project.data.awards ? await getEntries(project.data.awards) : [];
 		color: var(--text-main);
 	}
 
-	.project-awards {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.4rem;
-		margin-bottom: -0.2rem;
+	p.project-role {
+		color: var(--text-secondary);
+		font-size: 0.85rem;
 	}
 
-	.award-badge {
-		font-size: 0.8rem;
-		background: var(--gold-tint);
-		color: var(--gold);
-		padding: 0.2rem 0.5rem;
-		border-radius: 4px;
-		display: inline-flex;
+	.project-type {
+		text-transform: capitalize;
+	}
+
+	p.project-award {
+		display: flex;
 		align-items: center;
-		gap: 0.2rem;
+		gap: 0.35rem;
+		color: var(--text-secondary);
+		font-size: 0.85rem;
+	}
+
+	.award-icon {
+		width: 16px;
+		height: 16px;
+		flex: none;
+		color: var(--award);
+	}
+
+	.sr-only {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+		clip-path: inset(50%);
+		white-space: nowrap;
+	}
+
+	.award-more {
+		color: var(--text-secondary);
+		cursor: help;
+	}
+
+	.project-tags {
+		margin-top: auto;
+		padding-top: 0.2rem;
 	}
 </style>

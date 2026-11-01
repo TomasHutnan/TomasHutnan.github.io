@@ -19,14 +19,19 @@ type: team
 startedAt: 2024-04-06
 completedAt: 2024-04-07
 awards:
-    - mlh-auth0-hackkosice-2024
     - tatrabanka-hackkosice-2024
+    - mlh-auth0-hackkosice-2024
 featured: true
 featuredOrder: 4
 
 repo: https://github.com/dejvokep/hk2024-app
 
 cover: ../../assets/projects/tatrinvest/cover.webp
+gallery:
+    - image: ../../assets/projects/tatrinvest/full.webp
+      alt: Three phone screens showing portfolio value, a savings goal and top holdings.
+    - image: ../../assets/projects/tatrinvest/stock-screens.webp
+      alt: Mobile screens showing stock detail pages and the recommended stocks list.
 
 role: ML Engineer
 shortRoleDescription: Built trend estimation and an LLM financial assistant for an investment app.

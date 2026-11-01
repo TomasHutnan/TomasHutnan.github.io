@@ -18,7 +18,7 @@ gallery:
     - video:
           - /media/projects/evo-driving-sim/showcase.webm
           - /media/projects/evo-driving-sim/showcase.mp4
-      poster: ../../assets/projects/evo-driving-sim/cover.webp
+      poster: ../../assets/projects/evo-driving-sim/poster.webp
       alt: Red and blue agents driving a winding track during evolutionary training, with live counters for active and crashed cars.
 
 role: ML Engineer

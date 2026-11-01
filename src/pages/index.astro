@@ -2,7 +2,6 @@
 import { getCollection } from "astro:content";
 import Layout from "../layouts/Layout.astro";
 import HeroSection from "../components/home/HeroSection.astro";
-import QuickInfoSection from "../components/home/QuickInfoSection.astro";
 import AboutSection from "../components/home/AboutSection.astro";
 import SkillsSection from "../components/home/SkillsSection.astro";
 import FeaturedProjectsSection from "../components/home/FeaturedProjectsSection.astro";
@@ -14,6 +13,7 @@ import { getFeaturedProjects } from "../utils/projects";
 import {
 	hero,
 	quickInfo,
+	highlights,
 	aboutParagraphs,
 	skillGroups,
 	experienceEntries,
@@ -38,9 +38,10 @@ const awards = await getCollection("awards");
 			secondaryHref="/resume.pdf"
 			secondaryLabel="Download Resume"
 			links={contactLinks}
+			facts={quickInfo}
+			highlights={highlights}
 		/>
 
-		<QuickInfoSection items={quickInfo} />
 		<AboutSection paragraphs={aboutParagraphs} />
 		<ExperienceSection entries={experienceEntries} />
 		<FeaturedProjectsSection projects={getFeaturedProjects(projects)} />

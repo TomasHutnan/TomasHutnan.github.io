@@ -1,72 +1,93 @@
 ---
-import { render, type CollectionEntry } from "astro:content";
-import { Image } from "astro:assets";
+import type { CollectionEntry } from "astro:content";
+import { Image, getImage } from "astro:assets";
 import { formatMonthYear } from "../../utils/dates";
 
 interface Props {
 	award: CollectionEntry<"awards">;
 }
 
+const MAX_ZOOM_WIDTH = 2000;
+const THUMBNAIL_WIDTH = 240;
+
 const { award } = Astro.props;
 const { title, event, issuer, date, cover } = award.data;
-const { Content } = await render(award);
+
+const zoomImage =
+	cover &&
+	(await getImage({
+		src: cover,
+		width: Math.min(cover.width, MAX_ZOOM_WIDTH),
+		format: "webp",
+	}));
 ---
 
-<li class="award-card">
-	{cover && (
-		<Image
-			class="award-cover"
-			src={cover}
-			alt={title}
-			widths={[480, 720, 1100]}
-			sizes="(max-width: 720px) 100vw, 550px"
-		/>
+<li class="award-row">
+	{cover && zoomImage && (
+		<a
+			class="award-photo"
+			href={zoomImage.src}
+			data-zoom
+			aria-label={`View photo: ${title}, ${event}`}
+		>
+			<Image
+				src={cover}
+				alt={`${title}, ${event}`}
+				width={Math.min(cover.width, THUMBNAIL_WIDTH)}
+				loading="lazy"
+			/>
+		</a>
 	)}
 	<div class="award-copy">
 		<strong>{title}</strong>
+		<span>{event}</span>
 		<span>
-			{event} - {issuer}
+			{issuer} • {formatMonthYear(date)}
 		</span>
-		<span>{formatMonthYear(date)}</span>
-		<div class="award-description">
-			<Content />
-		</div>
 	</div>
 </li>
 
 <style>
-	.award-card {
+	.award-row {
 		display: flex;
-		flex-direction: column;
+		align-items: center;
 		gap: 1rem;
 	}
 
-	.award-cover {
+	.award-photo {
+		flex: none;
+		display: block;
+		width: 7.5rem;
+		aspect-ratio: 3 / 2;
+		border-radius: var(--radius-sm);
+		overflow: hidden;
+		background: var(--bg-elevated);
+		cursor: zoom-in;
+	}
+
+	.award-photo img {
 		display: block;
 		width: 100%;
-		height: auto;
-		border-radius: var(--radius-sm);
-		background: var(--bg-elevated);
+		height: 100%;
+		object-fit: cover;
+		transition: transform 0.2s ease;
+	}
+
+	.award-photo:hover img {
+		transform: scale(1.04);
 	}
 
 	.award-copy {
+		min-width: 0;
 		display: grid;
-		gap: 0.35rem;
-		padding: 0 0.15rem 0.2rem;
+		gap: 0.2rem;
 		color: var(--text-secondary);
-		font-size: 0.92rem;
+		font-size: 0.9rem;
+		line-height: 1.4;
 	}
 
 	.award-copy strong {
 		color: var(--text-main);
-		line-height: 1.35;
-	}
-
-	.award-description {
-		line-height: 1.6;
-	}
-
-	.award-description :global(p) {
-		margin: 0.4rem 0 0;
+		font-size: 0.98rem;
 	}
 </style>

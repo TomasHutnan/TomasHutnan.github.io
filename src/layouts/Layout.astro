@@ -11,6 +11,7 @@ import "@fontsource/space-grotesk/700.css";
 import "../styles/global.css";
 import type { ImageMetadata } from "astro";
 import { getImage } from "astro:assets";
+import Footer from "../components/Footer.astro";
 import Navbar from "../components/Navbar.astro";
 import defaultShareImage from "../assets/og-default.png";
 
@@ -62,5 +63,6 @@ const socialImageUrl = new URL(socialImage.src, Astro.site);
 	<body>
 		<Navbar />
 		<slot />
+		<Footer />
 	</body>
 </html>

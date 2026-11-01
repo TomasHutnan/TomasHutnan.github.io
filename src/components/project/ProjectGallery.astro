@@ -2,6 +2,7 @@
 import { Image, getImage } from "astro:assets";
 import type { ImageMetadata } from "astro";
 import type { GalleryItem } from "../../utils/projects";
+import Lightbox from "../Lightbox.astro";
 
 interface Props {
 	items: GalleryItem[];
@@ -117,7 +118,7 @@ const hasImages = items.some((item) => item.kind === "image");
 		{hasMultipleSlides && (
 			<>
 				<button
-					class="nav-button nav-button--prev"
+					class="overlay-button overlay-button--prev"
 					type="button"
 					data-gallery-prev
 					aria-label="Previous media"
@@ -126,7 +127,7 @@ const hasImages = items.some((item) => item.kind === "image");
 					<span aria-hidden="true">‹</span>
 				</button>
 				<button
-					class="nav-button nav-button--next"
+					class="overlay-button overlay-button--next"
 					type="button"
 					data-gallery-next
 					aria-label="Next media"
@@ -161,35 +162,7 @@ const hasImages = items.some((item) => item.kind === "image");
 		</ol>
 	)}
 
-	{hasImages && (
-		<dialog class="lightbox" data-lightbox aria-label={`${title} image`}>
-			<img class="lightbox-image" data-lightbox-image alt="" />
-			<button
-				class="nav-button lightbox-close"
-				type="button"
-				data-lightbox-close
-				aria-label="Close"
-			>
-				<span aria-hidden="true">×</span>
-			</button>
-			<button
-				class="nav-button nav-button--prev"
-				type="button"
-				data-lightbox-prev
-				aria-label="Previous image"
-			>
-				<span aria-hidden="true">‹</span>
-			</button>
-			<button
-				class="nav-button nav-button--next"
-				type="button"
-				data-lightbox-next
-				aria-label="Next image"
-			>
-				<span aria-hidden="true">›</span>
-			</button>
-		</dialog>
-	)}
+	{hasImages && <Lightbox label={`${title} image`} />}
 </section>
 
 <script>
@@ -304,47 +277,9 @@ const hasImages = items.some((item) => item.kind === "image");
 		background: var(--primary-muted);
 	}
 
-	.nav-button {
-		position: absolute;
-		top: 50%;
-		display: grid;
-		place-items: center;
-		width: 2.6rem;
-		height: 2.6rem;
-		padding: 0 0 0.2rem;
-		transform: translateY(-50%);
-		border: 1px solid var(--border);
-		border-radius: 50%;
-		background: var(--bg-overlay);
-		color: var(--text-main);
-		font-size: 1.6rem;
-		line-height: 1;
-		cursor: pointer;
-		transition:
-			background-color 0.18s ease,
-			color 0.18s ease;
-	}
-
-	.nav-button[hidden] {
-		display: none;
-	}
-
-	.nav-button:hover {
-		background: var(--bg-surface);
-		color: var(--primary);
-	}
-
-	.nav-button--prev {
-		left: 0.6rem;
-	}
-
-	.nav-button--next {
-		right: 0.6rem;
-	}
-
 	/* Touch users swipe, so the arrows would only cover the media. */
 	@media (hover: none) {
-		.stage .nav-button {
+		.stage .overlay-button {
 			display: none;
 		}
 	}
@@ -398,44 +333,6 @@ const hasImages = items.some((item) => item.kind === "image");
 		object-position: top;
 	}
 
-	.lightbox {
-		width: 100vw;
-		max-width: none;
-		height: 100dvh;
-		max-height: none;
-		margin: 0;
-		padding: 1rem;
-		border: 0;
-		background: transparent;
-		overflow: hidden;
-	}
-
-	.lightbox[open] {
-		display: grid;
-		place-items: center;
-	}
-
-	.lightbox::backdrop {
-		background: var(--bg-overlay);
-	}
-
-	.lightbox-image {
-		max-width: 100%;
-		max-height: 100%;
-		object-fit: contain;
-		border-radius: var(--radius-sm);
-	}
-
-	.lightbox .nav-button {
-		position: fixed;
-	}
-
-	.lightbox .lightbox-close {
-		top: 1rem;
-		right: 1rem;
-		transform: none;
-	}
-
 	@media (max-width: 720px) {
 		.thumb {
 			width: 6.5rem;
@@ -448,11 +345,6 @@ const hasImages = items.some((item) => item.kind === "image");
 
 		.play-badge--large::after {
 			border-width: 0.55rem 0 0.55rem 0.9rem;
-		}
-
-		.nav-button {
-			width: 2.2rem;
-			height: 2.2rem;
 		}
 	}
 </style>

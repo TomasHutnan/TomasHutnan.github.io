@@ -1,5 +1,6 @@
 ---
 title: MLH Best Use of Auth0
+shortTitle: "MLH Best Use of Auth0"
 event: Hack Košice 2024
 issuer: Major League Hacking
 date: 2024-04-07

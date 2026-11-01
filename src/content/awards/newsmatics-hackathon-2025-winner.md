@@ -1,5 +1,6 @@
 ---
 title: 1st Place Overall
+shortTitle: "1st place, Newsmatics 2025"
 event: Newsmatics Hackathon 2025
 issuer: Newsmatics
 date: 2025-03-01

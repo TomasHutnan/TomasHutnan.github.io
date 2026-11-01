@@ -35,9 +35,8 @@
 	--accent-tint: rgba(167, 139, 250, 0.16);
 	--accent-tint-faint: rgba(167, 139, 250, 0.08);
 
-	/* award badges */
-	--gold: #ffd700;
-	--gold-tint: rgba(255, 215, 0, 0.15);
+	/* awards */
+	--award: #e3c77b;
 
 	--radius-sm: 10px;
 	--radius-md: 14px;
@@ -96,6 +95,46 @@ a {
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 	gap: 1rem;
+}
+
+/* Round buttons laid over images and video. */
+
+.overlay-button {
+	position: absolute;
+	top: 50%;
+	display: grid;
+	place-items: center;
+	width: 2.6rem;
+	height: 2.6rem;
+	padding: 0 0 0.2rem;
+	transform: translateY(-50%);
+	border: 1px solid var(--border);
+	border-radius: 50%;
+	background: var(--bg-overlay);
+	color: var(--text-main);
+	font-size: 1.6rem;
+	line-height: 1;
+	cursor: pointer;
+	transition:
+		background-color 0.18s ease,
+		color 0.18s ease;
+}
+
+.overlay-button[hidden] {
+	display: none;
+}
+
+.overlay-button:hover {
+	background: var(--bg-surface);
+	color: var(--primary);
+}
+
+.overlay-button--prev {
+	left: 0.6rem;
+}
+
+.overlay-button--next {
+	right: 0.6rem;
 }
 
 @media (prefers-reduced-motion: reduce) {
