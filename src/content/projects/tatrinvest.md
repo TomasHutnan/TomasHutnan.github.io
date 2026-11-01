@@ -2,20 +2,22 @@
 title: Tatrinvest
 description: AI-assisted investment platform combining machine learning, gamification, and financial education to simplify investing for all experience levels.
 tags:
+    - machine-learning
+    - llm
+    - nlp
+    - fintech
+    - python
+    - pytorch
     - nextjs
     - react
     - typescript
-    - python
-    - pytorch
-    - machine-learning
-    - natural-language-processing
-    - fintech
     - mongodb
     - postgresql
     - auth0
+    - backend
 type: team
-startedAt: 2026-04-06
-completedAt: 2026-04-07
+startedAt: 2024-04-06
+completedAt: 2024-04-07
 awards:
     - mlh-auth0-hackkosice-2024
     - tatrabanka-hackkosice-2024

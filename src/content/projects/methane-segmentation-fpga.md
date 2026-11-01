@@ -3,6 +3,7 @@ title: Methane Segmentation on FPGA
 description: Onboard optimization of ML pipelines for methane segmentation on FPGA edge devices to solve aerospace data-downlink bottlenecks.
 tags:
     - computer-vision
+    - machine-learning
     - fpga
     - quantization
     - remote-sensing

@@ -2,17 +2,19 @@
 title: StockMatics
 description: AI-powered financial market analytics platform for tracking sentiment, political influence, and event-driven market behavior.
 tags:
-    - python
     - machine-learning
-    - natural-language-processing
+    - nlp
+    - llm
+    - fintech
+    - python
     - pytorch
     - transformers
     - fastapi
     - nextjs
     - typescript
     - postgresql
-    - data-analysis
-    - fintech
+    - data-engineering
+    - backend
 type: team
 startedAt: 2025-02-28
 completedAt: 2025-03-01

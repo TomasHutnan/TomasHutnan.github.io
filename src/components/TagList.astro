@@ -1,0 +1,34 @@
+---
+import type { TagSlug } from "../data/tags";
+import TagLink from "./TagLink.astro";
+
+interface Props {
+	tags: TagSlug[];
+	compact?: boolean;
+}
+
+const { tags, compact = false } = Astro.props;
+---
+
+<ul class="tag-list">
+	{tags.map((tag) => (
+		<li>
+			<TagLink tag={tag} compact={compact} />
+		</li>
+	))}
+</ul>
+
+<style>
+	.tag-list {
+		list-style: none;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+		padding: 0;
+		margin: 0;
+	}
+
+	.tag-list li {
+		display: flex;
+	}
+</style>

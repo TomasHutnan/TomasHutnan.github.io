@@ -9,7 +9,8 @@ import FeaturedProjectsSection from "../components/home/FeaturedProjectsSection.
 import AwardsTimelineSection from "../components/home/AwardsTimelineSection.astro";
 import ExperienceSection from "../components/home/ExperienceSection.astro";
 import ContactSection from "../components/home/ContactSection.astro";
-import { slugify } from "../utils/slug";
+import { groupAwardsByYear, mapAwardsToProjects } from "../utils/awards";
+import { getFeaturedProjects } from "../utils/projects";
 import {
 	hero,
 	quickInfo,
@@ -21,59 +22,41 @@ import {
 
 const projects = await getCollection("projects");
 const awards = await getCollection("awards");
-
-const awardProjectMap = new Map(
-	projects.flatMap((project) =>
-		(project.data.awards ?? []).map((awardRef) => [awardRef.id, project]),
-	),
-);
-
-const featuredProjects = projects
-	.filter((project) => project.data.featured)
-	.sort((a, b) => (a.data.featuredOrder ?? 0) - (b.data.featuredOrder ?? 0));
 ---
 
 <Layout
 	pageTitle="Home"
 	description="Portfolio of Tomáš Hutňan, an informatics student focused on machine learning, computer vision, and full-stack software."
 >
-	<main class="home-page">
+	<main class="page-container home-page">
 		<HeroSection
 			name={hero.name}
 			title={hero.title}
 			summary={hero.summary}
-			primaryHref="/projects"
+			primaryHref="/projects/"
 			primaryLabel="View Projects"
 			secondaryHref="/resume.pdf"
 			secondaryLabel="Download Resume"
+			links={contactLinks}
 		/>
 
-		<div class="home-sections">
-			<QuickInfoSection items={quickInfo} />
-			<AboutSection paragraphs={aboutParagraphs} />
-			<ExperienceSection entries={experienceEntries} />
-			<FeaturedProjectsSection projects={featuredProjects} />
-			<AwardsTimelineSection
-				awards={awards}
-				awardProjectMap={awardProjectMap}
-			/>
-			<SkillsSection groups={skillGroups} />
-			<ContactSection links={contactLinks} />
-		</div>
+		<QuickInfoSection items={quickInfo} />
+		<AboutSection paragraphs={aboutParagraphs} />
+		<ExperienceSection entries={experienceEntries} />
+		<FeaturedProjectsSection projects={getFeaturedProjects(projects)} />
+		<AwardsTimelineSection
+			groups={groupAwardsByYear(awards)}
+			awardProjectMap={mapAwardsToProjects(projects)}
+		/>
+		<SkillsSection groups={skillGroups} />
+		<ContactSection links={contactLinks} />
 	</main>
 </Layout>
 
 <style>
 	.home-page {
-		max-width: 1160px;
-		margin: 0 auto;
-		padding: 2rem 1rem 4rem;
 		display: grid;
-		gap: 2.2rem;
-	}
-
-	.home-sections {
-		display: grid;
+		grid-template-columns: minmax(0, 1fr);
 		gap: 2.2rem;
 	}
 </style>

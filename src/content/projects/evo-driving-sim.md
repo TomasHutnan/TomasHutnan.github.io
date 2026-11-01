@@ -2,12 +2,10 @@
 title: Evolutionary Driving Simulator
 description: 2D simulation environment using evolutionary neural networks to train autonomous driving agents without backpropagation.
 tags:
-    - python
     - machine-learning
     - evolutionary-algorithms
     - simulation
-    - neural-networks
-    - reinforcement-learning
+    - python
 type: solo
 startedAt: 2026-01-11
 completedAt: 2026-01-26
@@ -16,7 +14,12 @@ featured: false
 repo: https://github.com/tomashutnan/evo-driving-sim
 
 cover: ../../assets/projects/evo-driving-sim/cover.webp
-gallery: [../../assets/projects/evo-driving-sim/showcase.gif]
+gallery:
+    - video:
+          - /media/projects/evo-driving-sim/showcase.webm
+          - /media/projects/evo-driving-sim/showcase.mp4
+      poster: ../../assets/projects/evo-driving-sim/cover.webp
+      alt: Red and blue agents driving a winding track during evolutionary training, with live counters for active and crashed cars.
 
 role: ML Engineer
 shortRoleDescription: Built a simulation framework for training neural networks with genetic algorithms and real-time visualization.

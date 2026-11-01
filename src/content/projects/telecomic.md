@@ -2,15 +2,17 @@
 title: TeleComic
 description: AI-powered platform for generating comics from user ideas using large language models and image generation tools.
 tags:
+    - generative-ai
+    - llm
+    - openai
+    - backend
+    - python
+    - flask
     - nextjs
     - react
     - javascript
-    - python
-    - flask
-    - machine-learning
-    - generative-ai
-    - openai
     - mongodb
+    - machine-learning
 type: team
 startedAt: 2023-04-01
 completedAt: 2023-04-02

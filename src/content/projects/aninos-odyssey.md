@@ -5,9 +5,7 @@ tags:
     - unity
     - csharp
     - game-development
-    - frontend
-    - game-design
-    - systems-design
+    - ui-development
 type: team
 startedAt: 2022-11-03
 completedAt: 2023-05-31

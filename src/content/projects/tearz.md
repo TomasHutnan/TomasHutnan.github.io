@@ -2,13 +2,15 @@
 title: Tearz
 description: AI-powered tear ferning microscopy diagnostic tool for non-invasive detection of systemic diseases.
 tags:
-    - machine-learning
     - computer-vision
     - deep-learning
+    - medical-ai
+    - python
     - pytorch
     - keras
     - scikit-learn
-    - medical-ai
+    - machine-learning
+    - image-processing
 type: team
 startedAt: 2026-04-18
 completedAt: 2026-04-19

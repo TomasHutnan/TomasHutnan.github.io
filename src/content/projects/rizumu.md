@@ -5,10 +5,7 @@ tags:
     - unity
     - csharp
     - game-development
-    - frontend
-    - game-design
-    - animation
-    - systems-design
+    - ui-development
 type: team
 startedAt: 2021-10-24
 completedAt: 2022-03-31
@@ -18,7 +15,7 @@ awards:
 featured: false
 
 repo: https://github.com/dejvokep/rizumu
-demo: https://www.youtube.com/watch?v=HhdKHjrPklo
+demo: https://www.youtube.com/watch?v=dF_jtC54lSQ
 
 cover: ../../assets/projects/rizumu/cover.webp
 

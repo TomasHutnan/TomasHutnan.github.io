@@ -1,22 +1,21 @@
 ---
-import { slugify } from "../utils/slug";
+import { TAG_LABELS, type TagSlug } from "../data/tags";
+import { getTagHref } from "../utils/tags";
 
 interface Props {
-	tag: string;
-	size?: number;
+	tag: TagSlug;
+	compact?: boolean;
 }
 
-const { tag, size } = Astro.props;
-const href = `/projects?tags=${slugify(tag)}`;
+const { tag, compact = false } = Astro.props;
 ---
 
 <a
-	class="tag-link"
-	href={href}
-	data-tag-slug={slugify(tag)}
-	style={size ? `font-size: ${size}rem;` : undefined}
+	class:list={["tag-link", { compact }]}
+	href={getTagHref(tag)}
+	data-tag-slug={tag}
 >
-	<span>{tag}</span>
+	{TAG_LABELS[tag]}
 </a>
 
 <style>
@@ -26,7 +25,7 @@ const href = `/projects?tags=${slugify(tag)}`;
 		justify-content: center;
 		padding: 0.3rem 0.7rem;
 		border-radius: 999px;
-		background: rgba(34, 211, 238, 0.12);
+		background: var(--primary-tint);
 		color: var(--primary-soft);
 		text-decoration: none;
 		font-weight: 600;
@@ -38,17 +37,21 @@ const href = `/projects?tags=${slugify(tag)}`;
 			color 160ms ease;
 	}
 
+	.compact {
+		font-size: 0.7rem;
+	}
+
 	.tag-link:hover {
 		transform: translateY(-1px);
-		background: rgba(34, 211, 238, 0.18);
+		background: var(--primary-tint-strong);
 		color: var(--text-main);
 	}
 
 	.tag-link.active {
 		background: linear-gradient(
 			90deg,
-			rgba(34, 211, 238, 0.18),
-			rgba(167, 139, 250, 0.16)
+			var(--primary-tint-strong),
+			var(--accent-tint)
 		);
 		color: var(--text-main);
 	}

@@ -1,0 +1,144 @@
+---
+import { getEntries, type CollectionEntry } from "astro:content";
+import { Image } from "astro:assets";
+import { getProjectHref } from "../utils/projects";
+import ProjectLinks from "./project/ProjectLinks.astro";
+import TagList from "./TagList.astro";
+
+interface Props {
+	project: CollectionEntry<"projects">;
+}
+
+const MAX_VISIBLE_TAGS = 4;
+
+const { project } = Astro.props;
+const { title, cover, role, type, description, tags } = project.data;
+
+const projectHref = getProjectHref(project);
+const awards = project.data.awards ? await getEntries(project.data.awards) : [];
+---
+
+<article class="project-card" data-tag-slugs={tags.join(" ")}>
+	<a
+		class="project-cover-link"
+		href={projectHref}
+		aria-label={`Open ${title}`}
+	>
+		<Image
+			src={cover}
+			alt=""
+			widths={[320, 480, 640, 800]}
+			sizes="(max-width: 600px) 100vw, (max-width: 1000px) 50vw, 280px"
+		/>
+	</a>
+
+	<div class="project-copy">
+		<div class="project-card-header">
+			<h3>
+				<a href={projectHref}>{title}</a>
+			</h3>
+			<ProjectLinks project={project} iconOnly />
+		</div>
+
+		<p class="project-role">
+			{role} • {type}
+		</p>
+
+		<p>{description}</p>
+
+		{awards.length > 0 && (
+			<div class="project-awards">
+				{awards.map((award) => (
+					<span class="award-badge" title={award.data.title}>
+						🏆 {award.data.title}
+					</span>
+				))}
+			</div>
+		)}
+		<TagList tags={tags.slice(0, MAX_VISIBLE_TAGS)} compact />
+	</div>
+</article>
+
+<style>
+	.project-card {
+		height: 100%;
+		padding: 1rem;
+		border: 1px solid var(--border);
+		border-radius: var(--radius-lg);
+		background: var(--card-gradient);
+		box-shadow: var(--shadow-card);
+	}
+
+	.project-card[hidden] {
+		display: none;
+	}
+
+	.project-cover-link {
+		display: block;
+		border-radius: var(--radius-md);
+		overflow: hidden;
+	}
+
+	.project-cover-link img {
+		display: block;
+		width: 100%;
+		height: auto;
+		aspect-ratio: 16 / 9;
+		object-fit: cover;
+		border-radius: var(--radius-md);
+	}
+
+	.project-copy {
+		margin-top: 1rem;
+		display: grid;
+		gap: 0.8rem;
+	}
+
+	.project-role {
+		color: var(--text-secondary);
+		font-size: 0.85rem;
+	}
+
+	.project-card-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-start;
+		gap: 0.5rem;
+	}
+
+	h3 {
+		margin: 0;
+		font-family: var(--font-heading);
+		font-weight: 600;
+		font-size: 1.15rem;
+	}
+
+	h3 a {
+		text-decoration: none;
+	}
+
+	p {
+		margin: 0;
+		font-size: 0.95rem;
+		line-height: 1.5;
+		color: var(--text-main);
+	}
+
+	.project-awards {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.4rem;
+		margin-bottom: -0.2rem;
+	}
+
+	.award-badge {
+		font-size: 0.8rem;
+		background: var(--gold-tint);
+		color: var(--gold);
+		padding: 0.2rem 0.5rem;
+		border-radius: 4px;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.2rem;
+	}
+</style>

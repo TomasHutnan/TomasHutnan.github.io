@@ -1,18 +1,16 @@
 ---
 const links = [
-	{ href: "/projects", label: "Projects" },
+	{ href: "/projects/", label: "Projects" },
 	{ href: "/#contact", label: "Contact" },
 ];
 ---
 
 <nav class="nav">
 	<div class="nav-container">
-		<!-- Logo -->
 		<a href="/" class="nav-logo">
 			Tomáš Hutňan
 		</a>
 
-		<!-- Links -->
 		<div class="nav-links">
 			{links.map((link) => (
 				<a href={link.href} class="nav-link">
@@ -22,3 +20,69 @@ const links = [
 		</div>
 	</div>
 </nav>
+
+<style>
+	.nav {
+		position: sticky;
+		top: 0;
+		z-index: 100;
+		background: var(--bg-main);
+		border-bottom: 1px solid var(--border);
+	}
+
+	.nav-container {
+		max-width: var(--page-width);
+		margin: 0 auto;
+		padding: 0.85rem var(--page-gutter);
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	}
+
+	.nav-logo {
+		font-family: var(--font-heading);
+		font-weight: 600;
+		font-size: 1.1rem;
+		color: var(--text-main);
+		text-decoration: none;
+		transition: color 0.2s ease;
+	}
+
+	.nav-logo:hover {
+		color: var(--primary);
+	}
+
+	.nav-links {
+		display: flex;
+		align-items: center;
+		gap: 1.6rem;
+	}
+
+	.nav-link {
+		position: relative;
+		font-size: 0.95rem;
+		font-weight: 500;
+		color: var(--text-secondary);
+		text-decoration: none;
+		transition: color 0.2s ease;
+	}
+
+	.nav-link:hover {
+		color: var(--primary);
+	}
+
+	.nav-link::after {
+		content: "";
+		position: absolute;
+		left: 0;
+		bottom: -4px;
+		width: 0%;
+		height: 1px;
+		background: var(--primary);
+		transition: width 0.25s ease;
+	}
+
+	.nav-link:hover::after {
+		width: 100%;
+	}
+</style>

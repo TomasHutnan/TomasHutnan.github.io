@@ -2,11 +2,12 @@
 title: Nutritional Data Clustering
 description: Semantic categorization of 10,000+ USDA food ingredients using unsupervised learning.
 tags:
+    - machine-learning
+    - unsupervised-learning
+    - data-science
     - python
     - scikit-learn
     - pandas
-    - unsupervised-learning
-    - data-science
 type: university
 role: Data Scientist
 startedAt: 2026-02-01

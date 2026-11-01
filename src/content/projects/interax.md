@@ -2,13 +2,14 @@
 title: InteraX
 description: End-to-end clinical pharmacology pipeline screening for critical drug-drug interactions with HL7 FHIR export and local RAG search.
 tags:
-    - python
     - medical-ai
-    - machine-learning
     - rag
-    - vector-search
     - fhir
-    - data-processing
+    - python
+    - machine-learning
+    - llm
+    - data-engineering
+    - system-design
 type: team
 startedAt: 2026-10-16
 completedAt: 2026-10-17
@@ -18,10 +19,13 @@ repo: https://github.com/TomasHutnan/interax
 demo: https://www.youtube.com/watch?v=o8Fo_oQnjxc
 
 cover: ../../assets/projects/interax/cover.webp
-# gallery:
-#     - ../../assets/projects/interax/1.webp
-#     - ../../assets/projects/interax/2.webp
-#     - ../../assets/projects/interax/3.webp
+gallery:
+    - image: ../../assets/projects/interax/1.webp
+      alt: Clinician dashboard listing a patient's prescriptions and FOLFOX4 regimen beside drug interactions ranked by severity.
+    - image: ../../assets/projects/interax/2.webp
+      alt: Confirmation dialog for sending a patient's medications and observed interactions to the FHIR repository.
+    - image: ../../assets/projects/interax/3.webp
+      alt: Mobile views of a patient form with voice input and a saved form with a temporary access PIN.
 
 role: ML Engineer
 shortRoleDescription: Architected clinical data integration, FHIR infrastructure, and vector search for DDI screening.
