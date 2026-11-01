@@ -2,7 +2,6 @@
 import { getCollection } from "astro:content";
 import Layout from "../layouts/Layout.astro";
 import HeroSection from "../components/home/HeroSection.astro";
-import AboutSection from "../components/home/AboutSection.astro";
 import SkillsSection from "../components/home/SkillsSection.astro";
 import FeaturedProjectsSection from "../components/home/FeaturedProjectsSection.astro";
 import AwardsTimelineSection from "../components/home/AwardsTimelineSection.astro";
@@ -12,12 +11,11 @@ import { groupAwardsByYear, mapAwardsToProjects } from "../utils/awards";
 import { getFeaturedProjects } from "../utils/projects";
 import {
 	hero,
-	quickInfo,
 	highlights,
-	aboutParagraphs,
 	skillGroups,
 	experienceEntries,
 	contactLinks,
+	location,
 } from "../data/home";
 
 const projects = await getCollection("projects");
@@ -38,11 +36,9 @@ const awards = await getCollection("awards");
 			secondaryHref="/resume.pdf"
 			secondaryLabel="Download Resume"
 			links={contactLinks}
-			facts={quickInfo}
 			highlights={highlights}
 		/>
 
-		<AboutSection paragraphs={aboutParagraphs} />
 		<ExperienceSection entries={experienceEntries} />
 		<FeaturedProjectsSection projects={getFeaturedProjects(projects)} />
 		<AwardsTimelineSection
@@ -50,7 +46,7 @@ const awards = await getCollection("awards");
 			awardProjectMap={mapAwardsToProjects(projects)}
 		/>
 		<SkillsSection groups={skillGroups} />
-		<ContactSection links={contactLinks} />
+		<ContactSection links={contactLinks} location={location} />
 	</main>
 </Layout>
 

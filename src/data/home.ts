@@ -1,8 +1,3 @@
-export interface QuickInfoItem {
-	label: string;
-	value: string;
-}
-
 export interface SkillGroup {
 	title: string;
 	items: string[];
@@ -26,32 +21,18 @@ export interface ContactLink {
 
 export const hero = {
 	name: "Tomáš Hutňan",
-	title: "Informatics Student — Machine Learning & Computer Vision",
+	title: "Machine learning and the software around it.",
 	summary:
-		"I build machine learning systems and the software around them, from medical imaging to GPU pipelines.",
+		"Informatics student at Masaryk University. I teach AI and algorithms, and research LLM safety for clinical use.",
 };
-
-export const quickInfo: QuickInfoItem[] = [
-	{ label: "Location", value: "Brno, Czechia / Slovakia" },
-	{
-		label: "Education",
-		value: "Masaryk University — Bachelor's in Informatics (in progress)",
-	},
-	{
-		label: "Current roles",
-		value: "Teaching Assistant & Research Assistant",
-	},
-];
 
 export const highlights = [
 	"1st place, Newsmatics Hackathon 2025",
 	"Tatra Banka Challenge winner, 2024 and 2026",
-	"1,000+ automated test cases at ChyronHego",
 ];
 
-export const aboutParagraphs = [
-	"I like building practical AI: medical diagnostics, financial tools, generative apps and games. Alongside my studies, I teach AI, algorithms and programming, and research LLM safety for clinical use.",
-];
+export const location =
+	"Brno, Czechia during the semester, originally from Košice, Slovakia";
 
 export const skillGroups: SkillGroup[] = [
 	{
