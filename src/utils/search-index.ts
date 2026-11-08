@@ -1,3 +1,4 @@
+import { existsSync } from "node:fs";
 import { getCollection } from "astro:content";
 import { TAG_LABELS } from "../data/tags";
 import { getShortEventName, mapAwardsToProjects } from "./awards";
@@ -18,8 +19,13 @@ export interface SearchEntry {
 	suggested?: boolean;
 }
 
+interface PageEntry extends SearchEntry {
+	/** Listed only when this file exists, so the list can't link a missing page. */
+	source?: string;
+}
+
 /** Fixed pages. A new top-level page should be added here too. */
-const PAGES: SearchEntry[] = [
+const PAGES: PageEntry[] = [
 	{
 		kind: "page",
 		title: "Home",
@@ -35,6 +41,22 @@ const PAGES: SearchEntry[] = [
 		href: "/projects/",
 		keywords: "work portfolio",
 		suggested: true,
+	},
+	{
+		kind: "page",
+		title: "Project timeline",
+		detail: "Every project by when it ran",
+		href: "/projects/timeline/",
+		keywords: "gantt history chronology",
+		source: "src/pages/projects/timeline.astro",
+	},
+	{
+		kind: "page",
+		title: "Homelab",
+		detail: "Self-hosted services and how they fit together",
+		href: "/homelab/",
+		keywords: "self hosted server docker caddy services",
+		source: "src/pages/homelab.astro",
 	},
 	{
 		kind: "page",
@@ -98,5 +120,13 @@ export async function buildSearchIndex(): Promise<SearchEntry[]> {
 			};
 		});
 
-	return [...PAGES, ...projectEntries, ...tagEntries, ...awardEntries];
+	const pages: SearchEntry[] = PAGES.filter(
+		(page) => !page.source || existsSync(page.source),
+	).map((page) => {
+		const entry = { ...page };
+		delete entry.source;
+		return entry;
+	});
+
+	return [...pages, ...projectEntries, ...tagEntries, ...awardEntries];
 }

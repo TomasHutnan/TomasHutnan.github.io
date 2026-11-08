@@ -125,7 +125,9 @@ function initSearch(dialog: HTMLDialogElement, indexJson: string) {
 	input.addEventListener("input", render);
 
 	input.addEventListener("keydown", (event) => {
-		if (event.key === "ArrowDown") setActive(active + 1);
+		// A search field's own Escape only clears the text, so close here.
+		if (event.key === "Escape") dialog.close();
+		else if (event.key === "ArrowDown") setActive(active + 1);
 		else if (event.key === "ArrowUp") setActive(active - 1);
 		else if (event.key === "Enter" && options[active]) {
 			options[active].click();
