@@ -1,4 +1,6 @@
 ---
+import SearchDialog from "./SearchDialog.astro";
+
 const links = [
 	{ href: "/projects/", label: "Projects" },
 	{ href: "/#contact", label: "Contact" },
@@ -28,6 +30,9 @@ const links = [
 		</div>
 	</div>
 </nav>
+
+<!-- Lives with the button that opens it, so every page with a navbar has it. -->
+<SearchDialog />
 
 <style>
 	.nav {
