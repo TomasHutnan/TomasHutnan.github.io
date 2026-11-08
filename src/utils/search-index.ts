@@ -55,7 +55,8 @@ const PAGES: PageEntry[] = [
 		title: "Homelab",
 		detail: "Self-hosted services and how they fit together",
 		href: "/homelab/",
-		keywords: "self hosted server docker caddy services",
+		keywords:
+			"self hosted server docker caddy services hetzner tailscale forgejo git seafile drive searxng vaultwarden bitwarden xandikos caldav carddav paperless dockge glances",
 		source: "src/pages/homelab.astro",
 	},
 	{
