@@ -1,0 +1,197 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Section from "../components/Section.astro";
+import ArchitectureDiagram from "../components/homelab/ArchitectureDiagram.astro";
+import {
+	externalServices,
+	getServiceUrl,
+	homelabIntro,
+	homelabPractices,
+	services,
+} from "../data/homelab";
+
+const groups = [
+	{
+		access: "public",
+		title: "On the internet",
+		note: "Each on its own subdomain, behind Caddy.",
+	},
+	{
+		access: "tailscale",
+		title: "Tailscale only",
+		note: "Tools that control the server or hold my documents, so only my own devices can reach them.",
+	},
+] as const;
+---
+
+<Layout
+	pageTitle="Homelab"
+	description="The self-hosted services Tomáš Hutňan runs on his own server, and how they fit together."
+>
+	<main class="page-container homelab">
+		<Section title="Homelab" description={homelabIntro} headingLevel="h1">
+			<ArchitectureDiagram services={services} />
+		</Section>
+
+		<Section title="How it's run">
+			<ul class="practices">
+				{homelabPractices.map(({ title, text }) => (
+					<li>
+						<h3>{title}</h3>
+						<p>{text}</p>
+					</li>
+				))}
+			</ul>
+		</Section>
+
+		{groups.map(({ access, title, note }) => (
+			<Section title={title} description={note}>
+				<ul class="services">
+					{services
+						.filter((service) => service.access === access)
+						.map((service) => {
+							const url = getServiceUrl(service);
+							return (
+								<li
+									id={`service-${service.id}`}
+									class="service-card"
+								>
+									<div class="service-head">
+										<h3>{service.name}</h3>
+										<span class="service-role">
+											{service.role}
+										</span>
+									</div>
+									<p>{service.description}</p>
+									{url && service.browsable !== false ? (
+										<a class="service-link" href={url}>
+											{new URL(url).host} ↗
+										</a>
+									) : (
+										<span class="service-note">
+											{url
+												? `${new URL(url).host} · sync only`
+												: "Tailscale"}
+										</span>
+									)}
+								</li>
+							);
+						})}
+				</ul>
+			</Section>
+		))}
+
+		<Section
+			title="Off the server"
+			description="Part of the setup, but hosted elsewhere."
+		>
+			<ul class="services">
+				{externalServices.map(({ name, role, address, href, host }) => (
+					<li class="service-card">
+						<div class="service-head">
+							<h3>{name}</h3>
+							<span class="service-role">{role}</span>
+						</div>
+						<p>Hosted on {host}.</p>
+						{href ? (
+							<a class="service-link" href={href}>
+								{address}
+							</a>
+						) : (
+							<span class="service-note">{address}</span>
+						)}
+					</li>
+				))}
+			</ul>
+		</Section>
+	</main>
+</Layout>
+
+<style>
+	.homelab {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr);
+		gap: 2.6rem;
+	}
+
+	.practices,
+	.services {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+		gap: 1rem;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.practices {
+		grid-template-columns: repeat(auto-fill, minmax(min(20rem, 100%), 1fr));
+	}
+
+	.practices h3,
+	.service-head h3 {
+		margin: 0;
+		font-size: 1.02rem;
+	}
+
+	.practices p,
+	.service-card p {
+		margin: 0.45rem 0 0;
+		color: var(--text-secondary);
+		line-height: 1.55;
+	}
+
+	.service-card {
+		display: flex;
+		flex-direction: column;
+		padding: 1.1rem 1.2rem;
+		border: 1px solid var(--border);
+		border-radius: var(--radius-md);
+		background: var(--card-gradient);
+		/* Clears the sticky navbar when a diagram node links here. */
+		scroll-margin-top: 6rem;
+		transition:
+			border-color 200ms ease,
+			box-shadow 200ms ease;
+	}
+
+	.service-card:target {
+		border-color: var(--primary-line);
+		box-shadow: 0 0 0 4px var(--primary-tint-faint);
+	}
+
+	.service-head {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 0.2rem 0.8rem;
+	}
+
+	.service-role {
+		color: var(--primary-soft);
+		font-size: 0.82rem;
+		font-weight: 600;
+	}
+
+	.service-link,
+	.service-note {
+		margin-top: auto;
+		padding-top: 0.9rem;
+		font-size: 0.88rem;
+		font-weight: 600;
+	}
+
+	.service-link {
+		color: var(--primary-soft);
+		text-decoration: none;
+	}
+
+	.service-link:hover {
+		color: var(--primary);
+	}
+
+	.service-note {
+		color: var(--text-secondary);
+	}
+</style>
