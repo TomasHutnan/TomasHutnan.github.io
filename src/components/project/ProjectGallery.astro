@@ -7,6 +7,8 @@ import Lightbox from "../Lightbox.astro";
 interface Props {
 	items: GalleryItem[];
 	title: string;
+	/** Matches the project card's cover, so it grows into the stage. */
+	transitionName?: string;
 }
 
 const MAX_ZOOM_WIDTH = 2400;
@@ -14,7 +16,7 @@ const POSTER_WIDTH = 1280;
 const STAGE_WIDTHS = [640, 960, 1280, 1920];
 const STAGE_SIZES = "(max-width: 1160px) 100vw, 1128px";
 
-const { items, title } = Astro.props;
+const { items, title, transitionName } = Astro.props;
 const hasMultipleSlides = items.length > 1;
 
 const toResizedUrl = async (src: ImageMetadata, width: number) => {
@@ -50,7 +52,10 @@ const hasImages = items.some((item) => item.kind === "image");
 ---
 
 <section class="gallery" data-gallery aria-label={`${title} media`}>
-	<div class="stage">
+	<div
+		class="stage"
+		style={transitionName && `view-transition-name: ${transitionName}`}
+	>
 		<ul class="slides" data-slides tabindex="0">
 			{slides.map(
 				({ item, id, position, isFirst, zoomUrl, posterUrl }) => (

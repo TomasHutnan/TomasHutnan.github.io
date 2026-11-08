@@ -8,6 +8,15 @@ export type GalleryItem =
 	| { kind: "video"; sources: string[]; poster: ImageMetadata; alt: string }
 	| { kind: "youtube"; videoId: string; poster: ImageMetadata; alt: string };
 
+/**
+ * The view transition name shared by a project's card cover and the media on
+ * its page, so one grows into the other. Only the image morphs: moving the
+ * title too made it slide over the description mid-flight.
+ */
+export function getCoverTransitionName(project: Project): string {
+	return `project-cover-${project.id}`;
+}
+
 export function getProjectHref(project: Project): string {
 	return `/projects/${project.id}/`;
 }

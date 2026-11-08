@@ -13,7 +13,7 @@ import AwardCard from "../../components/project/AwardCard.astro";
 import ProjectGallery from "../../components/project/ProjectGallery.astro";
 import ProjectLinks from "../../components/project/ProjectLinks.astro";
 import { formatDateRange } from "../../utils/dates";
-import { getGalleryItems } from "../../utils/projects";
+import { getGalleryItems, getCoverTransitionName } from "../../utils/projects";
 
 export async function getStaticPaths() {
 	const projects = await getCollection("projects");
@@ -47,6 +47,7 @@ const awards = project.data.awards ? await getEntries(project.data.awards) : [];
 const { Content } = await render(project);
 const dateRange = formatDateRange(startedAt, completedAt);
 const galleryItems = getGalleryItems(project);
+const coverTransition = getCoverTransitionName(project);
 ---
 
 <Layout pageTitle={title} description={description} shareImage={cover}>
@@ -72,9 +73,16 @@ const galleryItems = getGalleryItems(project);
 			</header>
 
 			{galleryItems.length > 0 ? (
-				<ProjectGallery items={galleryItems} title={title} />
+				<ProjectGallery
+					items={galleryItems}
+					title={title}
+					transitionName={coverTransition}
+				/>
 			) : (
-				<figure class="project-cover">
+				<figure
+					class="project-cover"
+					style={`view-transition-name: ${coverTransition}`}
+				>
 					<Image
 						src={cover}
 						alt={title}
