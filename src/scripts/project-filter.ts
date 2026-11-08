@@ -3,6 +3,7 @@ import {
 	getTagCloudFontSize,
 	isStrongTag,
 } from "../utils/tags";
+import { createTagCloud } from "./tag-cloud";
 
 const cloud = document.querySelector<HTMLElement>("[data-tag-cloud]");
 const summary = document.querySelector<HTMLElement>("[data-filter-summary]");
@@ -45,6 +46,7 @@ function initProjectFilter(
 		tags: (element.dataset.tagSlugs ?? "").split(" ").filter(Boolean),
 	}));
 	const knownSlugs = new Set(cloudLinks.map(getSlug));
+	const tagCloud = createTagCloud(cloud);
 
 	function getSlug(link: HTMLElement) {
 		return link.dataset.tagSlug ?? "";
@@ -103,6 +105,16 @@ function initProjectFilter(
 		cloud.append(...ordered);
 		// Re-appending a focused link would otherwise drop keyboard focus.
 		if (focusedElement instanceof HTMLElement) focusedElement.focus();
+
+		tagCloud.update(
+			ordered.map((link) => ({
+				element: link,
+				count: countOf(link),
+				// Active tags are bold too, and the layout measures them that way.
+				strong:
+					isStrongTag(countOf(link)) || selected.has(getSlug(link)),
+			})),
+		);
 	}
 
 	function renderActiveLinks(selected: Set<string>) {
