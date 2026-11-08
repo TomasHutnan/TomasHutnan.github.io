@@ -1,4 +1,6 @@
 ---
+import SearchDialog from "./SearchDialog.astro";
+
 const links = [
 	{ href: "/projects/", label: "Projects" },
 	{ href: "/#contact", label: "Contact" },
@@ -18,9 +20,20 @@ const links = [
 					{link.label}
 				</a>
 			))}
+			<button class="search-button" type="button" data-search-open>
+				<svg viewBox="0 0 20 20" aria-hidden="true">
+					<circle cx="8.5" cy="8.5" r="5.5"></circle>
+					<path d="m13 13 4 4"></path>
+				</svg>
+				<span class="search-label">Search</span>
+				<kbd data-search-shortcut>Ctrl K</kbd>
+			</button>
 		</div>
 	</div>
 </nav>
+
+<!-- Lives with the button that opens it, so every page with a navbar has it. -->
+<SearchDialog />
 
 <style>
 	.nav {
@@ -94,5 +107,51 @@ const links = [
 
 	.nav-link:hover::after {
 		width: 100%;
+	}
+
+	.search-button {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.45rem;
+		padding: 0.35rem 0.5rem 0.35rem 0.6rem;
+		border: 1px solid var(--border);
+		border-radius: var(--radius-sm);
+		background: transparent;
+		color: var(--text-secondary);
+		font: inherit;
+		font-size: 0.88rem;
+		cursor: pointer;
+		transition:
+			color 0.2s ease,
+			border-color 0.2s ease;
+	}
+
+	.search-button:hover {
+		border-color: var(--primary-line);
+		color: var(--text-main);
+	}
+
+	.search-button svg {
+		width: 0.95rem;
+		height: 0.95rem;
+		fill: none;
+		stroke: currentColor;
+		stroke-width: 1.8;
+		stroke-linecap: round;
+	}
+
+	.search-button kbd {
+		padding: 0.05rem 0.3rem;
+		border: 1px solid var(--border);
+		border-radius: 4px;
+		font-family: inherit;
+		font-size: 0.7rem;
+	}
+
+	@media (max-width: 600px) {
+		.search-label,
+		.search-button kbd {
+			display: none;
+		}
 	}
 </style>
