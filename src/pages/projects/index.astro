@@ -22,7 +22,12 @@ const projects = sortProjectsByRecency(await getCollection("projects"));
 		>
 			<TagCloud tags={collectTagStats(projects)} />
 
-			<h2 class="index-title">All projects</h2>
+			<div class="index-heading">
+				<h2 class="index-title">All projects</h2>
+				<a class="timeline-link" href="/projects/timeline/">
+					See them on a timeline
+				</a>
+			</div>
 			<div class="filter-bar">
 				<p
 					class="filter-summary"
@@ -50,8 +55,27 @@ const projects = sortProjectsByRecency(await getCollection("projects"));
 </script>
 
 <style>
+	.index-heading {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 0.5rem 1rem;
+		margin-top: 2rem;
+	}
+
+	.timeline-link {
+		color: var(--primary-soft);
+		font-weight: 600;
+		text-decoration: none;
+	}
+
+	.timeline-link:hover {
+		color: var(--primary);
+	}
+
 	.index-title {
-		margin: 2rem 0 0;
+		margin: 0;
 		font-size: 2rem;
 	}
 
