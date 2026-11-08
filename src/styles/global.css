@@ -151,15 +151,9 @@ a {
 /* PAGE TRANSITIONS */
 
 /*
- * Native cross-document view transitions: no client router, so page scripts
- * run as on any normal load. Browsers without support just navigate.
+ * Astro's ClientRouter swaps pages in place inside a same-document view
+ * transition, which Firefox supports too (unlike cross-document ones).
  */
-@media (prefers-reduced-motion: no-preference) {
-	@view-transition {
-		navigation: auto;
-	}
-}
-
 ::view-transition-group(*) {
 	animation-duration: 380ms;
 	animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
@@ -168,4 +162,13 @@ a {
 ::view-transition-old(root),
 ::view-transition-new(root) {
 	animation-duration: 220ms;
+}
+
+/* The router still runs a transition, so switch off what it would animate. */
+@media (prefers-reduced-motion: reduce) {
+	::view-transition-group(*),
+	::view-transition-old(*),
+	::view-transition-new(*) {
+		animation: none !important;
+	}
 }

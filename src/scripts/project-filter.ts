@@ -3,13 +3,8 @@ import {
 	getTagCloudFontSize,
 	isStrongTag,
 } from "../utils/tags";
+import { onPageLoad } from "./page";
 import { createTagCloud } from "./tag-cloud";
-
-const cloud = document.querySelector<HTMLElement>("[data-tag-cloud]");
-const summary = document.querySelector<HTMLElement>("[data-filter-summary]");
-const clearButton = document.querySelector<HTMLButtonElement>(
-	"[data-filter-clear]",
-);
 
 function getSelectedFromUrl(knownSlugs: Set<string>): Set<string> {
 	const param = new URLSearchParams(window.location.search).get("tags") ?? "";
@@ -23,13 +18,19 @@ function getSelectedFromUrl(knownSlugs: Set<string>): Set<string> {
 
 function writeSelectedToUrl(selected: Set<string>) {
 	const query = selected.size > 0 ? `?tags=${[...selected].join(",")}` : "";
-	history.replaceState({}, "", `${window.location.pathname}${query}`);
+	// Keep the state: the client router stores its own entry in it.
+	history.replaceState(
+		history.state,
+		"",
+		`${window.location.pathname}${query}`,
+	);
 }
 
 function initProjectFilter(
 	cloud: HTMLElement,
 	summary: HTMLElement,
 	clearButton: HTMLButtonElement,
+	signal: AbortSignal,
 ) {
 	const cloudLinks = [
 		...cloud.querySelectorAll<HTMLAnchorElement>("[data-tag-slug]"),
@@ -46,7 +47,7 @@ function initProjectFilter(
 		tags: (element.dataset.tagSlugs ?? "").split(" ").filter(Boolean),
 	}));
 	const knownSlugs = new Set(cloudLinks.map(getSlug));
-	const tagCloud = createTagCloud(cloud);
+	const tagCloud = createTagCloud(cloud, signal);
 
 	function getSlug(link: HTMLElement) {
 		return link.dataset.tagSlug ?? "";
@@ -150,20 +151,25 @@ function initProjectFilter(
 		clearButton.hidden = selected.size === 0;
 	}
 
-	document.addEventListener("click", (event) => {
-		const target = event.target;
-		if (!(target instanceof Element)) return;
+	document.addEventListener(
+		"click",
+		(event) => {
+			const target = event.target;
+			if (!(target instanceof Element)) return;
 
-		const link = target.closest<HTMLAnchorElement>("[data-tag-slug]");
-		if (!link || event.metaKey || event.ctrlKey || event.shiftKey) return;
+			const link = target.closest<HTMLAnchorElement>("[data-tag-slug]");
+			if (!link || event.metaKey || event.ctrlKey || event.shiftKey)
+				return;
 
-		event.preventDefault();
-		const selected = getSelectedFromUrl(knownSlugs);
-		const slug = getSlug(link);
-		if (!selected.delete(slug)) selected.add(slug);
-		writeSelectedToUrl(selected);
-		sync(selected);
-	});
+			event.preventDefault();
+			const selected = getSelectedFromUrl(knownSlugs);
+			const slug = getSlug(link);
+			if (!selected.delete(slug)) selected.add(slug);
+			writeSelectedToUrl(selected);
+			sync(selected);
+		},
+		{ signal },
+	);
 
 	clearButton.addEventListener("click", () => {
 		writeSelectedToUrl(new Set());
@@ -173,6 +179,15 @@ function initProjectFilter(
 	sync(getSelectedFromUrl(knownSlugs));
 }
 
-if (cloud && summary && clearButton) {
-	initProjectFilter(cloud, summary, clearButton);
-}
+onPageLoad((signal) => {
+	const cloud = document.querySelector<HTMLElement>("[data-tag-cloud]");
+	const summary = document.querySelector<HTMLElement>(
+		"[data-filter-summary]",
+	);
+	const clearButton = document.querySelector<HTMLButtonElement>(
+		"[data-filter-clear]",
+	);
+	if (cloud && summary && clearButton) {
+		initProjectFilter(cloud, summary, clearButton, signal);
+	}
+});
