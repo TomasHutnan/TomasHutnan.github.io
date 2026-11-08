@@ -40,7 +40,6 @@ export interface SkillLine {
  */
 export const skillLines: SkillLine[] = [
 	{ label: "Every day", items: ["Linux", "Git"] },
-	{ label: "Also", items: ["OpenCV"] },
 	{
 		label: "Languages",
 		items: ["English (C1/C2)", "German (A1/A2)", "Slovak (Native)"],
