@@ -1,50 +1,40 @@
 ---
+import type { CollectionEntry } from "astro:content";
 import Section from "../Section.astro";
-import type { SkillGroup } from "../../data/home";
+import TagCloud from "../TagCloud.astro";
+import { collectTagStats } from "../../utils/tags";
 
 interface Props {
-	groups: SkillGroup[];
+	projects: CollectionEntry<"projects">[];
+	languages: string[];
 }
 
-const { groups } = Astro.props;
+const { projects, languages } = Astro.props;
 ---
 
-<Section id="skills" title="Tools and domains I work in">
-	<div class="skills-grid">
-		{groups.map((group) => (
-			<article class="skill-card">
-				<h3>{group.title}</h3>
-				<ul>
-					{group.items.map((item) => (
-						<li>{item}</li>
-					))}
-				</ul>
-			</article>
-		))}
-	</div>
+<Section
+	id="skills"
+	title="Tools and domains I work in"
+	description="Sized by how many of my projects use each one. Select a tag to see them."
+>
+	<TagCloud tags={collectTagStats(projects)} standalone />
+
+	<p class="languages">
+		<span>Languages</span>
+		{languages.join(" · ")}
+	</p>
 </Section>
 
 <style>
-	.skills-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-		gap: 1rem;
-	}
-
-	.skill-card {
-		padding: 1.2rem;
-	}
-
-	.skill-card h3 {
-		margin: 0 0 0.85rem;
-		font-size: 1.05rem;
-	}
-
-	.skill-card ul {
-		margin: 0;
-		padding-left: 1.05rem;
-		display: grid;
-		gap: 0.45rem;
+	.languages {
+		margin: 0.5rem 0 0;
 		color: var(--text-secondary);
+		text-align: center;
+	}
+
+	.languages span {
+		margin-right: 0.6rem;
+		color: var(--text-main);
+		font-weight: 600;
 	}
 </style>

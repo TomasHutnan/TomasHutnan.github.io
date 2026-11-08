@@ -1,8 +1,3 @@
-export interface SkillGroup {
-	title: string;
-	items: string[];
-}
-
 export interface ExperienceEntry {
 	title: string;
 	organization: string;
@@ -34,43 +29,10 @@ export const highlights = [
 export const location =
 	"Brno, Czechia during the semester, originally from Košice, Slovakia";
 
-export const skillGroups: SkillGroup[] = [
-	{
-		title: "Core Stack",
-		items: [
-			"Python",
-			"C++",
-			"PyTorch",
-			"Docker",
-			"Linux",
-			"OpenCV",
-			"Pandas",
-		],
-	},
-	{
-		title: "Also Used",
-		items: [
-			"TypeScript",
-			"C#",
-			"FastAPI",
-			"PostgreSQL",
-			"MongoDB",
-			"React",
-		],
-	},
-	{
-		title: "Specializations",
-		items: [
-			"Computer Vision",
-			"NLP",
-			"GPU Optimization",
-			"Automated Testing",
-		],
-	},
-	{
-		title: "Languages",
-		items: ["English (C1/C2)", "German (A1/A2)", "Slovak (Native)"],
-	},
+export const spokenLanguages = [
+	"English (C1/C2)",
+	"German (A1/A2)",
+	"Slovak (Native)",
 ];
 
 export const experienceEntries: ExperienceEntry[] = [
