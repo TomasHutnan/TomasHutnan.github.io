@@ -9,13 +9,19 @@ tags:
     - scikit-learn
     - pandas
 type: university
-role: Data Scientist
 startedAt: 2026-02-01
 completedAt: 2026-04-30
+featured: false
+
 cover: ../../assets/projects/ib031-nutritional-clustering/cover.webp
 gallery:
     - image: ../../assets/projects/ib031-nutritional-clustering/full.webp
       alt: Six charts comparing the food clusters, including t-SNE, silhouette and macronutrient plots.
+
+role: Data Scientist
+shortRoleDescription: Built the K-Means clustering and subclustering that grouped 10,000+ USDA ingredients into dietary categories.
+contribution: Worked side by side with Eva Hatalčíková on preprocessing and feature engineering, then built the K-Means clustering and subclustering on my own while she explored DBSCAN and HDBSCAN. Together we combined the results into one report and presentation.
+
 collaborators:
     - Eva Hatalčíková
 ---
