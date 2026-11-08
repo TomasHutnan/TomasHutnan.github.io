@@ -2,18 +2,24 @@
 import Layout from "../layouts/Layout.astro";
 import Section from "../components/Section.astro";
 import ArchitectureDiagram from "../components/homelab/ArchitectureDiagram.astro";
-import { homelabIntro, homelabPractices, services } from "../data/homelab";
+import {
+	externalServices,
+	getServiceUrl,
+	homelabIntro,
+	homelabPractices,
+	services,
+} from "../data/homelab";
 
 const groups = [
 	{
-		id: "apps",
-		title: "Apps",
-		note: "What I use day to day.",
+		access: "public",
+		title: "On the internet",
+		note: "Each on its own subdomain, behind Caddy.",
 	},
 	{
-		id: "admin",
-		title: "Admin",
-		note: "Tools that can control the server or hold my documents. Private, so not linked.",
+		access: "tailscale",
+		title: "Tailscale only",
+		note: "Tools that control the server or hold my documents, so only my own devices can reach them.",
 	},
 ] as const;
 ---
@@ -38,39 +44,66 @@ const groups = [
 			</ul>
 		</Section>
 
-		{groups.map(({ id, title, note }) => (
+		{groups.map(({ access, title, note }) => (
 			<Section title={title} description={note}>
 				<ul class="services">
 					{services
-						.filter((service) => service.group === id)
-						.map((service) => (
-							<li
-								id={`service-${service.id}`}
-								class="service-card"
-							>
-								<div class="service-head">
-									<h3>{service.name}</h3>
-									<span class="service-role">
-										{service.role}
-									</span>
-								</div>
-								<p>{service.description}</p>
-								{service.href ? (
-									<a class="service-link" href={service.href}>
-										{new URL(service.href).host} ↗
-									</a>
-								) : (
-									id === "admin" && (
-										<span class="service-private">
-											Private
+						.filter((service) => service.access === access)
+						.map((service) => {
+							const url = getServiceUrl(service);
+							return (
+								<li
+									id={`service-${service.id}`}
+									class="service-card"
+								>
+									<div class="service-head">
+										<h3>{service.name}</h3>
+										<span class="service-role">
+											{service.role}
 										</span>
-									)
-								)}
-							</li>
-						))}
+									</div>
+									<p>{service.description}</p>
+									{url && service.browsable !== false ? (
+										<a class="service-link" href={url}>
+											{new URL(url).host} ↗
+										</a>
+									) : (
+										<span class="service-note">
+											{url
+												? `${new URL(url).host} · sync only`
+												: "Tailscale"}
+										</span>
+									)}
+								</li>
+							);
+						})}
 				</ul>
 			</Section>
 		))}
+
+		<Section
+			title="Off the server"
+			description="Under the same domain, but hosted elsewhere."
+		>
+			<ul class="services">
+				{externalServices.map(({ name, role, address, href, host }) => (
+					<li class="service-card">
+						<div class="service-head">
+							<h3>{name}</h3>
+							<span class="service-role">{role}</span>
+						</div>
+						<p>Hosted on {host}.</p>
+						{href ? (
+							<a class="service-link" href={href}>
+								{address}
+							</a>
+						) : (
+							<span class="service-note">{address}</span>
+						)}
+					</li>
+				))}
+			</ul>
+		</Section>
 	</main>
 </Layout>
 
@@ -138,7 +171,7 @@ const groups = [
 	}
 
 	.service-link,
-	.service-private {
+	.service-note {
 		margin-top: auto;
 		padding-top: 0.9rem;
 		font-size: 0.88rem;
@@ -154,7 +187,7 @@ const groups = [
 		color: var(--primary);
 	}
 
-	.service-private {
+	.service-note {
 		color: var(--text-secondary);
 	}
 </style>

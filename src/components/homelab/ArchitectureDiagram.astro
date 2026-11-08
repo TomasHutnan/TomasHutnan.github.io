@@ -7,8 +7,8 @@ interface Props {
 
 const { services } = Astro.props;
 const groups = [
-	{ id: "apps", label: "Apps" },
-	{ id: "admin", label: "Admin · private" },
+	{ access: "public", label: "Public" },
+	{ access: "tailscale", label: "Tailscale only" },
 ] as const;
 ---
 
@@ -35,13 +35,13 @@ const groups = [
 		</span>
 
 		<div class="network">
-			<span class="network-label">Docker · one VPS</span>
-			{groups.map(({ id, label }) => (
-				<div class:list={["group", `group--${id}`]}>
+			<span class="network-label">Docker · one Hetzner VPS</span>
+			{groups.map(({ access, label }) => (
+				<div class:list={["group", `group--${access}`]}>
 					<span class="group-label">{label}</span>
 					<ul>
 						{services
-							.filter((service) => service.group === id)
+							.filter((service) => service.access === access)
 							.map((service) => (
 								<li>
 									<a
@@ -59,8 +59,9 @@ const groups = [
 		</div>
 	</div>
 	<figcaption>
-		Requests reach a single Caddy proxy, which forwards each subdomain to
-		its container. Select a service for details.
+		Public requests reach a single Caddy proxy, which forwards each
+		subdomain to its container. The admin tools are only on my Tailscale
+		network. Select a service for details.
 	</figcaption>
 </figure>
 
@@ -212,7 +213,7 @@ const groups = [
 		transform: translateY(-1px);
 	}
 
-	.group--admin .service {
+	.group--tailscale .service {
 		border-style: dashed;
 		background: transparent;
 	}
