@@ -147,3 +147,25 @@ a {
 		animation-iteration-count: 1 !important;
 	}
 }
+
+/* PAGE TRANSITIONS */
+
+/*
+ * Native cross-document view transitions: no client router, so page scripts
+ * run as on any normal load. Browsers without support just navigate.
+ */
+@media (prefers-reduced-motion: no-preference) {
+	@view-transition {
+		navigation: auto;
+	}
+}
+
+::view-transition-group(*) {
+	animation-duration: 380ms;
+	animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+	animation-duration: 220ms;
+}
