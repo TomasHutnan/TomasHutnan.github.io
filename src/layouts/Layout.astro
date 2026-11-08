@@ -13,6 +13,7 @@ import type { ImageMetadata } from "astro";
 import { getImage } from "astro:assets";
 import Footer from "../components/Footer.astro";
 import Navbar from "../components/Navbar.astro";
+import SearchDialog from "../components/SearchDialog.astro";
 import defaultShareImage from "../assets/og-default.png";
 
 interface Props {
@@ -64,5 +65,6 @@ const socialImageUrl = new URL(socialImage.src, Astro.site);
 		<Navbar />
 		<slot />
 		<Footer />
+		<SearchDialog />
 	</body>
 </html>

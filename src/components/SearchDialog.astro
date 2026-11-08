@@ -1,0 +1,203 @@
+---
+import { buildSearchIndex } from "../utils/search-index";
+
+// A few kilobytes for the whole site, so it ships inline with every page.
+const index = await buildSearchIndex();
+// Escaped so text like "</script>" in a description can't end the tag early.
+const indexJson = JSON.stringify(index).replaceAll("<", "\\u003c");
+---
+
+<dialog class="search" data-search aria-label="Search the site">
+	<div class="search-panel">
+		<div class="search-field">
+			<svg class="search-icon" viewBox="0 0 20 20" aria-hidden="true">
+				<circle cx="8.5" cy="8.5" r="5.5"></circle>
+				<path d="m13 13 4 4"></path>
+			</svg>
+			<input
+				type="search"
+				placeholder="Search projects, tags, awards…"
+				autocomplete="off"
+				spellcheck="false"
+				role="combobox"
+				aria-expanded="true"
+				aria-controls="search-results"
+				aria-autocomplete="list"
+				data-search-input
+			/>
+			<kbd>Esc</kbd>
+		</div>
+		<ul
+			id="search-results"
+			class="search-results"
+			role="listbox"
+			aria-label="Results"
+			data-search-results
+		></ul>
+		<p class="search-empty" data-search-empty hidden>
+			No matches.
+		</p>
+		<p class="search-hint" aria-hidden="true">
+			<span>
+				<kbd>↑</kbd>
+				<kbd>↓</kbd> to move
+			</span>
+			<span>
+				<kbd>Enter</kbd> to open
+			</span>
+		</p>
+	</div>
+</dialog>
+
+<script
+	is:inline
+	type="application/json"
+	data-search-index
+	set:html={indexJson}
+/>
+<script>
+	import "../scripts/search";
+</script>
+
+<style>
+	.search {
+		width: min(36rem, calc(100vw - 2rem));
+		max-height: min(32rem, calc(100dvh - 4rem));
+		margin: 12vh auto auto;
+		padding: 0;
+		border: 1px solid var(--border);
+		border-radius: var(--radius-md);
+		background: var(--bg-elevated);
+		box-shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.8);
+		color: var(--text-main);
+	}
+
+	.search::backdrop {
+		background: rgba(2, 6, 23, 0.7);
+		backdrop-filter: blur(3px);
+	}
+
+	.search-panel {
+		display: grid;
+		grid-template-rows: auto minmax(0, 1fr) auto;
+		max-height: inherit;
+	}
+
+	.search-field {
+		display: flex;
+		align-items: center;
+		gap: 0.7rem;
+		padding: 0.9rem 1rem;
+		border-bottom: 1px solid var(--border);
+	}
+
+	.search-icon {
+		flex: none;
+		width: 1.15rem;
+		height: 1.15rem;
+		fill: none;
+		stroke: var(--text-secondary);
+		stroke-width: 1.8;
+		stroke-linecap: round;
+	}
+
+	input {
+		flex: 1;
+		min-width: 0;
+		border: 0;
+		outline: 0;
+		background: transparent;
+		color: var(--text-main);
+		font: inherit;
+		font-size: 1.05rem;
+	}
+
+	input::-webkit-search-cancel-button {
+		display: none;
+	}
+
+	kbd {
+		padding: 0.1rem 0.35rem;
+		border: 1px solid var(--border);
+		border-radius: 5px;
+		color: var(--text-secondary);
+		font-family: inherit;
+		font-size: 0.72rem;
+	}
+
+	.search-results {
+		overflow-y: auto;
+		margin: 0;
+		padding: 0.4rem;
+		list-style: none;
+	}
+
+	.search-results :global(.search-group) {
+		padding: 0.6rem 0.65rem 0.3rem;
+		color: var(--text-secondary);
+		font-size: 0.72rem;
+		font-weight: 600;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+	}
+
+	.search-results :global(a) {
+		display: grid;
+		gap: 0.1rem;
+		padding: 0.55rem 0.65rem;
+		border-radius: var(--radius-sm);
+		color: var(--text-main);
+		text-decoration: none;
+	}
+
+	.search-results :global(a[aria-selected="true"]) {
+		background: var(--primary-tint);
+	}
+
+	.search-results :global(.search-detail) {
+		overflow: hidden;
+		color: var(--text-secondary);
+		font-size: 0.85rem;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	.search-results :global(mark) {
+		background: none;
+		color: var(--primary-soft);
+	}
+
+	.search-empty {
+		margin: 0;
+		padding: 1.2rem 1rem;
+		color: var(--text-secondary);
+	}
+
+	.search-empty[hidden] {
+		display: none;
+	}
+
+	.search-hint {
+		display: flex;
+		gap: 1.2rem;
+		margin: 0;
+		padding: 0.6rem 1rem;
+		border-top: 1px solid var(--border);
+		color: var(--text-secondary);
+		font-size: 0.78rem;
+	}
+
+	.search-hint kbd {
+		margin-right: 0.2rem;
+	}
+
+	@media (max-width: 600px) {
+		.search {
+			margin-top: 1rem;
+		}
+
+		.search-hint {
+			display: none;
+		}
+	}
+</style>
