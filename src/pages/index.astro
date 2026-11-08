@@ -12,7 +12,7 @@ import { getFeaturedProjects } from "../utils/projects";
 import {
 	hero,
 	highlights,
-	skillGroups,
+	skillLines,
 	experienceEntries,
 	contactLinks,
 	location,
@@ -45,7 +45,7 @@ const awards = await getCollection("awards");
 			groups={groupAwardsByYear(awards)}
 			awardProjectMap={mapAwardsToProjects(projects)}
 		/>
-		<SkillsSection groups={skillGroups} />
+		<SkillsSection projects={projects} lines={skillLines} />
 		<ContactSection links={contactLinks} location={location} />
 	</main>
 </Layout>

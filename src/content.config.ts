@@ -53,9 +53,11 @@ const projects = defineCollection({
 				cover: image(),
 				gallery: z.array(galleryItem(image)).default([]),
 
+				// Every project page shows the role, a one-line summary of it and a
+				// Contribution section, so none of them may be left out.
 				role: z.string(),
-				shortRoleDescription: z.string().optional(),
-				contribution: z.string().optional(),
+				shortRoleDescription: z.string(),
+				contribution: z.string(),
 				collaborators: z.array(z.string()).optional(),
 			})
 			.refine(

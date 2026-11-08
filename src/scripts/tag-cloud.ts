@@ -30,7 +30,9 @@ const GAP = 3;
 const EDGE_MARGIN = 10;
 /** Word area over cloud area that a first attempt aims for. */
 const TARGET_DENSITY = 0.42;
-const MAX_ATTEMPTS = 40;
+const MAX_ATTEMPTS = 60;
+/** The tallest cloud, as width over height. */
+const MIN_ASPECT = 0.45;
 /** Spiral radius gained per radian, and distance between samples, in px. */
 const SPIRAL_GROWTH = 1.6;
 const SPIRAL_STRIDE = 3;
@@ -253,7 +255,8 @@ function tryLayout(
 	const placements: Placement[] = [];
 	const { x: cx, y: cy } = shape.centre;
 	const stretch = shape.aspect * 0.85;
-	const maxRadius = VIEW_WIDTH;
+	// Far enough to reach the ends of a tall cloud, not just a wide one.
+	const maxRadius = Math.max(VIEW_WIDTH, shape.height);
 
 	for (const [index, item] of words.entries()) {
 		const fontSize = Math.max(MIN_FONT, item.base * fontScale);
@@ -306,7 +309,19 @@ function tryLayout(
 	return placements;
 }
 
-function solve(words: Measured[], containerWidth: number, fontFamily: string) {
+/** Where the last full-width layout settled, to start the next one there. */
+interface Fit {
+	containerWidth: number;
+	aspect: number;
+	fontScale: number;
+}
+
+function solve(
+	words: Measured[],
+	containerWidth: number,
+	fontFamily: string,
+	hint?: Fit,
+) {
 	const wide = containerWidth >= 640;
 	let aspect = wide ? 2.35 : 1.15;
 
@@ -328,6 +343,18 @@ function solve(words: Measured[], containerWidth: number, fontFamily: string) {
 	let width = Math.max(minWidth, Math.min(containerWidth, idealWidth));
 	let fontScale = 1;
 
+	// A cloud that filled a narrow screen took many attempts to settle.
+	// Filtering only removes words, so the last fit almost always works
+	// first time and saves a phone repeating the whole search.
+	if (
+		hint &&
+		hint.containerWidth === containerWidth &&
+		width === containerWidth
+	) {
+		aspect = hint.aspect;
+		fontScale = hint.fontScale;
+	}
+
 	for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
 		const shape = buildShape(aspect);
 		const placements = tryLayout(
@@ -337,14 +364,22 @@ function solve(words: Measured[], containerWidth: number, fontFamily: string) {
 			fontScale,
 			fontFamily,
 		);
-		if (placements) return { shape, width, placements };
+		if (placements) return { shape, width, placements, fontScale };
 
 		if (width < containerWidth) {
 			width = Math.min(containerWidth, width * 1.08);
 		} else if (fontScale > 0.74) {
 			fontScale *= 0.94;
+		} else if (aspect > MIN_ASPECT) {
+			aspect = Math.max(MIN_ASPECT, aspect * 0.92);
+		} else if (fontScale > 0.4) {
+			// As tall as it likes to get: shrink further. MIN_FONT keeps the
+			// small tags readable, so this only scales the largest words
+			// down, which lets one like "Machine Learning" fit a narrow phone.
+			fontScale *= 0.94;
 		} else {
-			aspect = Math.max(0.45, aspect * 0.92);
+			// The narrowest phones: grow taller past the usual limit.
+			aspect *= 0.92;
 		}
 	}
 	return null;
@@ -424,6 +459,7 @@ export function createTagCloud(container: HTMLElement) {
 	let words: CloudWord[] = [];
 	let lastWidth = 0;
 	let lastAspect = 0;
+	let lastFit: Fit | undefined;
 
 	function layout() {
 		const containerWidth = container.clientWidth;
@@ -448,13 +484,22 @@ export function createTagCloud(container: HTMLElement) {
 					right.label.length - left.label.length,
 			);
 
-		const result = solve(measured, containerWidth, fontFamily);
+		const result = solve(measured, containerWidth, fontFamily, lastFit);
 		if (!result) {
+			// Back to the plain list, without positions from an earlier layout.
 			container.classList.remove("is-cloud");
+			container.style.removeProperty("height");
+			for (const word of words) {
+				word.element.style.removeProperty("transform");
+			}
 			return;
 		}
 
-		const { shape, width, placements } = result;
+		const { shape, width, placements, fontScale } = result;
+		lastFit =
+			width === containerWidth
+				? { containerWidth, aspect: shape.aspect, fontScale }
+				: undefined;
 		const height = width / shape.aspect;
 		const offsetX = (containerWidth - width) / 2;
 

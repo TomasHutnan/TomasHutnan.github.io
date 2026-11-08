@@ -1,0 +1,374 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+import Section from "../../components/Section.astro";
+import { formatDateRange, formatMonthYear } from "../../utils/dates";
+import { getProjectHref } from "../../utils/projects";
+import { buildTimeline } from "../../utils/timeline";
+
+const projects = await getCollection("projects");
+const awards = await getCollection("awards");
+const { rows, years, plannedCount } = buildTimeline(projects, awards);
+
+const TYPES = [
+	{ type: "solo", label: "Solo" },
+	{ type: "team", label: "Team" },
+	{ type: "university", label: "University" },
+] as const;
+const typeLabel = (type: string) =>
+	TYPES.find((entry) => entry.type === type)?.label ?? type;
+
+// Tooltips near the right edge open leftwards so they stay on screen.
+const TOOLTIP_FLIP_AT = 62;
+---
+
+<Layout
+	pageTitle="Project timeline"
+	description="Tomáš Hutňan's projects on a timeline, from hackathon weekends to semester-long university work."
+>
+	<main class="page-container">
+		<Section
+			title="Timeline"
+			description="Every project by when it ran. Hackathons show as dots, longer work as bars."
+			headingLevel="h1"
+		>
+			<ul class="legend" aria-label="Legend">
+				{TYPES.map(({ type, label }) => (
+					<li>
+						<span class:list={["swatch", `type-${type}`]} />
+						{label}
+					</li>
+				))}
+				<li>
+					<span class="swatch-award" />
+					Award
+				</li>
+			</ul>
+
+			<div class="chart">
+				<div class="grid-lines" aria-hidden="true">
+					{years.map(({ year, at }, index) => (
+						<span class="year" style={`left: ${at}%`}>
+							{/* The closing line marks the end of the axis only. */}
+							{index < years.length - 1 && <span>{year}</span>}
+						</span>
+					))}
+				</div>
+
+				{rows.map(({ project, start, end, left, width, awards }) => (
+					<div class="row">
+						<a class="label" href={getProjectHref(project)}>
+							{project.data.title}
+						</a>
+						<div class="track">
+							<span
+								class:list={[
+									"bar",
+									`type-${project.data.type}`,
+									{ ongoing: !end },
+								]}
+								style={`left: ${left}%; width: ${width}%`}
+							/>
+							{awards.map(({ at }) => (
+								<span class="award" style={`left: ${at}%`} />
+							))}
+							<span
+								class:list={[
+									"tip",
+									{ "tip--end": left > TOOLTIP_FLIP_AT },
+								]}
+								style={`--at: ${left}%`}
+							>
+								<strong>{project.data.title}</strong>
+								<span>
+									{formatDateRange(start, end)} ·{" "}
+									{typeLabel(project.data.type)}
+								</span>
+								{awards.map(({ title }) => (
+									<span class="tip-award">{title}</span>
+								))}
+							</span>
+						</div>
+					</div>
+				))}
+			</div>
+
+			{plannedCount > 0 && (
+				<p class="note">
+					{plannedCount} planned project
+					{plannedCount === 1 ? "" : "s"} without a start date not
+					shown.
+				</p>
+			)}
+
+			<details class="table-view">
+				<summary>View as table</summary>
+				<table>
+					<thead>
+						<tr>
+							<th scope="col">Project</th>
+							<th scope="col">Type</th>
+							<th scope="col">Started</th>
+							<th scope="col">Finished</th>
+							<th scope="col">Awards</th>
+						</tr>
+					</thead>
+					<tbody>
+						{rows.map(({ project, start, end, awards }) => (
+							<tr>
+								<th scope="row">
+									<a href={getProjectHref(project)}>
+										{project.data.title}
+									</a>
+								</th>
+								<td>{typeLabel(project.data.type)}</td>
+								<td>{formatMonthYear(start)}</td>
+								<td>
+									{end ? formatMonthYear(end) : "In progress"}
+								</td>
+								<td>
+									{awards
+										.map(({ title }) => title)
+										.join(", ")}
+								</td>
+							</tr>
+						))}
+					</tbody>
+				</table>
+			</details>
+		</Section>
+	</main>
+</Layout>
+
+<style>
+	/* Validated for colour-vision deficiency against --bg-main. */
+	.type-solo {
+		--type-color: #0e9fb8;
+	}
+
+	.type-team {
+		--type-color: #8b5cf6;
+	}
+
+	.type-university {
+		--type-color: #d0661c;
+	}
+
+	.legend {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.4rem 1.2rem;
+		margin: 0 0 0.6rem;
+		padding: 0;
+		list-style: none;
+		color: var(--text-secondary);
+		font-size: 0.9rem;
+	}
+
+	.legend li {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.45rem;
+	}
+
+	.swatch {
+		width: 0.8rem;
+		height: 0.8rem;
+		border-radius: 4px;
+		background: var(--type-color);
+	}
+
+	.swatch-award,
+	.award {
+		width: 9px;
+		height: 9px;
+		background: var(--award);
+		transform: rotate(45deg);
+		box-shadow: 0 0 0 2px var(--bg-main);
+	}
+
+	.chart {
+		--label-width: 12rem;
+		position: relative;
+		display: grid;
+		grid-template-columns: var(--label-width) minmax(0, 1fr);
+		padding-bottom: 1.8rem;
+	}
+
+	.grid-lines {
+		position: absolute;
+		inset: 0 0 0 var(--label-width);
+		pointer-events: none;
+	}
+
+	.year {
+		position: absolute;
+		top: 0;
+		bottom: 1.4rem;
+		border-left: 1px solid var(--border);
+	}
+
+	.year span {
+		position: absolute;
+		bottom: -1.4rem;
+		transform: translateX(-50%);
+		color: var(--text-secondary);
+		font-size: 0.8rem;
+		font-variant-numeric: tabular-nums;
+	}
+
+	.row {
+		display: grid;
+		grid-column: 1 / -1;
+		grid-template-columns: subgrid;
+		align-items: center;
+		min-height: 2.1rem;
+	}
+
+	.row:hover,
+	.row:focus-within {
+		background: var(--primary-tint-faint);
+	}
+
+	.label {
+		overflow: hidden;
+		padding-right: 1rem;
+		color: var(--text-secondary);
+		font-size: 0.92rem;
+		text-decoration: none;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	.row:hover .label,
+	.label:focus-visible {
+		color: var(--text-main);
+	}
+
+	.track {
+		position: relative;
+		height: 2.1rem;
+	}
+
+	.bar {
+		position: absolute;
+		top: 50%;
+		min-width: 10px;
+		height: 10px;
+		border-radius: 5px;
+		background: var(--type-color);
+		transform: translateY(-50%);
+	}
+
+	/* Still running: fades out towards today. */
+	.bar.ongoing {
+		background: linear-gradient(90deg, var(--type-color) 60%, transparent);
+	}
+
+	/* Sits above the bar, so it never hides a one-weekend dot. */
+	.award {
+		position: absolute;
+		top: calc(50% - 13px);
+		margin-left: -4.5px;
+	}
+
+	.tip {
+		position: absolute;
+		bottom: calc(100% - 0.2rem);
+		left: var(--at);
+		z-index: 2;
+		display: none;
+		width: max-content;
+		max-width: 18rem;
+		padding: 0.55rem 0.75rem;
+		border: 1px solid var(--border);
+		border-radius: var(--radius-sm);
+		background: var(--bg-elevated);
+		box-shadow: var(--shadow-card);
+		color: var(--text-secondary);
+		font-size: 0.82rem;
+		line-height: 1.4;
+		pointer-events: none;
+	}
+
+	.tip--end {
+		left: auto;
+		right: calc(100% - var(--at) - 10px);
+	}
+
+	.row:hover .tip,
+	.row:focus-within .tip {
+		display: grid;
+	}
+
+	.tip strong {
+		color: var(--text-main);
+	}
+
+	.tip-award {
+		color: var(--award);
+	}
+
+	.note {
+		margin: 0;
+		color: var(--text-secondary);
+		font-size: 0.9rem;
+	}
+
+	.table-view summary {
+		color: var(--primary-soft);
+		font-weight: 600;
+		cursor: pointer;
+	}
+
+	table {
+		width: 100%;
+		margin-top: 1rem;
+		border-collapse: collapse;
+		font-size: 0.92rem;
+	}
+
+	th,
+	td {
+		padding: 0.5rem 0.75rem 0.5rem 0;
+		border-bottom: 1px solid var(--border);
+		text-align: left;
+		vertical-align: top;
+	}
+
+	thead th {
+		color: var(--text-secondary);
+		font-weight: 600;
+	}
+
+	tbody th {
+		font-weight: 500;
+	}
+
+	tbody a {
+		color: var(--text-main);
+		text-decoration: none;
+	}
+
+	td {
+		color: var(--text-secondary);
+	}
+
+	@media (max-width: 720px) {
+		.chart {
+			--label-width: 7.5rem;
+		}
+
+		.label {
+			font-size: 0.8rem;
+		}
+
+		.year span {
+			font-size: 0.7rem;
+		}
+
+		.table-view {
+			overflow-x: auto;
+		}
+	}
+</style>

@@ -23,6 +23,7 @@ Before pushing, run `npx prettier --check .`, `npm run lint` and `npm run typech
 - `src/pages`, `src/layouts`, `src/components`: routes and UI.
 - `src/scripts`: browser code for the project filter and gallery.
 - `src/utils`: shared logic for dates, tags, projects and awards.
+- `src/pages/og`: link-preview cards (1200×630 JPEG), drawn at build time by `src/utils/share-card.ts`. Pages pick theirs with `<Layout shareCard>`.
 - `public/media`: videos, which Astro's image pipeline can't process.
 
 ## Adding a project

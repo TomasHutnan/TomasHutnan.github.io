@@ -1,50 +1,69 @@
 ---
+import type { CollectionEntry } from "astro:content";
 import Section from "../Section.astro";
-import type { SkillGroup } from "../../data/home";
+import TagCloud from "../TagCloud.astro";
+import type { SkillLine } from "../../data/home";
+import { collectTagStats } from "../../utils/tags";
 
 interface Props {
-	groups: SkillGroup[];
+	projects: CollectionEntry<"projects">[];
+	lines: SkillLine[];
 }
 
-const { groups } = Astro.props;
+const { projects, lines } = Astro.props;
 ---
 
-<Section id="skills" title="Tools and domains I work in">
-	<div class="skills-grid">
-		{groups.map((group) => (
-			<article class="skill-card">
-				<h3>{group.title}</h3>
-				<ul>
-					{group.items.map((item) => (
-						<li>{item}</li>
-					))}
-				</ul>
-			</article>
+<Section
+	id="skills"
+	title="Tools and domains I work in"
+	description="Sized by how many of my projects use each one. Select a tag to see them."
+>
+	<TagCloud tags={collectTagStats(projects)} standalone />
+
+	<dl class="skill-lines">
+		{lines.map(({ label, items }) => (
+			<div>
+				<dt>{label}</dt>
+				<dd>{items.join(" · ")}</dd>
+			</div>
 		))}
-	</div>
+	</dl>
 </Section>
 
 <style>
-	.skills-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-		gap: 1rem;
-	}
-
-	.skill-card {
-		padding: 1.2rem;
-	}
-
-	.skill-card h3 {
-		margin: 0 0 0.85rem;
-		font-size: 1.05rem;
-	}
-
-	.skill-card ul {
-		margin: 0;
-		padding-left: 1.05rem;
-		display: grid;
-		gap: 0.45rem;
+	.skill-lines {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 0.4rem 2rem;
+		margin: 0.5rem 0 0;
 		color: var(--text-secondary);
+	}
+
+	.skill-lines div {
+		display: flex;
+		gap: 0.6rem;
+	}
+
+	.skill-lines dt {
+		color: var(--text-main);
+		font-weight: 600;
+	}
+
+	.skill-lines dd {
+		margin: 0;
+	}
+
+	@media (max-width: 480px) {
+		.skill-lines {
+			flex-direction: column;
+			align-items: center;
+			text-align: center;
+		}
+
+		.skill-lines div {
+			flex-direction: column;
+			gap: 0;
+		}
 	}
 </style>
