@@ -2,8 +2,8 @@
  * Packs the tag links into a cumulus-shaped cloud.
  *
  * The silhouette is a union of circles ("puffs") over a flat-bottomed body,
- * drawn in SVG with a blur-and-threshold filter that melts the circles into
- * one soft shape. Words are placed largest first along an elliptical spiral
+ * drawn in SVG as a halftone of dots, with a blur-and-threshold filter that
+ * melts the circles into one soft shape. Words are placed largest first along an elliptical spiral
  * from the cloud's centre, and each one must sit inside the circles (with a
  * margin) and clear every word placed before it. When a word doesn't fit, the
  * fonts shrink a little and, past a floor, the cloud grows taller instead.
@@ -34,6 +34,9 @@ const MAX_ATTEMPTS = 40;
 /** Spiral radius gained per radian, and distance between samples, in px. */
 const SPIRAL_GROWTH = 1.6;
 const SPIRAL_STRIDE = 3;
+/** Halftone grid spacing and dot radius, in px. */
+const DOT_SPACING = 11;
+const DOT_RADIUS = 1.6;
 
 export interface CloudWord {
 	element: HTMLElement;
@@ -347,74 +350,68 @@ function solve(words: Measured[], containerWidth: number, fontFamily: string) {
 	return null;
 }
 
+/**
+ * Draws the cloud as a halftone: a grid of dots shown through the silhouette,
+ * fading out towards the edges.
+ */
 function renderShape(svg: SVGSVGElement, shape: Shape) {
 	const height = shape.height.toFixed(1);
+	const { x: cx, y: cy } = shape.centre;
 	svg.setAttribute("viewBox", `0 0 ${VIEW_WIDTH} ${height}`);
 
-	const layer = (className: string, withBody: boolean, scale = 1) => {
-		const group = document.createElementNS(SVG_NS, "g");
-		group.setAttribute("class", className);
-		for (const puff of shape.puffs) {
-			const circle = document.createElementNS(SVG_NS, "circle");
-			circle.setAttribute("cx", puff.x.toFixed(1));
-			circle.setAttribute("cy", puff.y.toFixed(1));
-			circle.setAttribute("r", (puff.r * scale).toFixed(1));
-			group.append(circle);
-		}
-		if (withBody) {
-			const { body } = shape;
-			const rect = document.createElementNS(SVG_NS, "rect");
-			rect.setAttribute("x", body.x0.toFixed(1));
-			rect.setAttribute("y", body.y0.toFixed(1));
-			rect.setAttribute("width", (body.x1 - body.x0).toFixed(1));
-			rect.setAttribute("height", (body.y1 - body.y0).toFixed(1));
-			group.append(rect);
-		}
-		return group;
-	};
-
-	// Blur then sharpen the alpha: overlapping circles melt into one outline.
-	const goo = `
-		<feGaussianBlur in="SourceGraphic" stdDeviation="12" result="blur" />
-		<feColorMatrix in="blur" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 24 -10" result="goo" />`;
+	// The fade is an ellipse matching the cloud's proportions.
+	const fadeTransform = `translate(${cx.toFixed(1)} ${cy.toFixed(1)}) scale(1 ${(1 / shape.aspect).toFixed(3)}) translate(${(-cx).toFixed(1)} ${(-cy).toFixed(1)})`;
 
 	svg.innerHTML = `
 		<defs>
-			<linearGradient id="cloud-fill" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="${height}">
-				<stop offset="0" style="stop-color: var(--cloud-top)" />
-				<stop offset="1" style="stop-color: var(--cloud-bottom)" />
-			</linearGradient>
-			<radialGradient id="cloud-puff" cx="0.44" cy="0.36" r="0.5">
-				<stop offset="0" style="stop-color: var(--cloud-light)" />
-				<stop offset="0.45" style="stop-color: var(--cloud-light); stop-opacity: 0.55" />
-				<stop offset="1" style="stop-color: var(--cloud-light); stop-opacity: 0" />
+			<filter id="cloud-goo" x="-10%" y="-20%" width="120%" height="140%">
+				<feGaussianBlur in="SourceGraphic" stdDeviation="12" result="blur" />
+				<feColorMatrix in="blur" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 24 -10" />
+			</filter>
+			<radialGradient id="cloud-fade" gradientUnits="userSpaceOnUse" cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${VIEW_WIDTH / 2}" gradientTransform="${fadeTransform}">
+				<stop offset="0" stop-color="#fff" />
+				<stop offset="0.6" stop-color="#888" />
+				<stop offset="1" stop-color="#333" />
 			</radialGradient>
-			<filter id="cloud-goo" x="-10%" y="-20%" width="120%" height="140%">${goo}</filter>
-			<filter id="cloud-rim" x="-10%" y="-20%" width="120%" height="140%">${goo}
-				<feMorphology in="goo" operator="erode" radius="3" result="eroded" />
-				<feComposite in="goo" in2="eroded" operator="out" result="outline" />
-				<feComponentTransfer in="outline" result="faint">
-					<feFuncA type="linear" slope="0.4" />
-				</feComponentTransfer>
-				<feOffset in="goo" dy="8" result="shifted" />
-				<feComposite in="goo" in2="shifted" operator="out" result="lit" />
-				<feMerge result="rim">
-					<feMergeNode in="faint" />
-					<feMergeNode in="lit" />
-				</feMerge>
-				<feGaussianBlur in="rim" stdDeviation="1.6" />
-			</filter>
-			<filter id="cloud-glow" x="-20%" y="-40%" width="140%" height="180%">
-				<feGaussianBlur in="SourceGraphic" stdDeviation="40" />
-			</filter>
-		</defs>`;
-	svg.append(
-		layer("cloud-glow", true),
-		layer("cloud-body", true),
-		// Each puff catches light on its upper side, which gives the volume.
-		layer("cloud-light", false, 0.92),
-		layer("cloud-rim", true),
-	);
+			<pattern id="cloud-dots" patternUnits="userSpaceOnUse" width="11" height="11">
+				<circle class="cloud-dot" cx="5.5" cy="5.5" r="1.7" />
+			</pattern>
+			<mask id="cloud-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="${VIEW_WIDTH}" height="${height}"></mask>
+		</defs>
+		<rect class="cloud-halftone" width="${VIEW_WIDTH}" height="${height}" fill="url(#cloud-dots)" mask="url(#cloud-mask)" />`;
+
+	// The mask is the silhouette: circles and body, blurred then sharpened
+	// so they melt into one outline, and shaded by the fade.
+	const silhouette = document.createElementNS(SVG_NS, "g");
+	silhouette.setAttribute("fill", "url(#cloud-fade)");
+	silhouette.setAttribute("filter", "url(#cloud-goo)");
+	for (const puff of shape.puffs) {
+		const circle = document.createElementNS(SVG_NS, "circle");
+		circle.setAttribute("cx", puff.x.toFixed(1));
+		circle.setAttribute("cy", puff.y.toFixed(1));
+		circle.setAttribute("r", puff.r.toFixed(1));
+		silhouette.append(circle);
+	}
+	const { body } = shape;
+	const rect = document.createElementNS(SVG_NS, "rect");
+	rect.setAttribute("x", body.x0.toFixed(1));
+	rect.setAttribute("y", body.y0.toFixed(1));
+	rect.setAttribute("width", (body.x1 - body.x0).toFixed(1));
+	rect.setAttribute("height", (body.y1 - body.y0).toFixed(1));
+	silhouette.append(rect);
+	svg.querySelector("#cloud-mask")?.append(silhouette);
+}
+
+/** Keeps the dots the same size on screen whatever the cloud's width. */
+function setDotSpacing(svg: SVGSVGElement, width: number) {
+	const spacing = (DOT_SPACING * VIEW_WIDTH) / width;
+	const pattern = svg.querySelector("#cloud-dots");
+	const dot = pattern?.querySelector("circle");
+	pattern?.setAttribute("width", spacing.toFixed(2));
+	pattern?.setAttribute("height", spacing.toFixed(2));
+	dot?.setAttribute("cx", (spacing / 2).toFixed(2));
+	dot?.setAttribute("cy", (spacing / 2).toFixed(2));
+	dot?.setAttribute("r", ((DOT_RADIUS * VIEW_WIDTH) / width).toFixed(2));
 }
 
 export function createTagCloud(container: HTMLElement) {
@@ -465,6 +462,7 @@ export function createTagCloud(container: HTMLElement) {
 			renderShape(svg, shape);
 			lastAspect = shape.aspect;
 		}
+		setDotSpacing(svg, width);
 		svg.style.width = `${width}px`;
 		svg.style.height = `${height}px`;
 		svg.style.transform = `translateX(${offsetX}px)`;

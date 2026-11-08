@@ -120,14 +120,6 @@ const maxTagCount = tagStats[0]?.count ?? 1;
 
 	/* Cloud mode, switched on by scripts/tag-cloud.ts once words are placed. */
 
-	.tag-cloud {
-		--cloud-top: rgba(203, 213, 225, 0.1);
-		--cloud-bottom: rgba(56, 189, 248, 0.06);
-		--cloud-light: rgba(226, 232, 240, 0.07);
-		--cloud-rim: rgba(103, 232, 249, 0.5);
-		--cloud-glow: rgba(34, 211, 238, 0.08);
-	}
-
 	.tag-cloud.is-cloud {
 		position: relative;
 		display: block;
@@ -151,7 +143,7 @@ const maxTagCount = tagStats[0]?.count ?? 1;
 		overflow: visible;
 		pointer-events: none;
 		/* Its own layer, so the drift moves pixels instead of re-running the
-		   blur filters every frame. */
+		   blur filter and mask every frame. */
 		will-change: translate;
 		animation: cloud-drift 11s ease-in-out infinite;
 	}
@@ -163,24 +155,12 @@ const maxTagCount = tagStats[0]?.count ?? 1;
 			transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
 	}
 
-	.tag-cloud :global(.cloud-body) {
-		fill: url(#cloud-fill);
-		filter: url(#cloud-goo);
+	.tag-cloud :global(.cloud-dot) {
+		fill: var(--primary-soft);
 	}
 
-	.tag-cloud :global(.cloud-rim) {
-		fill: var(--cloud-rim);
-		filter: url(#cloud-rim);
-		opacity: 0.5;
-	}
-
-	.tag-cloud :global(.cloud-light) {
-		fill: url(#cloud-puff);
-	}
-
-	.tag-cloud :global(.cloud-glow) {
-		fill: var(--cloud-glow);
-		filter: url(#cloud-glow);
+	.tag-cloud :global(.cloud-halftone) {
+		opacity: 0.4;
 	}
 
 	@keyframes cloud-drift {
