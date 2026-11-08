@@ -35,8 +35,11 @@ const links = [
 		margin: 0 auto;
 		padding: 0.85rem var(--page-gutter);
 		display: flex;
+		/* Narrow phones put the links on a second row rather than scroll. */
+		flex-wrap: wrap;
 		align-items: center;
 		justify-content: space-between;
+		gap: 0.5rem 1rem;
 	}
 
 	.nav-logo {
@@ -56,6 +59,12 @@ const links = [
 		display: flex;
 		align-items: center;
 		gap: 1.6rem;
+	}
+
+	@media (max-width: 480px) {
+		.nav-links {
+			gap: 1.1rem;
+		}
 	}
 
 	.nav-link {
