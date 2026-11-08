@@ -1,0 +1,160 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Section from "../components/Section.astro";
+import ArchitectureDiagram from "../components/homelab/ArchitectureDiagram.astro";
+import { homelabIntro, homelabPractices, services } from "../data/homelab";
+
+const groups = [
+	{
+		id: "apps",
+		title: "Apps",
+		note: "What I use day to day.",
+	},
+	{
+		id: "admin",
+		title: "Admin",
+		note: "Tools that can control the server or hold my documents. Private, so not linked.",
+	},
+] as const;
+---
+
+<Layout
+	pageTitle="Homelab"
+	description="The self-hosted services Tomáš Hutňan runs on his own server, and how they fit together."
+>
+	<main class="page-container homelab">
+		<Section title="Homelab" description={homelabIntro} headingLevel="h1">
+			<ArchitectureDiagram services={services} />
+		</Section>
+
+		<Section title="How it's run">
+			<ul class="practices">
+				{homelabPractices.map(({ title, text }) => (
+					<li>
+						<h3>{title}</h3>
+						<p>{text}</p>
+					</li>
+				))}
+			</ul>
+		</Section>
+
+		{groups.map(({ id, title, note }) => (
+			<Section title={title} description={note}>
+				<ul class="services">
+					{services
+						.filter((service) => service.group === id)
+						.map((service) => (
+							<li
+								id={`service-${service.id}`}
+								class="service-card"
+							>
+								<div class="service-head">
+									<h3>{service.name}</h3>
+									<span class="service-role">
+										{service.role}
+									</span>
+								</div>
+								<p>{service.description}</p>
+								{service.href ? (
+									<a class="service-link" href={service.href}>
+										{new URL(service.href).host} ↗
+									</a>
+								) : (
+									id === "admin" && (
+										<span class="service-private">
+											Private
+										</span>
+									)
+								)}
+							</li>
+						))}
+				</ul>
+			</Section>
+		))}
+	</main>
+</Layout>
+
+<style>
+	.homelab {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr);
+		gap: 2.6rem;
+	}
+
+	.practices,
+	.services {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+		gap: 1rem;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.practices h3,
+	.service-head h3 {
+		margin: 0;
+		font-size: 1.02rem;
+	}
+
+	.practices p,
+	.service-card p {
+		margin: 0.45rem 0 0;
+		color: var(--text-secondary);
+		line-height: 1.55;
+	}
+
+	.service-card {
+		display: flex;
+		flex-direction: column;
+		padding: 1.1rem 1.2rem;
+		border: 1px solid var(--border);
+		border-radius: var(--radius-md);
+		background: var(--card-gradient);
+		/* Clears the sticky navbar when a diagram node links here. */
+		scroll-margin-top: 6rem;
+		transition:
+			border-color 200ms ease,
+			box-shadow 200ms ease;
+	}
+
+	.service-card:target {
+		border-color: var(--primary-line);
+		box-shadow: 0 0 0 4px var(--primary-tint-faint);
+	}
+
+	.service-head {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 0.2rem 0.8rem;
+	}
+
+	.service-role {
+		color: var(--primary-soft);
+		font-size: 0.82rem;
+		font-weight: 600;
+	}
+
+	.service-link,
+	.service-private {
+		margin-top: auto;
+		padding-top: 0.9rem;
+		font-size: 0.88rem;
+		font-weight: 600;
+	}
+
+	.service-link {
+		color: var(--primary-soft);
+		text-decoration: none;
+	}
+
+	.service-link:hover {
+		color: var(--primary);
+	}
+
+	.service-private {
+		color: var(--text-secondary);
+	}
+</style>
