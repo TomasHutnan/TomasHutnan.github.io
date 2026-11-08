@@ -19,8 +19,8 @@ gallery:
       alt: Six charts comparing the food clusters, including t-SNE, silhouette and macronutrient plots.
 
 role: Data Scientist
-shortRoleDescription: Grouped 10,000+ USDA ingredients into interpretable dietary categories by comparing clustering methods.
-contribution: Prepared the data with log transforms, scaling and Atwater validation, engineered nutrient-ratio features, reduced dimensions with t-SNE and UMAP, and compared DBSCAN, HDBSCAN and K-Means to choose the final clustering.
+shortRoleDescription: Built the K-Means clustering and subclustering that grouped 10,000+ USDA ingredients into dietary categories.
+contribution: Worked side by side with Eva Hatalčíková on preprocessing and feature engineering, then built the K-Means clustering and subclustering on my own while she explored DBSCAN and HDBSCAN. Together we combined the results into one report and presentation.
 
 collaborators:
     - Eva Hatalčíková
