@@ -168,7 +168,9 @@ function initProjectFilter(
 			writeSelectedToUrl(selected);
 			sync(selected);
 		},
-		{ signal },
+		// Capture runs before the client router's own click handler, which
+		// would otherwise turn a filter click into a page navigation.
+		{ signal, capture: true },
 	);
 
 	clearButton.addEventListener("click", () => {

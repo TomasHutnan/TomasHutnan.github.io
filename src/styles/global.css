@@ -155,13 +155,13 @@ a {
  * transition, which Firefox supports too (unlike cross-document ones).
  */
 ::view-transition-group(*) {
-	animation-duration: 380ms;
+	animation-duration: 280ms;
 	animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 ::view-transition-old(root),
 ::view-transition-new(root) {
-	animation-duration: 220ms;
+	animation-duration: 160ms;
 }
 
 /* The router still runs a transition, so switch off what it would animate. */

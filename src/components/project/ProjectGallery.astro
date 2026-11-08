@@ -55,6 +55,7 @@ const hasImages = items.some((item) => item.kind === "image");
 	<div
 		class="stage"
 		style={transitionName && `view-transition-name: ${transitionName}`}
+		data-cover-transition={transitionName}
 	>
 		<ul class="slides" data-slides tabindex="0">
 			{slides.map(

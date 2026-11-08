@@ -63,5 +63,8 @@ const socialImageUrl = new URL(getShareCardPath(shareCard), Astro.site);
 		<Navbar />
 		<slot />
 		<Footer />
+		<script>
+			import "../scripts/cover-transition";
+		</script>
 	</body>
 </html>
