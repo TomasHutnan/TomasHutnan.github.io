@@ -83,7 +83,7 @@ const groups = [
 
 		<Section
 			title="Off the server"
-			description="Under the same domain, but hosted elsewhere."
+			description="Part of the setup, but hosted elsewhere."
 		>
 			<ul class="services">
 				{externalServices.map(({ name, role, address, href, host }) => (
@@ -122,6 +122,10 @@ const groups = [
 		margin: 0;
 		padding: 0;
 		list-style: none;
+	}
+
+	.practices {
+		grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
 	}
 
 	.practices h3,

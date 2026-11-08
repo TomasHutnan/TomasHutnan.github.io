@@ -25,7 +25,7 @@ export interface ExternalService {
 }
 
 export const homelabIntro =
-	"The services I run for myself on one small Hetzner VPS under hutnan.dev. Everything is a Docker Compose stack, and everything public sits behind a single Caddy proxy.";
+	"The services I run for myself under hutnan.dev, on one small Hetzner VPS in the EU, because where my data is stored matters to me. Everything is a Docker Compose stack, and everything public sits behind a single Caddy proxy.";
 
 export const services: Service[] = [
 	{
@@ -33,7 +33,7 @@ export const services: Service[] = [
 		name: "Forgejo",
 		role: "Git hosting",
 		description:
-			"Self-hosted Git forge for private repositories, mirrors and experiments that don't belong on GitHub.",
+			"Holds my Obsidian vault, one of the most personal things I own. It's mostly plain text and I want its full history, so it belongs in Git, just not on a public Git host.",
 		access: "public",
 		subdomain: "git",
 	},
@@ -42,7 +42,7 @@ export const services: Service[] = [
 		name: "Live",
 		role: "Live presentations",
 		description:
-			"My own service for teaching from Quarto reveal.js decks: students follow on their own screens, I draw on the slides, and the room asks questions.",
+			"My own service for teaching from Quarto reveal.js decks: students type the session code on its home page, follow on their own screens and ask questions while I draw on the slides.",
 		access: "public",
 		subdomain: "live",
 	},
@@ -51,7 +51,7 @@ export const services: Service[] = [
 		name: "Seafile",
 		role: "Files and drive",
 		description:
-			"File sync and sharing across my devices, in place of a commercial cloud drive.",
+			"My Google Drive replacement for whatever doesn't fit Paperless or Git: school presentations, PDF assignments, large binaries and the sheets for shared finances and split bills. Nextcloud was far more than I needed.",
 		access: "public",
 		subdomain: "drive",
 	},
@@ -60,7 +60,7 @@ export const services: Service[] = [
 		name: "SearXNG",
 		role: "Metasearch engine",
 		description:
-			"Private search that queries several engines at once, without tracking or ads.",
+			"The default search on my laptop, iPad and GrapheneOS phone. It queries several engines at once, without tracking or ads.",
 		access: "public",
 		subdomain: "search",
 	},
@@ -69,7 +69,7 @@ export const services: Service[] = [
 		name: "Vaultwarden",
 		role: "Passwords",
 		description:
-			"A lightweight Bitwarden-compatible server. The official Bitwarden apps encrypt the vault on my devices and sync it here, so the server only ever stores ciphertext.",
+			"Replaced years of Firefox's built-in passwords, which always felt too exposed. The official Bitwarden apps encrypt the vault on my devices, so the server only ever stores ciphertext.",
 		access: "public",
 		subdomain: "vault",
 	},
@@ -78,7 +78,7 @@ export const services: Service[] = [
 		name: "Xandikos",
 		role: "Contacts and calendar sync",
 		description:
-			"A small CardDAV and CalDAV server that keeps contacts and calendars in sync across phone and laptop.",
+			"CardDAV and CalDAV for one person, with no accounts to create or secure. Thunderbird syncs it on my laptop; DAVx⁵, Fossify Calendar and the contacts app on my phone.",
 		access: "public",
 		subdomain: "dav",
 		browsable: false,
@@ -88,7 +88,7 @@ export const services: Service[] = [
 		name: "Paperless-ngx",
 		role: "Document archive",
 		description:
-			"Scanned letters and documents, OCR'd, tagged and searchable.",
+			"Every important document, uploaded and tagged through its web interface and OCR'd locally so it's searchable. That OCR is also the server's biggest CPU spike.",
 		access: "tailscale",
 	},
 	{
@@ -96,7 +96,7 @@ export const services: Service[] = [
 		name: "Dockge",
 		role: "Stack manager",
 		description:
-			"A web UI over the Compose files: start, stop, update and edit each stack.",
+			"A web UI over the Compose files, and where I review and apply every update. It does what I need from Portainer without the heavier UI or Kubernetes support.",
 		access: "tailscale",
 	},
 	{
@@ -104,7 +104,7 @@ export const services: Service[] = [
 		name: "Glances",
 		role: "System metrics",
 		description:
-			"Live CPU, memory, disk and container usage for the server.",
+			"CPU, memory, disk and container usage. Lately it shows the server filling up.",
 		access: "tailscale",
 	},
 ];
@@ -125,6 +125,12 @@ export const externalServices: ExternalService[] = [
 		host: "GitHub Pages",
 	},
 	{
+		name: "Domain and backups",
+		role: "Registrar and storage",
+		address: "R2 object storage",
+		host: "Cloudflare",
+	},
+	{
 		name: "Mail",
 		role: "Email",
 		address: "tomas@hutnan.dev",
@@ -142,19 +148,27 @@ export function getServiceUrl(service: Service) {
 /** How the pieces fit together, shown under the diagram. */
 export const homelabPractices = [
 	{
+		title: "Lean on purpose",
+		text: "Each service is the lightest tool that does the job. That keeps the attack surface small enough to reason about, and fits everything on a budget VPS.",
+	},
+	{
 		title: "One proxy, configured by labels",
-		text: "Caddy runs with caddy-docker-proxy. Every public stack joins one Docker network, web, and declares its domain in Compose labels; Caddy picks it up and serves it over HTTPS with automatic certificates.",
+		text: "Caddy runs with caddy-docker-proxy. Every public stack joins one Docker network, web, and declares its domain in Compose labels; Caddy serves it over HTTPS with automatic certificates. The same labels feed a Homepage dashboard, so a new stack gets its tile automatically.",
 	},
 	{
-		title: "Admin tools off the internet",
-		text: "Paperless, Dockge and Glances are reachable only over Tailscale, from my own devices.",
+		title: "Admin off the internet, nothing hidden",
+		text: "Paperless, Dockge and Glances are reachable only over Tailscale. The rest is listed here on purpose: each service has its own strong password, and nothing depends on an address staying secret.",
 	},
 	{
-		title: "Not relying on obscurity",
-		text: "Listing everything here is deliberate. Each service has its own strong password, and nothing depends on an address staying secret.",
+		title: "Backups off the box",
+		text: "restic pushes the data and the Compose files to Cloudflare R2 object storage.",
 	},
 	{
-		title: "Dashboard from the same labels",
-		text: "A Homepage dashboard lists the services, grouped from the same Compose labels, so adding a stack adds its tile.",
+		title: "Updates by hand",
+		text: "I review and apply container updates in Dockge, and update the server myself, only when I have time to fix whatever breaks. Nothing updates on its own, so a key service never breaks at a bad moment.",
+	},
+	{
+		title: "What's next",
+		text: "Glances shows the server filling up, and Paperless spikes the CPU while it OCRs an upload. The likely next step is a second VPS that runs only the core services.",
 	},
 ];
