@@ -23,14 +23,14 @@ gallery:
     - image: ../../assets/projects/live/questions.webp
       alt: The projected question board, listing five audience questions in Slovak, ordered by their votes.
     - image: ../../assets/projects/live/join.webp
-      alt: The projected join screen, a large QR code beside "Pripojte sa a pýtajte sa" and the short link live.hutnan.dev/pb016.
+      alt: The projected join screen, a large QR code beside "Pripojte sa a pýtajte sa" and the short link live.hutnan.dev/ib111.
 
 role: Full-Stack Developer
 shortRoleDescription: Designed and built a realtime presenting service, from the WebSocket protocol to the container it ships in.
 contribution: Built it alone, from the WebSocket protocol, outbox and SQLite storage to the presenter controls, the viewer, the offline export and the hardened container image, with unit and end-to-end tests throughout.
 ---
 
-Live is the service I use to teach seminars at Masaryk University. I upload a Quarto reveal.js deck, share a link, and present from a password-protected page while drawing on the slides. Students follow on their own screens slide by slide and step by step, and ask questions that the rest of the room can vote up. Afterwards the annotated deck downloads as a single HTML file that works offline.
+Live is the service I use to teach seminars at Masaryk University. I upload a Quarto reveal.js deck, share a short link like live.hutnan.dev/ib111 (or students type the code on the home page), and present from a password-protected page while drawing on the slides. Students follow on their own screens slide by slide and step by step, and ask questions that the rest of the room can vote up. Afterwards the annotated deck downloads as a single HTML file that works offline.
 
 Ink belongs to the slide and step it was drawn on, so it hides when the presenter steps back and returns when they step forward. A Wi-Fi drop loses nothing: strokes, moves and questions wait in an outbox until the server acknowledges them, and every message is idempotent, so a resend after reconnecting can't duplicate or revive anything. Live strokes stream as best-effort previews, and the finished stroke is what's stored.
 
