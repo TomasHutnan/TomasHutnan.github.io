@@ -29,10 +29,22 @@ export const highlights = [
 export const location =
 	"Brno, Czechia during the semester, originally from Košice, Slovakia";
 
-export const spokenLanguages = [
-	"English (C1/C2)",
-	"German (A1/A2)",
-	"Slovak (Native)",
+export interface SkillLine {
+	label: string;
+	items: string[];
+}
+
+/**
+ * Lines under the home tag cloud. Tools used everywhere don't belong on any
+ * one project, so they would never show in a cloud built from project tags.
+ */
+export const skillLines: SkillLine[] = [
+	{ label: "Every day", items: ["Linux", "Git"] },
+	{ label: "Also", items: ["OpenCV"] },
+	{
+		label: "Languages",
+		items: ["English (C1/C2)", "German (A1/A2)", "Slovak (Native)"],
+	},
 ];
 
 export const experienceEntries: ExperienceEntry[] = [

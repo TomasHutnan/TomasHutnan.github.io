@@ -2,14 +2,15 @@
 import type { CollectionEntry } from "astro:content";
 import Section from "../Section.astro";
 import TagCloud from "../TagCloud.astro";
+import type { SkillLine } from "../../data/home";
 import { collectTagStats } from "../../utils/tags";
 
 interface Props {
 	projects: CollectionEntry<"projects">[];
-	languages: string[];
+	lines: SkillLine[];
 }
 
-const { projects, languages } = Astro.props;
+const { projects, lines } = Astro.props;
 ---
 
 <Section
@@ -19,22 +20,50 @@ const { projects, languages } = Astro.props;
 >
 	<TagCloud tags={collectTagStats(projects)} standalone />
 
-	<p class="languages">
-		<span>Languages</span>
-		{languages.join(" · ")}
-	</p>
+	<dl class="skill-lines">
+		{lines.map(({ label, items }) => (
+			<div>
+				<dt>{label}</dt>
+				<dd>{items.join(" · ")}</dd>
+			</div>
+		))}
+	</dl>
 </Section>
 
 <style>
-	.languages {
+	.skill-lines {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 0.4rem 2rem;
 		margin: 0.5rem 0 0;
 		color: var(--text-secondary);
-		text-align: center;
 	}
 
-	.languages span {
-		margin-right: 0.6rem;
+	.skill-lines div {
+		display: flex;
+		gap: 0.6rem;
+	}
+
+	.skill-lines dt {
 		color: var(--text-main);
 		font-weight: 600;
+	}
+
+	.skill-lines dd {
+		margin: 0;
+	}
+
+	@media (max-width: 480px) {
+		.skill-lines {
+			flex-direction: column;
+			align-items: center;
+			text-align: center;
+		}
+
+		.skill-lines div {
+			flex-direction: column;
+			gap: 0;
+		}
 	}
 </style>
