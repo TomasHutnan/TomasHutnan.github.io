@@ -8,8 +8,8 @@ const SITE = "hutnan.dev";
 const CARD_TAGS = 3;
 
 /**
- * Share cards, generated at build time: /og/default.png for most pages,
- * /og/projects.png for the project list, and one per project.
+ * Share cards, generated at build time: /og/default.jpg for most pages,
+ * /og/projects.jpg for the project list, and one per project.
  */
 export const getStaticPaths = (async () => {
 	const projects = await getCollection("projects");
@@ -61,8 +61,8 @@ export const getStaticPaths = (async () => {
 }) satisfies GetStaticPaths;
 
 export const GET: APIRoute = async ({ props }) => {
-	const png = await renderCard(props as CardContent);
-	return new Response(new Uint8Array(png), {
-		headers: { "Content-Type": "image/png" },
+	const jpeg = await renderCard(props as CardContent);
+	return new Response(new Uint8Array(jpeg), {
+		headers: { "Content-Type": "image/jpeg" },
 	});
 };

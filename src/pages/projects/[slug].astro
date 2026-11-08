@@ -49,7 +49,11 @@ const dateRange = formatDateRange(startedAt, completedAt);
 const galleryItems = getGalleryItems(project);
 ---
 
-<Layout pageTitle={title} description={description} shareImage={cover}>
+<Layout
+	pageTitle={title}
+	description={description}
+	shareCard={`projects/${project.id}`}
+>
 	<main class="page-container">
 		<article>
 			<header>

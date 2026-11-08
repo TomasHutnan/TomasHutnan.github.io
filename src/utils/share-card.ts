@@ -253,12 +253,17 @@ export async function renderCard(content: CardContent): Promise<Buffer> {
 		height: CARD_HEIGHT,
 		fonts: await loadFonts(),
 	});
-	return new Resvg(svg, { fitTo: { mode: "width", value: CARD_WIDTH } })
+	const png = new Resvg(svg, {
+		fitTo: { mode: "width", value: CARD_WIDTH },
+	})
 		.render()
 		.asPng();
+	// JPEG: share scrapers handle it most reliably, and photo covers come
+	// out a fraction of the PNG size.
+	return sharp(png).jpeg({ quality: 88, mozjpeg: true }).toBuffer();
 }
 
 /** The card's URL for a page: "default", "projects" or "projects/<id>". */
 export function getShareCardPath(slug: string): string {
-	return `/og/${slug}.png`;
+	return `/og/${slug}.jpg`;
 }
