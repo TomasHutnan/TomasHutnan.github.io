@@ -10,9 +10,14 @@ import {
 interface Props {
 	/** Sorted by count, most used first. */
 	tags: TagStat[];
+	/**
+	 * Lays itself out, for clouds that only link to the projects page. The
+	 * projects page leaves this off because its filter drives the cloud.
+	 */
+	standalone?: boolean;
 }
 
-const { tags } = Astro.props;
+const { tags, standalone = false } = Astro.props;
 const maxTagCount = tags[0]?.count ?? 1;
 ---
 
@@ -20,7 +25,11 @@ const maxTagCount = tags[0]?.count ?? 1;
 	Without JavaScript this is a wrapped list of links. scripts/tag-cloud.ts
 	packs the links into a cloud shape and adds the is-cloud class.
 -->
-<div class="tag-cloud" data-tag-cloud>
+<div
+	class="tag-cloud"
+	data-tag-cloud
+	data-tag-cloud-static={standalone || undefined}
+>
 	{tags.map(({ slug, label, count }) => (
 		<a
 			class:list={["tag-box", { "tag-box--strong": isStrongTag(count) }]}
@@ -34,6 +43,10 @@ const maxTagCount = tags[0]?.count ?? 1;
 		</a>
 	))}
 </div>
+
+<script>
+	import "../scripts/tag-cloud-static";
+</script>
 
 <style>
 	.tag-cloud {
