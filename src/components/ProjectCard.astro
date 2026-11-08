@@ -1,7 +1,7 @@
 ---
 import { getEntries, type CollectionEntry } from "astro:content";
 import { Image } from "astro:assets";
-import { getProjectHref } from "../utils/projects";
+import { getProjectHref, getCoverTransitionName } from "../utils/projects";
 import ProjectLinks from "./project/ProjectLinks.astro";
 import TagList from "./TagList.astro";
 import AwardIcon from "../assets/icons/award.svg";
@@ -15,6 +15,7 @@ const MAX_VISIBLE_TAGS = 3;
 const { project } = Astro.props;
 const { title, cover, role, type, description, tags } = project.data;
 
+const coverTransition = getCoverTransitionName(project);
 const awards = project.data.awards ? await getEntries(project.data.awards) : [];
 const [topAward, ...otherAwards] = awards;
 const otherAwardTitles = otherAwards
@@ -29,6 +30,7 @@ const otherAwardTitles = otherAwards
 		alt=""
 		widths={[320, 480, 640, 800]}
 		sizes="(max-width: 600px) 100vw, (max-width: 1000px) 50vw, 280px"
+		style={`view-transition-name: ${coverTransition}`}
 	/>
 
 	<div class="project-copy">
