@@ -1,5 +1,6 @@
 import type { SearchEntry } from "../utils/search-index";
 import { normalize, prepare, search } from "./search-match";
+import { onPageLoad } from "./page";
 
 const GROUP_LABELS: Record<SearchEntry["kind"], string> = {
 	page: "Pages",
@@ -44,7 +45,11 @@ function highlight(text: string, terms: string[]): DocumentFragment {
 	return fragment;
 }
 
-function initSearch(dialog: HTMLDialogElement, indexJson: string) {
+function initSearch(
+	dialog: HTMLDialogElement,
+	indexJson: string,
+	signal: AbortSignal,
+) {
 	const input = dialog.querySelector<HTMLInputElement>("[data-search-input]");
 	const list = dialog.querySelector<HTMLUListElement>(
 		"[data-search-results]",
@@ -150,39 +155,47 @@ function initSearch(dialog: HTMLDialogElement, indexJson: string) {
 		if (event.target === dialog) dialog.close();
 	});
 
-	document.addEventListener("keydown", (event) => {
-		const target = event.target as HTMLElement;
-		const typing =
-			target.isContentEditable ||
-			["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName);
+	document.addEventListener(
+		"keydown",
+		(event) => {
+			const target = event.target as HTMLElement;
+			const typing =
+				target.isContentEditable ||
+				["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName);
 
-		if (
-			(event.metaKey || event.ctrlKey) &&
-			event.key.toLowerCase() === "k"
-		) {
-			event.preventDefault();
-			if (dialog.open) dialog.close();
-			else open();
-		} else if (event.key === "/" && !typing && !dialog.open) {
-			event.preventDefault();
-			open();
-		}
-	});
+			if (
+				(event.metaKey || event.ctrlKey) &&
+				event.key.toLowerCase() === "k"
+			) {
+				event.preventDefault();
+				if (dialog.open) dialog.close();
+				else open();
+			} else if (event.key === "/" && !typing && !dialog.open) {
+				event.preventDefault();
+				open();
+			}
+		},
+		{ signal },
+	);
 
 	for (const trigger of document.querySelectorAll("[data-search-open]")) {
 		trigger.addEventListener("click", open);
 	}
 }
 
-// The button shows Ctrl K until it knows it's on a Mac.
-if (/Mac|iPhone|iPad/.test(navigator.platform)) {
-	for (const shortcut of document.querySelectorAll(
-		"[data-search-shortcut]",
-	)) {
-		shortcut.textContent = "⌘K";
+onPageLoad((signal) => {
+	// The button shows Ctrl K until it knows it's on a Mac.
+	if (/Mac|iPhone|iPad/.test(navigator.platform)) {
+		for (const shortcut of document.querySelectorAll(
+			"[data-search-shortcut]",
+		)) {
+			shortcut.textContent = "⌘K";
+		}
 	}
-}
 
-const dialog = document.querySelector<HTMLDialogElement>("[data-search]");
-const indexJson = document.querySelector("[data-search-index]")?.textContent;
-if (dialog && indexJson) initSearch(dialog, indexJson);
+	const dialog = document.querySelector<HTMLDialogElement>("[data-search]");
+	const indexJson = document.querySelector(
+		"[data-search-index]",
+	)?.textContent;
+	if (dialog && indexJson) initSearch(dialog, indexJson, signal);
+});

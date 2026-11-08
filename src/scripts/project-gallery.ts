@@ -1,4 +1,5 @@
 import { createLightbox, isPlainLeftClick } from "./lightbox";
+import { onPageLoad } from "./page";
 
 const SWITCH_THRESHOLD = 0.6;
 
@@ -153,4 +154,8 @@ function initGallery(gallery: HTMLElement) {
 	setActive(0);
 }
 
-document.querySelectorAll<HTMLElement>("[data-gallery]").forEach(initGallery);
+onPageLoad(() => {
+	document
+		.querySelectorAll<HTMLElement>("[data-gallery]")
+		.forEach(initGallery);
+});

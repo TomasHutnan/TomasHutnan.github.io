@@ -1,5 +1,8 @@
 import { createLightbox } from "./lightbox";
+import { onPageLoad } from "./page";
 
-document
-	.querySelectorAll<HTMLElement>("[data-award-photos]")
-	.forEach((root) => createLightbox(root));
+onPageLoad(() => {
+	document
+		.querySelectorAll<HTMLElement>("[data-award-photos]")
+		.forEach((root) => createLightbox(root));
+});

@@ -449,7 +449,7 @@ function setDotSpacing(svg: SVGSVGElement, width: number) {
 	dot?.setAttribute("r", ((DOT_RADIUS * VIEW_WIDTH) / width).toFixed(2));
 }
 
-export function createTagCloud(container: HTMLElement) {
+export function createTagCloud(container: HTMLElement, signal?: AbortSignal) {
 	const svg = document.createElementNS(SVG_NS, "svg");
 	svg.setAttribute("class", "tag-cloud-shape");
 	svg.setAttribute("aria-hidden", "true");
@@ -527,9 +527,14 @@ export function createTagCloud(container: HTMLElement) {
 		frame = requestAnimationFrame(layout);
 	}
 
-	new ResizeObserver(() => {
+	const observer = new ResizeObserver(() => {
 		if (container.clientWidth !== lastWidth) schedule();
-	}).observe(container);
+	});
+	observer.observe(container);
+	signal?.addEventListener("abort", () => {
+		observer.disconnect();
+		cancelAnimationFrame(frame);
+	});
 
 	// Layout measures text on a canvas, so redo it once the web fonts arrive.
 	void document.fonts?.ready.then(() => {
