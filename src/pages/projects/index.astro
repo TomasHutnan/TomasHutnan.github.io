@@ -4,18 +4,10 @@ import Layout from "../../layouts/Layout.astro";
 import Section from "../../components/Section.astro";
 import ProjectCard from "../../components/ProjectCard.astro";
 import { sortProjectsByRecency } from "../../utils/projects";
-import {
-	collectTagStats,
-	getTagAriaLabel,
-	getTagCloudFontSize,
-	getTagHref,
-	isStrongTag,
-} from "../../utils/tags";
+import TagCloud from "../../components/TagCloud.astro";
+import { collectTagStats } from "../../utils/tags";
 
 const projects = sortProjectsByRecency(await getCollection("projects"));
-
-const tagStats = collectTagStats(projects);
-const maxTagCount = tagStats[0]?.count ?? 1;
 ---
 
 <Layout
@@ -28,22 +20,7 @@ const maxTagCount = tagStats[0]?.count ?? 1;
 			description="Select tags to narrow the list."
 			headingLevel="h1"
 		>
-			<div class="tag-cloud" data-tag-cloud>
-				{tagStats.map(({ slug, label, count }) => (
-					<a
-						class:list={[
-							"tag-box",
-							{ "tag-box--strong": isStrongTag(count) },
-						]}
-						href={getTagHref(slug)}
-						data-tag-slug={slug}
-						aria-label={getTagAriaLabel(label, count)}
-						style={`font-size: ${getTagCloudFontSize(count, maxTagCount)}px;`}
-					>
-						{label}
-					</a>
-				))}
-			</div>
+			<TagCloud tags={collectTagStats(projects)} />
 
 			<h2 class="index-title">All projects</h2>
 			<div class="filter-bar">
@@ -73,131 +50,6 @@ const maxTagCount = tagStats[0]?.count ?? 1;
 </script>
 
 <style>
-	.tag-cloud {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.2rem 0.4rem;
-		align-items: center;
-		padding: 0.1rem 0 0.35rem;
-	}
-
-	.tag-box {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		padding: 0.05rem 0.2rem;
-		border-radius: 0.2rem;
-		color: var(--text-secondary);
-		text-decoration: none;
-		transition:
-			color 160ms ease,
-			transform 160ms ease;
-		line-height: 1.1;
-		white-space: nowrap;
-	}
-
-	.tag-box[hidden] {
-		display: none;
-	}
-
-	.tag-box:hover {
-		transform: translateY(-1px);
-		color: var(--text-main);
-	}
-
-	.tag-box--strong {
-		color: var(--text-main);
-		font-weight: 700;
-	}
-
-	.tag-box.active {
-		color: var(--text-main);
-		font-weight: 700;
-		text-decoration: underline;
-		text-decoration-thickness: 2px;
-		text-underline-offset: 0.16em;
-	}
-
-	/* Cloud mode, switched on by scripts/tag-cloud.ts once words are placed. */
-
-	.tag-cloud.is-cloud {
-		position: relative;
-		display: block;
-		padding: 0;
-		margin: 0.5rem 0 0;
-	}
-
-	.tag-cloud.is-settled {
-		transition: height 520ms cubic-bezier(0.22, 1, 0.36, 1);
-	}
-
-	.tag-cloud :global(.tag-cloud-shape) {
-		display: none;
-	}
-
-	.tag-cloud.is-cloud :global(.tag-cloud-shape) {
-		display: block;
-		position: absolute;
-		top: 0;
-		left: 0;
-		overflow: visible;
-		pointer-events: none;
-		/* Its own layer, so the drift moves pixels instead of re-running the
-		   blur filter and mask every frame. */
-		will-change: translate;
-		animation: cloud-drift 11s ease-in-out infinite;
-	}
-
-	.tag-cloud.is-settled :global(.tag-cloud-shape) {
-		transition:
-			width 520ms cubic-bezier(0.22, 1, 0.36, 1),
-			height 520ms cubic-bezier(0.22, 1, 0.36, 1),
-			transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
-	}
-
-	.tag-cloud :global(.cloud-dot) {
-		fill: var(--primary-soft);
-	}
-
-	.tag-cloud :global(.cloud-halftone) {
-		opacity: 0.4;
-	}
-
-	@keyframes cloud-drift {
-		50% {
-			translate: 0 -4px;
-		}
-	}
-
-	.tag-cloud.is-cloud .tag-box {
-		position: absolute;
-		top: 0;
-		left: 0;
-		padding: 2px 6px;
-		line-height: 1.15;
-	}
-
-	.tag-cloud.is-cloud .tag-box[hidden] {
-		display: inline-flex;
-		opacity: 0;
-		visibility: hidden;
-		pointer-events: none;
-	}
-
-	.tag-cloud.is-settled .tag-box {
-		transition:
-			transform 520ms cubic-bezier(0.22, 1, 0.36, 1),
-			font-size 520ms cubic-bezier(0.22, 1, 0.36, 1),
-			opacity 260ms ease,
-			visibility 260ms,
-			color 160ms ease;
-	}
-
-	.tag-cloud.is-cloud .tag-box:hover {
-		color: var(--primary-soft);
-		text-shadow: 0 0 18px rgba(34, 211, 238, 0.45);
-	}
-
 	.index-title {
 		margin: 2rem 0 0;
 		font-size: 2rem;
