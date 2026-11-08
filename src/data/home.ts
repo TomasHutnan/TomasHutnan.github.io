@@ -1,8 +1,3 @@
-export interface SkillGroup {
-	title: string;
-	items: string[];
-}
-
 export interface ExperienceEntry {
 	title: string;
 	organization: string;
@@ -34,41 +29,19 @@ export const highlights = [
 export const location =
 	"Brno, Czechia during the semester, originally from Košice, Slovakia";
 
-export const skillGroups: SkillGroup[] = [
+export interface SkillLine {
+	label: string;
+	items: string[];
+}
+
+/**
+ * Lines under the home tag cloud. Tools used everywhere don't belong on any
+ * one project, so they would never show in a cloud built from project tags.
+ */
+export const skillLines: SkillLine[] = [
+	{ label: "Every day", items: ["Linux", "Git"] },
 	{
-		title: "Core Stack",
-		items: [
-			"Python",
-			"C++",
-			"PyTorch",
-			"Docker",
-			"Linux",
-			"OpenCV",
-			"Pandas",
-		],
-	},
-	{
-		title: "Also Used",
-		items: [
-			"TypeScript",
-			"C#",
-			"FastAPI",
-			"PostgreSQL",
-			"MongoDB",
-			"React",
-		],
-	},
-	{
-		title: "Specializations",
-		items: [
-			"Computer Vision",
-			"NLP",
-			"GPU Optimization",
-			"Automated Testing",
-		],
-	},
-	{
-		title: "Languages",
+		label: "Languages",
 		items: ["English (C1/C2)", "German (A1/A2)", "Slovak (Native)"],
 	},
 ];
